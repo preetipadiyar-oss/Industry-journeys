@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Talkdesk — Travel &amp; Hospitality Demo Library (Journeys)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg-s:#f7f7f5;--bg-t:#f0efe9;
+  --tp:#1a1a18;--ts:#5c5c58;--tt:#8c8c88;
+  --bd:rgba(0,0,0,.10);--bdm:rgba(0,0,0,.18);
+  --rmd:8px;--rlg:12px;
+  --p50:#EEEDFE;--p600:#534AB7;--p800:#3C3489;
+  --b50:#E6F1FB;--b800:#0C447C;
+  --g50:#EAF3DE;--g800:#27500A;
+  --a50:#FAEEDA;--a800:#633806;
+  --pk50:#FBEAF0;--pk800:#72243E;
+  --gr50:#F1EFE8;--gr800:#444441;
+  --c50:#FAECE7;--c800:#993C1D;
+  --tl50:#E1F5EE;--tl800:#085041;
+  --j50:#FFF0FB;--j600:#C026A0;--j800:#86186D;
+  --both50:#F3E8FF;--both800:#6B21A8;
+  --wa50:#E7F5E8;--wa800:#1A5C20;--wa600:#25D366;
+  --td-red:#CC2936;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg-s:#252523;--bg-t:#2e2e2b;
+    --tp:#f0efe9;--ts:#a8a8a2;--tt:#6c6c68;
+    --bd:rgba(255,255,255,.10);--bdm:rgba(255,255,255,.18);
+    --p50:#26215C;--p800:#CECBF6;
+    --b50:#042C53;--b800:#B5D4F4;
+    --g50:#173404;--g800:#C0DD97;
+    --a50:#412402;--a800:#FAC775;
+    --pk50:#4B1528;--pk800:#F4C0D1;
+    --gr50:#2C2C2A;--gr800:#D3D1C7;
+    --c50:#4A1B0C;--c800:#F5C4B3;
+    --tl50:#04342C;--tl800:#9FE1CB;
+    --j50:#3D0A30;--j800:#F5AEED;
+    --both50:#3B0764;--both800:#E9D5FF;
+    --wa50:#0C2E0E;--wa800:#6EE48A;
+  }
+}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg-t);color:var(--tp);min-height:100vh;line-height:1.6}
+nav{background:var(--bg);border-bottom:.5px solid var(--bd);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
+.nb{display:flex;align-items:center;gap:10px}
+.tdl{width:28px;height:28px;border-radius:6px;background:var(--td-red);display:flex;align-items:center;justify-content:center}
+.tdl svg{width:16px;height:16px}
+.nt{font-size:14px;font-weight:500;color:var(--tp)}
+.ns{font-size:12px;color:var(--tt);margin-left:4px}
+.npill{font-size:11px;padding:3px 9px;border-radius:20px;background:var(--j50);color:var(--j800);font-weight:500}
+main{max-width:1060px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.hero{margin-bottom:1.75rem}
+.hero h1{font-size:26px;font-weight:600;margin-bottom:6px}
+.hero p{font-size:14px;color:var(--ts);max-width:600px;line-height:1.6}
+.hmeta{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap}
+.hm{font-size:12px;color:var(--tt);display:flex;align-items:center;gap:4px}
+.hm i{font-size:14px}
+/* JOURNEY CALLOUT */
+.j-callout{background:var(--j50);border:.5px solid var(--j600);border-radius:var(--rlg);padding:12px 16px;margin-bottom:1.5rem;display:flex;gap:10px;align-items:flex-start}
+.j-callout i{font-size:18px;color:var(--j600);flex-shrink:0;margin-top:1px}
+.j-callout-body{flex:1}
+.j-callout-title{font-size:12px;font-weight:600;color:var(--j800);margin-bottom:3px}
+.j-callout-text{font-size:12px;color:var(--ts);line-height:1.6}
+.sbar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg);border:.5px solid var(--bd);border-radius:var(--rmd);margin-bottom:1.5rem;flex-wrap:wrap;gap:8px}
+.sbar span{font-size:12px;color:var(--ts);display:flex;align-items:center;gap:5px}
+.cbtn{font-size:12px;padding:5px 12px;border-radius:var(--rmd);border:.5px solid var(--bdm);background:var(--bg-s);color:var(--tp);cursor:pointer;display:flex;align-items:center;gap:5px;font-family:inherit}
+.cbtn:hover{background:var(--bg-t)}
+.legend{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 14px;background:var(--bg);border:.5px solid var(--bd);border-radius:var(--rmd);margin-bottom:1.25rem;font-size:12px}
+.ll{color:var(--tt);font-weight:500}
+.li{display:flex;align-items:center;gap:5px;color:var(--ts)}
+.ld{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.lsep{width:1px;height:14px;background:var(--bd)}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem}
+.pill{font-size:12px;padding:5px 12px;border-radius:20px;border:.5px solid var(--bdm);background:var(--bg);color:var(--ts);cursor:pointer;transition:all .12s;user-select:none}
+.pill.active{background:var(--p50);border-color:var(--p600);color:var(--p800)}
+.pill:hover:not(.active){background:var(--bg-s)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(295px,1fr));gap:12px}
+.scard{background:var(--bg);border:.5px solid var(--bd);border-radius:var(--rlg);padding:1rem 1.125rem;cursor:pointer;transition:border-color .12s,transform .1s;display:flex;flex-direction:column;gap:9px}
+.scard:hover{border-color:var(--bdm);transform:translateY(-1px)}
+.scard.sel{border:1px solid var(--p600)}
+.ctop{display:flex;justify-content:space-between;align-items:flex-start;gap:6px}
+.snum{font-size:10px;color:var(--tt);font-weight:500;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.chs{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.cb{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500;white-space:nowrap}
+.cb-chat{background:var(--b50);color:var(--b800)}
+.cb-sms{background:var(--g50);color:var(--g800)}
+.cb-email{background:var(--a50);color:var(--a800)}
+.cb-whatsapp{background:var(--wa50);color:var(--wa800)}
+.jbadge{font-size:10px;padding:2px 7px;border-radius:10px;background:var(--j50);color:var(--j800);font-weight:500;display:flex;align-items:center;gap:3px;white-space:nowrap}
+.jbadge i{font-size:10px}
+.stitle{font-size:13px;font-weight:500;color:var(--tp);line-height:1.4}
+.sdesc{font-size:12px;color:var(--ts);line-height:1.55}
+.smeta{display:flex;gap:8px;flex-wrap:wrap}
+.mtag{font-size:11px;color:var(--tt);display:flex;align-items:center;gap:3px}
+.mtag i{font-size:12px}
+.dir-in{color:var(--b800)}
+.dir-out{color:var(--g800)}
+.dir-both{color:var(--both800)}
+.sfoot{border-top:.5px solid var(--bd);padding-top:8px;display:flex;justify-content:space-between;align-items:center}
+.otag{font-size:11px;color:var(--tt);display:flex;align-items:center;gap:3px}
+.vbtn{font-size:12px;color:var(--p600);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:3px;padding:0;font-family:inherit}
+.vbtn:hover{text-decoration:underline}
+/* DETAIL PANEL */
+.dpanel{display:none;background:var(--bg);border:.5px solid var(--bd);border-radius:var(--rlg);margin-top:12px;overflow:hidden}
+.dpanel.open{display:block}
+.dhead{display:flex;justify-content:space-between;align-items:flex-start;padding:1.25rem 1.5rem 0;gap:10px}
+.dhmeta{font-size:10px;color:var(--tt);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+.dhtitle{font-size:17px;font-weight:500;color:var(--tp);line-height:1.3;margin-bottom:10px}
+.dhtags{display:flex;gap:6px;flex-wrap:wrap}
+.dtag{font-size:11px;padding:3px 9px;border-radius:20px;display:flex;align-items:center;gap:4px;font-weight:500}
+.dtag i{font-size:12px}
+.dtag-in{background:var(--b50);color:var(--b800)}
+.dtag-out{background:var(--g50);color:var(--g800)}
+.dtag-both{background:var(--both50);color:var(--both800)}
+.dtag-ch{background:var(--bg-s);color:var(--ts);border:.5px solid var(--bd)}
+.dtag-j{background:var(--j50);color:var(--j800)}
+.xbtn{background:none;border:none;cursor:pointer;color:var(--ts);font-size:20px;padding:0;flex-shrink:0;line-height:1;margin-top:4px}
+.xbtn:hover{color:var(--tp)}
+.tabs{display:flex;gap:0;border-bottom:.5px solid var(--bd);padding:0 1.5rem;margin-top:1rem;overflow-x:auto}
+.tab{font-size:12px;padding:8px 14px;cursor:pointer;color:var(--tt);border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .12s;user-select:none;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.tab i{font-size:13px}
+.tab:hover{color:var(--tp)}
+.tab.active{color:var(--p600);border-bottom-color:var(--p600);font-weight:500}
+.tabcontent{padding:1.25rem 1.5rem 1.5rem}
+/* OVERVIEW */
+.ov-cols{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media(max-width:640px){.ov-cols{grid-template-columns:1fr}}
+.sl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--tt);margin-bottom:8px;margin-top:1.125rem;display:flex;align-items:center;gap:5px}
+.sl:first-child{margin-top:0}
+.sl i{font-size:13px}
+.chflow{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.chn{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:var(--rmd);font-size:12px;font-weight:500}
+.chn.chat{background:var(--b50);color:var(--b800)}
+.chn.sms{background:var(--g50);color:var(--g800)}
+.chn.email{background:var(--a50);color:var(--a800)}
+.chn.whatsapp{background:var(--wa50);color:var(--wa800)}
+.chn i{font-size:13px}
+.charr{color:var(--tt);font-size:14px}
+.personas{display:flex;gap:6px;flex-wrap:wrap}
+.persona{display:flex;align-items:center;gap:5px;background:var(--bg-s);border-radius:var(--rmd);padding:4px 9px;font-size:12px;color:var(--tp)}
+.persona i{font-size:13px;color:var(--ts)}
+.tdchips{display:flex;flex-wrap:wrap;gap:5px}
+.tdchip{font-size:10px;padding:3px 8px;border-radius:8px;background:var(--bg-s);color:var(--ts);border:.5px solid var(--bd)}
+.tdchip.j{background:var(--j50);color:var(--j800);border-color:var(--j600)}
+.vlist{list-style:none;display:flex;flex-direction:column;gap:6px}
+.vlist li{font-size:12px;color:var(--ts);display:flex;align-items:flex-start;gap:7px;line-height:1.5}
+.vlist li i{font-size:13px;color:var(--p600);flex-shrink:0;margin-top:1px}
+/* JOURNEY FLOW DIAGRAM */
+.jflow{display:flex;flex-direction:column;gap:0;position:relative}
+.jnode{display:flex;gap:10px;padding-bottom:0;position:relative}
+.jnode-main{display:flex;gap:10px;padding-bottom:10px;position:relative}
+.jvl{width:1px;background:var(--bd);position:absolute;left:13px;top:26px;bottom:0}
+.jnode:last-child>.jnode-main>.jvl{display:none}
+.jico{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;position:relative;z-index:1}
+.jico.trigger{background:var(--j50);color:var(--j800)}
+.jico.send{background:var(--g50);color:var(--g800)}
+.jico.wait{background:var(--gr50);color:var(--gr800)}
+.jico.branch{background:var(--a50);color:var(--a800)}
+.jico.bot{background:var(--p50);color:var(--p800)}
+.jico.agent{background:var(--pk50);color:var(--pk800)}
+.jico.close{background:var(--tl50);color:var(--tl800)}
+.jbody{flex:1;padding-top:1px}
+.jt{font-size:12px;font-weight:500;color:var(--tp);line-height:1.3}
+.jd{font-size:11px;color:var(--ts);line-height:1.5;margin-top:1px}
+.jch{font-size:10px;padding:1px 5px;border-radius:6px;display:inline-block;margin-top:2px;background:var(--bg-s);color:var(--tt)}
+/* branch children */
+.jbranches{margin-left:35px;border-left:1px dashed var(--bdm);padding-left:10px;margin-bottom:8px;display:flex;flex-direction:column;gap:6px}
+.jbranch-item{display:flex;gap:8px;align-items:flex-start}
+.jbranch-dot{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:1px}
+.jbranch-dot.yes{background:var(--tl50);color:var(--tl800)}
+.jbranch-dot.no{background:var(--c50);color:var(--c800)}
+.jbranch-dot.alt{background:var(--p50);color:var(--p800)}
+.jbranch-text{font-size:11px;color:var(--ts);line-height:1.5}
+.jbranch-label{font-weight:600;color:var(--tp);margin-right:4px}
+/* value cards */
+.vcards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:560px){.vcards{grid-template-columns:1fr}}
+.vcard{background:var(--bg-s);border-radius:var(--rmd);padding:10px 12px;text-align:center}
+.vnum{font-size:20px;font-weight:600;color:var(--p600);margin-bottom:2px}
+.vlabel{font-size:11px;color:var(--ts);line-height:1.4}
+/* journey reason box */
+.j-reason{background:var(--j50);border:.5px solid var(--j600);border-radius:var(--rmd);padding:10px 14px;margin-bottom:1rem}
+.j-reason-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--j800);margin-bottom:4px;display:flex;align-items:center;gap:4px}
+.j-reason-label i{font-size:12px}
+.j-reason-text{font-size:12px;color:var(--ts);line-height:1.6}
+/* SCRIPT */
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:500px){.sg{grid-template-columns:1fr}}
+.sc{background:var(--bg-s);border-radius:var(--rmd);padding:9px 11px}
+.scl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--tt);margin-bottom:4px}
+.scv{font-size:12px;color:var(--ts);line-height:1.55}
+.ttrack{display:flex;flex-direction:column;gap:0}
+.tstep{display:flex;gap:12px;position:relative;padding-bottom:1.25rem}
+.tstep:last-child{padding-bottom:0}
+.tvl{position:absolute;left:15px;top:32px;bottom:0;width:1px;background:var(--bd)}
+.tstep:last-child .tvl{display:none}
+.tic{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;position:relative;z-index:1}
+.tic.inbound{background:var(--b50);color:var(--b800)}
+.tic.outbound{background:var(--g50);color:var(--g800)}
+.tic.bot{background:var(--p50);color:var(--p800)}
+.tic.agent{background:var(--pk50);color:var(--pk800)}
+.tic.sys{background:var(--gr50);color:var(--gr800)}
+.tic.journey{background:var(--j50);color:var(--j800)}
+.tb{flex:1}
+.tlabel{display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap}
+.tst{font-size:13px;font-weight:500;color:var(--tp)}
+.tch{font-size:10px;padding:1px 6px;border-radius:8px;background:var(--bg-s);color:var(--tt);border:.5px solid var(--bd)}
+.tj{font-size:10px;padding:1px 6px;border-radius:8px;background:var(--j50);color:var(--j800);border:.5px solid var(--j600)}
+.say{background:var(--bg-s);border-left:2px solid var(--p600);border-radius:0 var(--rmd) var(--rmd) 0;padding:8px 12px;margin-bottom:6px}
+.sayl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--p800);margin-bottom:3px}
+.sayt{font-size:13px;color:var(--tp);line-height:1.6;font-style:italic}
+.show{background:var(--tl50);border-left:2px solid #1D9E75;border-radius:0 var(--rmd) var(--rmd) 0;padding:8px 12px;margin-bottom:6px}
+.showl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--tl800);margin-bottom:3px}
+.showt{font-size:13px;color:var(--ts);line-height:1.6}
+.tip{background:var(--a50);border-left:2px solid #BA7517;border-radius:0 var(--rmd) var(--rmd) 0;padding:8px 12px;margin-bottom:6px}
+.tipl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--a800);margin-bottom:3px}
+.tipt{font-size:13px;color:var(--ts);line-height:1.6}
+.jnote{background:var(--j50);border-left:2px solid var(--j600);border-radius:0 var(--rmd) var(--rmd) 0;padding:8px 12px;margin-bottom:6px}
+.jnotel{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--j800);margin-bottom:3px}
+.jnotet{font-size:13px;color:var(--ts);line-height:1.6}
+.script-legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.125rem;padding:8px 12px;background:var(--bg-s);border-radius:var(--rmd);border:.5px solid var(--bd)}
+.sl-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--tt)}
+.sl-swatch{width:3px;height:14px;border-radius:2px;flex-shrink:0}
+/* OBJECTIONS */
+.objlist{display:flex;flex-direction:column;gap:10px}
+.obj{border:.5px solid var(--bd);border-radius:var(--rlg);overflow:hidden}
+.objq{padding:10px 14px;background:var(--c50);font-size:13px;font-weight:500;color:var(--c800);display:flex;align-items:flex-start;gap:7px}
+.objq i{font-size:14px;flex-shrink:0;margin-top:1px}
+.obja{padding:10px 14px;font-size:13px;color:var(--ts);line-height:1.6;background:var(--bg)}
+.disclist{display:flex;flex-direction:column;gap:8px}
+.disc{display:flex;align-items:flex-start;gap:9px;padding:10px 14px;background:var(--bg-s);border-radius:var(--rmd)}
+.dn{font-size:11px;font-weight:600;color:var(--p800);background:var(--p50);width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.dq{font-size:13px;color:var(--tp);line-height:1.5}
+.dw{font-size:12px;color:var(--tt);margin-top:2px}
+footer{text-align:center;padding:2rem;font-size:12px;color:var(--tt);border-top:.5px solid var(--bd);margin-top:3rem}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nb">
+    <div class="tdl"><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" fill="white" opacity=".9"/><circle cx="10" cy="10" r="3.5" fill="#CC2936"/></svg></div>
+    <span class="nt">Talkdesk</span><span class="ns">/ Travel &amp; Hospitality Demo Library</span>
+  </div>
+  <span class="npill"><i class="ti ti-route" style="font-size:11px"></i>&nbsp;T&amp;H · Journeys · 7 stories</span>
+</nav>
+<main>
+<div class="hero">
+  <h1>Travel &amp; Hospitality story library</h1>
+  <p>Journey-orchestrated omnichannel stories across WhatsApp, SMS, Email and Chat — outbound-heavy, built for hotels, airlines and OTAs. Every story uses Talkdesk Journeys as the cross-channel control plane: owning state, decisioning, sequencing, and every channel transition end to end.</p>
+  <div class="hmeta">
+    <span class="hm"><i class="ti ti-route" style="color:var(--j600)"></i>Journeys-first</span>
+    <span class="hm"><i class="ti ti-brand-whatsapp"></i>WhatsApp · SMS · Email · Chat</span>
+    <span class="hm"><i class="ti ti-arrow-up-right"></i>Outbound (3)</span>
+    <span class="hm"><i class="ti ti-arrows-exchange"></i>Both (3)</span>
+    <span class="hm"><i class="ti ti-arrow-down-left"></i>Inbound (1)</span>
+    <span class="hm"><i class="ti ti-plane"></i>Travel &amp; Hospitality</span>
+  </div>
+</div>
+
+<div class="sbar">
+  <span><i class="ti ti-share"></i>Share — open this HTML file in any browser, or host on any static server.</span>
+  <button class="cbtn" onclick="copyLink()"><i class="ti ti-copy"></i><span id="copy-label">Copy link</span></button>
+</div>
+<div class="legend">
+  <span class="ll">Channels:</span>
+  <span class="li"><span class="ld" style="background:#378ADD"></span>Chat</span>
+  <span class="li"><span class="ld" style="background:#639922"></span>SMS</span>
+  <span class="li"><span class="ld" style="background:#BA7517"></span>Email</span>
+  <span class="lsep"></span>
+  <span class="ll">Direction:</span>
+  <span class="li"><span class="ld" style="background:#378ADD"></span>Inbound</span>
+  <span class="li"><span class="ld" style="background:#639922"></span>Outbound</span>
+  <span class="li"><span class="ld" style="background:#9333EA"></span>Both</span>
+  <span class="lsep"></span>
+  <span class="li"><span class="ld" style="background:var(--j600)"></span>All flows orchestrated by Journeys</span>
+</div>
+<div class="filters" id="filters">
+  <span class="pill active" onclick="flt('all',this)">All stories</span>
+  <span class="pill" onclick="flt('inbound',this)">Inbound</span>
+  <span class="pill" onclick="flt('outbound',this)">Outbound</span>
+  <span class="pill" onclick="flt('both',this)">Both directions</span>
+  <span class="pill" onclick="flt('whatsapp',this)">WhatsApp</span>
+  <span class="pill" onclick="flt('sms',this)">SMS</span>
+  <span class="pill" onclick="flt('email',this)">Email</span>
+  <span class="pill" onclick="flt('chat',this)">Chat</span>
+</div>
+<div class="grid" id="grid"></div>
+<div class="dpanel" id="detail"></div>
+</main>
+<footer>Talkdesk T&amp;H Demo Library &nbsp;·&nbsp; Journeys-orchestrated · WhatsApp, SMS, Email, Chat &nbsp;·&nbsp; For internal demo use only</footer>
+<script>
+const ICO={inbound:'ti-arrow-down-left',outbound:'ti-arrow-up-right',bot:'ti-robot',agent:'ti-headset',sys:'ti-settings',journey:'ti-route'};
+const CH_ICONS={whatsapp:'ti-brand-whatsapp',sms:'ti-device-mobile-message',email:'ti-mail',chat:'ti-message-circle'};
+const DIR_LABEL={inbound:'Inbound',outbound:'Outbound',both:'Inbound + Outbound'};
+const JICO={trigger:'ti-bolt',send:'ti-send',wait:'ti-clock',branch:'ti-git-fork',bot:'ti-robot',agent:'ti-headset',close:'ti-circle-check',sys:'ti-settings'};
+
+const stories=[
+/* ══ OUTBOUND ══════════════════════════════════════════════════════════ */
+{
+  id:1,
+  title:"Pre-arrival upsell — WhatsApp itinerary with Journey-owned ancillary flow",
+  desc:"48 hours before check-in, Journey sends a rich WhatsApp itinerary with quick-reply upsell buttons. Journey monitors replies, handles bookings via PMS API, and branches on engagement — escalating to email and then agent if the guest goes silent.",
+  direction:"outbound",channels:["whatsapp","email"],all3:false,
+  personas:["Lena Fischer – leisure guest","Journey orchestration","Autopilot","PMS integration"],
+  td:["Journeys","Proactive Outreach","WhatsApp Business API","Autopilot","PMS integration","Campaign Manager"],
+  outcome:"30% ancillary upsell lift · Journey-owned from PMS trigger to booking confirmation",
+  journeyFlow:[
+    {type:"trigger",label:"Trigger",desc:"PMS fires T-48hr pre-arrival event. Journey instantiates flow: pulls guest profile, room type, booking preferences, and existing ancillary bookings from PMS.",ch:"PMS webhook · T-48hr"},
+    {type:"send",label:"Step 1 — Rich WhatsApp itinerary sent",desc:"Journey sends personalised WhatsApp message: check-in time, room type, 3-day highlights, and quick-reply buttons (Book Spa / Reserve Dinner / Add Transfer). Journey enters a WAIT state.",ch:"WhatsApp · Journey-controlled"},
+    {type:"wait",label:"Wait — quick-reply received? (6hr window)",desc:"Journey monitors for any quick-reply event. Each button maps to a different branch. If no interaction within 6 hours, Journey advances to email.",ch:"Journey wait state · 6hr"},
+    {type:"branch",label:"Branch — which upsell tapped, or no response?",branches:[
+      {outcome:"yes",label:"Spa / Dinner / Transfer tapped",text:"Journey routes to the relevant Autopilot booking sub-flow. PMS API queried for availability. Booking confirmed in the same WhatsApp thread. Journey logs the upsell event."},
+      {outcome:"no",label:"No interaction after 6hrs",text:"Journey advances to email channel: sends the same itinerary with a \'complete your stay\' CTA. Journey-tracked link — click fires back into Journey."},
+      {outcome:"alt",label:"Guest replies with a free-text question",text:"Journey routes to Autopilot for FAQ handling within the WhatsApp thread. If Autopilot cannot resolve, routes to a concierge agent with full Journey context."}
+    ]},
+    {type:"wait",label:"Wait — upsell booking completed? (24hr window)",desc:"Journey monitors for a booking confirmation event from the PMS (any channel). If confirmed, Journey closes the upsell sequence and moves to pre-arrival confirmation.",ch:"Journey wait state · 24hr"},
+    {type:"branch",label:"Branch — booking confirmed or no engagement?",branches:[
+      {outcome:"yes",label:"Booking confirmed via any channel",text:"Journey fires a booking confirmation WhatsApp: \'Your spa is booked for 10am — see you then, Lena!\' Suppresses email CTA. Logs upsell revenue in campaign dashboard."},
+      {outcome:"no",label:"No booking after 24hrs",text:"Journey marks as no upsell this stay. Exits upsell sequence. Guest still receives standard pre-arrival confirmation email."}
+    ]},
+    {type:"send",label:"Step 2 — Pre-arrival confirmation email",desc:"Comprehensive itinerary email: check-in instructions, room details, all booked ancillaries, hotel map, and contact details. Sent to all guests regardless of upsell outcome.",ch:"Email · Journey-fired"},
+    {type:"close",label:"Journey closes",desc:"Upsell outcome and revenue logged. Guest profile updated in PMS. Journey marks contact complete.",ch:"System"}
+  ],
+  value:["Journey monitors each quick-reply as an independent event — spa tap, dinner tap, and free-text reply each route to a different branch automatically","No passive email link: when the email is sent on the no-response branch, the link is Journey-tracked — click fires back into Journey and resumes the upsell flow","Upsell suppression: if the guest books via any channel (website, reception, WhatsApp), Journey detects the PMS event and stops further upsell messages immediately"],
+  setup:{env:"WhatsApp Business API connected. PMS integration with real-time availability query and write-back. Journey with T-48hr pre-arrival trigger.",data:"Guest: Lena Fischer. 3-night stay, Superior Room, check-in tomorrow 3pm. Spa and dining not booked.",products:"Journeys · Proactive Outreach · WhatsApp Business API · Autopilot · PMS integration · Campaign Manager",duration:"12 min full · 6 min lightning (Journey canvas, WhatsApp send, quick-reply branch, booking confirmation, email close)"},
+  script:[
+    {t:"journey",title:"1 — Journey canvas: from PMS trigger to upsell close",ch:"Journeys · PMS trigger",jnote:"Show the full canvas before any customer interaction — establish Journey as the control plane.",
+     say:"\"Lena is arriving tomorrow. Before we show you what she sees, let's look at what Journey is doing. The PMS fires a T-48hr event. Journey picks it up, pulls Lena's profile, and starts a flow that owns every step from this WhatsApp message to the pre-arrival email — including what happens if she doesn't reply, what happens if she taps 'Book Spa', and what happens if she asks a question.\"",
+     show:"Open the Journey canvas. Show: PMS trigger → WhatsApp send → 6hr wait → three-way branch (upsell tap / no response / free-text) → Autopilot sub-flow → booking confirmation branch → email close. Point to the state variables: guest_id, room_type, checkin_time, spa_booked: false."},
+    {t:"outbound",title:"2 — Journey sends rich WhatsApp itinerary",ch:"WhatsApp · Journey-controlled",jnote:"Emphasise Journey sent this — not a standalone campaign tool.",
+     say:"\"Journey sends Lena a rich WhatsApp message. Her name, her check-in time, her room type — all from the PMS. And three quick-reply buttons: Book Spa, Reserve Dinner, Add Transfer. Journey is now in a WAIT state, listening for whichever button she taps — or for 6 hours of silence.\"",
+     show:"Show the WhatsApp send node firing in Journey's activity log. Show Lena's message: personalised header, itinerary summary, three quick-reply buttons. Show the Journey timer: 6hr wait window.",
+     tip:"Ask: 'What does your current pre-arrival communication look like, and what's your ancillary conversion rate from it?' Most say a generic confirmation email with under 2% conversion. The contrast lands immediately."},
+    {t:"inbound",title:"3 — Guest taps 'Book Spa' — Journey routes to sub-flow",ch:"WhatsApp · inbound event → Journey",
+     say:"\"Lena taps Book Spa. That quick-reply fires an inbound event into Journey. Journey doesn't just forward it — it routes to the spa booking Autopilot sub-flow, which queries the PMS for availability, presents time slots in the same WhatsApp thread, and confirms the booking. All within Journey's context.\"",
+     show:"Show the quick-reply arriving as an event in Journey's activity log. Show Journey routing to the Autopilot spa sub-flow. Show Autopilot presenting two time slots. Show Lena selecting 10am. Show the PMS write-back: spa booking confirmed. Show Journey's state update: spa_booked: true."},
+    {t:"outbound",title:"4 — Journey sends confirmation and suppresses email upsell",ch:"WhatsApp · Journey-fired",
+     say:"\"The booking is confirmed in the PMS. Journey fires a WhatsApp confirmation in the same thread — 'Your spa is set for 10am. See you then.' And because Journey received the PMS booking event, it suppresses the email upsell CTA. Lena won't receive a 'don't forget to book your spa' email after she's already booked.\"",
+     show:"Show the WhatsApp confirmation message. Show Journey's suppression logic: PMS booking event received → email upsell CTA suppressed. Show the Journey state: spa_booked: true, email_upsell_suppressed: true."},
+    {t:"outbound",title:"5 — Journey fires pre-arrival confirmation email",ch:"Email · Journey-fired · all guests",
+     say:"\"Every guest — whether they booked a spa, ignored the WhatsApp, or asked a question — receives a comprehensive pre-arrival email. Check-in instructions, room details, everything booked so far. For Lena, her spa booking is already in the email. Journey built the email content from the current PMS state at send time.\"",
+     show:"Show Journey's email send node. Show Lena's email: spa booking confirmed, check-in instructions, hotel map. Show the PMS-driven content personalisation — spa booking automatically included. Show the Journey dashboard: upsell conversion rate, revenue attributed to the WhatsApp campaign."}
+  ],
+  objections:[
+    {q:"\"Our guests aren't all on WhatsApp.\"",a:"WhatsApp has 2 billion+ active users globally and dominates in Europe, APAC, Latin America, and the Middle East. Talkdesk Journey falls back to email for guests without WhatsApp opt-in — the fallback is a Journey branch, not a manual exception. The pre-arrival email goes to all guests regardless."},
+    {q:"\"We already send pre-arrival emails — what's the incremental value?\"",a:"WhatsApp open rates run at 80–90% vs 25% for email. More importantly, quick-reply buttons convert at 3–5× the rate of email CTAs because there's zero friction — one tap vs. click, load, scroll, fill. Journey also suppresses duplicates: if the guest books via any channel, Journey stops the upsell sequence. No over-messaging."},
+    {q:"\"What if two upsell buttons are tapped in quick succession?\"",a:"Journey handles each quick-reply as an independent inbound event. If Lena taps both Spa and Dinner, Journey fires two sub-flows in parallel, each querying the PMS independently. Both confirmations arrive in the same WhatsApp thread. Journey tracks both bookings and suppresses any further upsell on those categories."}
+  ],
+  discovery:[
+    {q:"What does your current pre-arrival communication look like — and what's your ancillary upsell conversion rate from it?",w:"Most T&H brands send a generic confirmation email. Under 2% conversion is common. Opens the WhatsApp channel and Journey orchestration conversation immediately."},
+    {q:"If a guest books a spa via the website after you've sent a pre-arrival email, do they still receive follow-up upsell messages for the spa?",w:"Almost universally yes — no suppression logic. Opens Journey's PMS event monitoring and suppression capability."},
+    {q:"How do upsell bookings currently feed back into your PMS — and how long does that take?",w:"Opens the real-time PMS write-back and Journey API node conversation."}
+  ],
+  metrics:["30%","6hr","0"],
+  metricLabels:["Ancillary upsell lift vs. email-only pre-arrival","Journey wait window before advancing to email fallback","Guests who receive upsell messages after already booking — Journey suppresses on PMS event"]
+},
+{
+  id:2,
+  title:"Flight disruption — proactive WhatsApp rebooking with GDS branch and multi-step recovery",
+  desc:"GDS flags a cancellation. Journey instantiates a flow per affected passenger, sends a WhatsApp alert with live alternatives, monitors for reply, handles rebooking via GDS API, and escalates non-responders — all with individual state per passenger.",
+  direction:"outbound",channels:["whatsapp","sms","email"],all3:false,
+  personas:["Marco Bianchi – business traveller","Journey orchestration","Autopilot","GDS API"],
+  td:["Journeys","Proactive Outreach","WhatsApp Business API","Autopilot","GDS integration","Campaign Manager"],
+  outcome:"35% disruption contacts self-served · Journey manages 280 passengers simultaneously",
+  journeyFlow:[
+    {type:"trigger",label:"Trigger",desc:"GDS cancellation event received. Journey instantiates 280 individual flows — one per affected PNR — each carrying the passenger's booking class, connection risk, and contact preference.",ch:"GDS API webhook"},
+    {type:"send",label:"Step 1 — Proactive WhatsApp alert with live alternatives",desc:"Journey sends personalised WhatsApp: original flight, delay reason, and three live GDS alternatives as numbered quick-replies. Journey enters a WAIT state per passenger.",ch:"WhatsApp · T+0 · Journey-controlled"},
+    {type:"wait",label:"Wait — reply received? (90min window)",desc:"Journey monitors for inbound WhatsApp reply. 90-minute window reflects the urgency of a disruption scenario.",ch:"Journey wait state · 90min"},
+    {type:"branch",label:"Branch — reply, HELP, or silence?",branches:[
+      {outcome:"yes",label:"Numbered reply (1, 2, or 3)",text:"Journey activates GDS rebooking sub-flow: confirms the selected flight's availability, books the seat, re-issues PNR. Confirmation sent in the same WhatsApp thread."},
+      {outcome:"no",label:"HELP reply",text:"Journey routes to a live agent with full disruption context: original booking, three alternatives shown, HELP request received. Agent sees everything Marco saw."},
+      {outcome:"alt",label:"No reply after 90min",text:"Journey escalates: sends an SMS as a secondary channel nudge. If no SMS response in 30min, routes to agent queue flagged as unresponsive — agent makes outbound contact."}
+    ]},
+    {type:"wait",label:"Wait — GDS rebooking confirmed? (15min)",desc:"Journey monitors for a GDS booking confirmation event. If confirmation received, Journey advances. If GDS API times out or returns an error, Journey routes to agent.",ch:"Journey wait state · GDS API"},
+    {type:"branch",label:"Branch — rebooking successful or failed?",branches:[
+      {outcome:"yes",label:"Rebooking confirmed",text:"Journey fires WhatsApp confirmation with new PNR, seat number, and check-in instructions. Then sends updated itinerary email + SMS boarding pass link."},
+      {outcome:"no",label:"GDS error or no availability",text:"Journey routes to agent with full context: passenger's choice, the GDS error, and remaining alternatives. Agent completes the rebook manually."}
+    ]},
+    {type:"send",label:"Step 2 — Itinerary email + SMS boarding pass",desc:"Email: full updated itinerary, new booking reference, refund policy for fare difference. SMS: mobile boarding pass link. Sent by Journey on rebooking-confirmed event.",ch:"Email + SMS · Journey-fired"},
+    {type:"wait",label:"Wait — flight departed? (post-departure check)",desc:"Journey monitors for flight departure event from GDS feed. If the passenger's new flight departs successfully, Journey closes cleanly.",ch:"Journey wait state · GDS feed"},
+    {type:"close",label:"Journey closes",desc:"Outcome logged per passenger: self-served rebook, agent-assisted, or unresponsive. Disruption dashboard updated in Talkdesk.",ch:"System"}
+  ],
+  value:["Journey runs 280 independent passenger flows simultaneously — each with individual state, reply tracking, and branch logic","SMS escalation fires automatically after 90 minutes of WhatsApp silence — Journey moves through channels on its own schedule","GDS rebooking is a Journey node: Journey makes the API call, receives the confirmation, and fires the itinerary email — no handoff, no context loss"],
+  setup:{env:"WhatsApp Business API and GDS integration connected. Journey with flight disruption trigger. SMS configured as fallback channel.",data:"280 passengers on BA447 LHR–FCO, cancelled. Marco Bianchi: business class, connection FCO–MXP at risk. GDS test webhook active.",products:"Journeys · Proactive Outreach · WhatsApp Business API · Autopilot · GDS integration · Campaign Manager",duration:"12 min full · 6 min lightning (Journey canvas, WhatsApp send, numbered reply, GDS call, itinerary close)"},
+  script:[
+    {t:"journey",title:"1 — Journey instantiates 280 individual passenger flows",ch:"Journeys · GDS trigger",jnote:"Lead with scale and per-contact state — this is the core Journey differentiator over a broadcast SMS tool.",
+     say:"\"BA447 has just been cancelled. 280 passengers. With a standard tool you send a blast — one message, no branching, no tracking of who replied. With Journey, each of those 280 passengers gets their own flow. Marco gets his flow. If Marco replies '2' and someone else goes silent, they take completely different paths, automatically, in real time.\"",
+     show:"Open the Journey canvas. Show the GDS trigger → '280 contacts instantiated'. Show the Journey run dashboard: 280 active instances, each in the WAIT state. Point to the per-contact state object: pnr, booking_class, connection_risk, alternative_flights: [3 live GDS options]."},
+    {t:"outbound",title:"2 — Journey sends personalised WhatsApp with live GDS alternatives",ch:"WhatsApp · Journey-controlled",
+     say:"\"Journey sends Marco a WhatsApp message — his original flight, the cancellation reason, and three real alternatives pulled live from the GDS at send time. Not placeholders. Real seats, real prices. Reply 1, 2, or 3 to rebook. Reply HELP for an agent.\"",
+     show:"Show the WhatsApp message: Marco's name, BA447 cancelled, three numbered alternatives with times and prices. Show the Journey timer: 90-minute wait window per passenger.",
+     tip:"Ask: 'When you have a disruption today, what does your inbound contact volume look like in the first 30 minutes?' Most say it spikes 3–5×. This is the proactive alternative to that spike."},
+    {t:"inbound",title:"3 — Marco replies '2' — Journey activates GDS sub-flow",ch:"WhatsApp · inbound event → Journey",
+     say:"\"Marco replies '2' — the 11am flight. That reply arrives as an inbound WhatsApp event. Journey receives it and immediately activates the GDS rebooking sub-flow. Journey makes the GDS API call — not a separate bot, not a handoff. Journey calls the GDS, gets seat 14A confirmed, and re-issues the PNR. All within Journey's context.\"",
+     show:"Show Marco's reply arriving in Journey's activity log. Show Journey transitioning to the GDS sub-flow node. Show the GDS API call: PNR + new flight → seat confirmed. Show Journey's state update: new_flight: BA449, seat: 14A, pnr_reissued: true."},
+    {t:"outbound",title:"4 — Journey fires WhatsApp confirmation + itinerary email + SMS boarding pass",ch:"WhatsApp + Email + SMS · Journey-fired",
+     say:"\"GDS confirmation received. Journey immediately fires three outbound actions: a WhatsApp confirmation in the same thread with Marco's new PNR and seat; a full itinerary email with refund policy for the fare difference; and an SMS with his mobile boarding pass link. Three channels, one Journey, zero agent involvement for Marco.\"",
+     show:"Show Journey's three send nodes executing on the GDS confirmation event: WhatsApp, email send node, SMS send node. Show Marco's WhatsApp: 'You're rebooked — BA449, 11am, seat 14A, PNR: [new]'. Show the itinerary email. Show the SMS boarding pass link."},
+    {t:"journey",title:"5 — Show the no-reply escalation path",ch:"Journeys · SMS escalation branch",jnote:"Show what Journey does when a passenger goes silent — the 90min wait and SMS fallback.",
+     say:"\"Let's also show what Journey does for passengers who don't reply. After 90 minutes of silence, Journey doesn't just give up. It sends an SMS — a secondary channel nudge. If there's no SMS response in 30 minutes, Journey routes to the agent queue, flagged as unresponsive. The agent sees everything: the WhatsApp that was sent, the alternatives that were shown, the time elapsed. They're picking up a brief, not a blank case.\"",
+     show:"Show the 90-min wait node timing out in Journey's canvas. Show the SMS nudge firing. Show the 30-min secondary wait. Show the agent escalation node: context object includes wa_sent, alternatives_shown, reply_received: false, sms_sent, elapsed_time. Show in Agent Workspace what the agent receives."}
+  ],
+  objections:[
+    {q:"\"Our airline/OTA controls rebooking — can Talkdesk actually call the GDS?\"",a:"Journey orchestrates the communication and passenger choice. The GDS write-back uses your existing inventory API — the same endpoint your agents use. Journey is the orchestration layer on top. A technical discovery call can confirm the specific GDS integration for your setup."},
+    {q:"\"What about passengers who want a refund rather than a rebook?\"",a:"The HELP reply routes to an agent with full context. For refund requests, Journey can also present a structured refund flow via Autopilot — the options are configurable. Journey handles the routing; your policy defines the options."},
+    {q:"\"What if two passengers reply to the same flight and the last seat goes mid-sequence?\"",a:"Journey re-queries the GDS at the point of the reply — not at send time. If the selected flight is no longer available, Journey presents the remaining alternatives within the same WhatsApp thread. Availability is always checked live before the booking is made."}
+  ],
+  discovery:[
+    {q:"When a flight is cancelled, what does your inbound contact volume look like in the first hour — and how do you currently handle 280 passengers at once?",w:"Quantifies the disruption spike and the scale problem. Opens the 280-simultaneous-flows conversation immediately."},
+    {q:"Do passengers currently have any self-serve way to rebook outside of calling or queuing at the airport?",w:"Almost universally: no. Opens the self-serve gap."},
+    {q:"What's the average handle time for a disruption rebooking call today — and how many of those calls involve the agent simply presenting the same alternatives?",w:"Opens the automation ROI conversation. If the agent is just reading out three flight options, Journey can do that in WhatsApp."}
+  ],
+  metrics:["280","35%","<2 min"],
+  metricLabels:["Individual passenger flows running simultaneously in one Journey","Disruption rebooks completed without agent involvement","Journey time from GDS confirmation to WhatsApp + email + SMS close"]
+},
+{
+  id:3,
+  title:"Post-stay NPS — WhatsApp survey, detractor recovery, and loyalty milestone",
+  desc:"Journey fires a two-tap WhatsApp NPS survey 24 hours after checkout. Detractors are immediately flagged and a recovery flow starts. Promoters enter a loyalty milestone sequence. Journey holds state across the full post-stay lifecycle.",
+  direction:"outbound",channels:["whatsapp","email"],all3:false,
+  personas:["Yuki Tanaka – recent guest","Journey orchestration","Autopilot","CRM / loyalty platform"],
+  td:["Journeys","Proactive Outreach","WhatsApp Business API","Autopilot","CRM integration","Campaign Manager"],
+  outcome:"40%+ survey response rate · detractor flagged in <60s · promoter loyalty sequence Journey-owned",
+  journeyFlow:[
+    {type:"trigger",label:"Trigger",desc:"PMS checkout event received. Journey schedules NPS WhatsApp for T+24hrs. Guest profile, stay data, and loyalty status pulled from PMS and CRM.",ch:"PMS checkout event · T+24hr scheduled"},
+    {type:"send",label:"Step 1 — WhatsApp NPS survey sent",desc:"Journey sends two-tap NPS message: 'Hi Yuki — how was your stay? Tap: 😍 9–10 · 🙂 7–8 · 😐 5–6 · 😞 1–4'. Journey enters a WAIT state.",ch:"WhatsApp · T+24hr"},
+    {type:"wait",label:"Wait — NPS response received? (48hr window)",desc:"Journey monitors for a WhatsApp reply event. 48-hour window allows for guests who read the message but reply later.",ch:"Journey wait state · 48hr"},
+    {type:"branch",label:"Branch — score received or no response?",branches:[
+      {outcome:"yes",label:"Promoter (9–10)",text:"Journey immediately sends a WhatsApp thank-you with bonus loyalty points confirmation. Advances to the promoter sequence: next-stay offer email."},
+      {outcome:"no",label:"Passive (7–8)",text:"Journey sends a brief WhatsApp acknowledgement and advances to a standard next-stay email offer. No recovery flow."},
+      {outcome:"alt",label:"Detractor (1–6)",text:"Journey immediately flags the case to the duty manager via push alert. Sends holding WhatsApp to guest: 'We\'re sorry to hear that — someone from our team will reach out shortly.' Journey starts a 2-hour SLA timer."},
+      {outcome:"alt",label:"No response (48hrs)",text:"Journey sends a one-time email nudge: 'Yuki — a quick note on your stay.' If no email response in 24hrs, Journey closes as unscored."}
+    ]},
+    {type:"agent",label:"Detractor recovery — duty manager contacts guest",desc:"Manager sees: stay details, score received, previous stays, and the holding message sent. Journey monitors for contact event. SLA: 2 hours.",ch:"Agent Workspace · Journey-SLA · detractor branch only"},
+    {type:"branch",label:"Branch — detractor recovery resolved?",branches:[
+      {outcome:"yes",label:"Guest acknowledged, resolution offered",text:"Journey fires a recovery email: apology, remedy details, discount on next stay. Marks contact as recovered."},
+      {outcome:"no",label:"SLA breached — no manager contact",text:"Journey escalates to General Manager with full timeline: score, guest LTV, time elapsed, holding message sent, no agent contact."}
+    ]},
+    {type:"send",label:"Promoter sequence — next-stay offer email",desc:"Journey sends a personalised next-stay offer to Promoters and Passives: 20% discount, curated property recommendations based on stay history.",ch:"Email · Journey-fired · promoter/passive branches"},
+    {type:"wait",label:"Wait — next-stay booking within 30 days?",desc:"Journey monitors for a PMS reservation event linked to this guest. If a booking is made, Journey fires a confirmation and marks the guest as re-acquired.",ch:"Journey wait state · 30 days"},
+    {type:"close",label:"Journey closes",desc:"NPS score, recovery outcome, and next-stay conversion logged per guest. CRM updated. Journey marks contact complete.",ch:"System"}
+  ],
+  value:["WhatsApp NPS achieves 40%+ response rate vs 8–12% for email — the feedback is actually collected","Detractor flag reaches the duty manager in under 60 seconds — before the guest posts a review online","Journey monitors next-stay booking after a promoter offer — the commercial impact of the NPS programme is fully attributed"],
+  setup:{env:"WhatsApp Business API connected. PMS checkout trigger active. Agent Workspace for detractor recovery. CRM integration for loyalty and stay history.",data:"Guest: Yuki Tanaka. Just checked out, 3-night stay, Gold loyalty member. No prior complaints on record.",products:"Journeys · Proactive Outreach · WhatsApp Business API · Autopilot · CRM integration · Campaign Manager",duration:"11 min full · 5 min lightning (Journey canvas, WhatsApp NPS, detractor branch, promoter email, next-stay wait)"},
+  script:[
+    {t:"journey",title:"1 — Journey canvas: checkout to post-stay lifecycle",ch:"Journeys · PMS checkout trigger",jnote:"Show the full post-stay lifecycle on the canvas before anything else.",
+     say:"\"Yuki checked out this morning. In most hotels, that's the end of the relationship until the next booking. Journey turns it into the start of a post-stay lifecycle. The PMS fires the checkout event. Journey schedules the NPS WhatsApp for T+24hrs. And it already has two paths ready: one for a promoter, one for a detractor. Let's look at both.\"",
+     show:"Open the Journey canvas. Show: PMS checkout → T+24hr schedule → WhatsApp NPS send → 48hr wait → four-way branch (promoter / passive / detractor / no response) → detractor SLA path and promoter email path → 30-day next-stay wait → close."},
+    {t:"outbound",title:"2 — Journey sends two-tap WhatsApp NPS",ch:"WhatsApp · Journey-controlled",
+     say:"\"24 hours later, Yuki gets this message. Her name, the hotel name, and four emoji-rated options. Five seconds to respond — no survey link, no login, no app. Journey is now in a WAIT state, monitoring for her reply.\"",
+     show:"Show the WhatsApp NPS message. Show the Journey wait state: 48-hour window, monitoring for inbound reply event.",
+     tip:"Ask: 'What's your current post-stay survey response rate?' Most T&H brands say 8–15% for email. The 40%+ WhatsApp benchmark is usually a significant moment."},
+    {t:"inbound",title:"3 — Detractor reply — Journey flags immediately",ch:"WhatsApp · inbound event → Journey · detractor branch",
+     say:"\"Say Yuki replies with a 4. Journey receives the event, classifies her as a detractor, and immediately fires two actions: an alert to the duty manager's device — with Yuki's score, stay details, and LTV — and a holding WhatsApp to Yuki: 'We're sorry to hear that, someone will be in touch shortly.' All of that happens before a human has seen the reply. The SLA timer starts.\"",
+     show:"Show the score '4' arriving in Journey's activity log. Show Journey classifying: detractor. Show the duty manager push alert. Show the holding WhatsApp sent to Yuki. Show the 2-hour SLA timer starting in Journey.",
+     tip:"Show the SLA breach branch too: if no manager contact in 2 hours, Journey escalates to the GM with the full timeline. Journey enforces the SLA — it's not just a recommendation."},
+    {t:"outbound",title:"4 — Promoter path — loyalty acknowledgement + next-stay offer",ch:"WhatsApp + Email · Journey-fired",
+     say:"\"Now let's show the promoter path. Yuki replies 9. Journey immediately sends a WhatsApp thank-you — 500 bonus points, Gold status confirmed. Then, 2 hours later, Journey fires the next-stay offer email — personalised based on her stay history, 20% off a return visit. Journey is monitoring: if Yuki makes a booking in the next 30 days, Journey attributes it to the NPS campaign.\"",
+     show:"Show the promoter branch in the Journey canvas. Show the WhatsApp thank-you with 500 bonus points. Show the scheduled email send node: T+2hr, 20% next-stay offer. Show the 30-day wait node monitoring for a PMS reservation event."},
+    {t:"journey",title:"5 — Next-stay booking detected — Journey closes with attribution",ch:"Journeys · PMS reservation event",
+     say:"\"3 weeks later, Yuki makes a new booking. The PMS fires a reservation event. Journey receives it, matches it to Yuki's flow, and closes the contact as re-acquired — with full attribution: NPS score was 9, next-stay offer was sent, booking confirmed 21 days later. The commercial value of the NPS programme is now measurable.\"",
+     show:"Show the PMS reservation event arriving in Journey's activity log. Show Journey matching it to Yuki's open flow. Show Journey's close state: nps_score: 9, next_stay_offer_sent: true, rebooked: true, days_to_rebook: 21. Show the campaign dashboard: NPS responses, detractor recovery rate, promoter rebook rate."}
+  ],
+  objections:[
+    {q:"\"We already send post-stay email surveys — this seems duplicative.\"",a:"Email NPS typically gets 8–12% response. WhatsApp gets 40%+. The feedback you collect is statistically more complete, and the detractor flag speed — under 60 seconds — means you can intervene before a TripAdvisor review goes live. Keep the email for the next-stay offer; use WhatsApp for the survey."},
+    {q:"\"What happens if the detractor has already posted a bad review by the time the manager contacts them?\"",a:"Journey flags the detractor in under 60 seconds of the reply. The duty manager contact window is within 2 hours. Most review sites have a moderation window or allow response. More importantly, a direct personal call from the hotel — same day — significantly improves the chance of review retraction or update. Speed is the variable Journey controls."},
+    {q:"\"GDPR — can we message guests via WhatsApp after checkout?\"",a:"WhatsApp Business API messaging requires opt-in, captured at booking or check-in. Post-stay service communication is a legitimate interest use case within the guest relationship. Talkdesk Journey manages consent, suppression lists, and audit trails. Your legal team can confirm the exact scope for your jurisdiction."}
+  ],
+  discovery:[
+    {q:"What's your current post-stay survey response rate — and how long after checkout does it take to get meaningful feedback?",w:"Surfaces the email survey gap. Most T&H brands are at under 15% response and waiting 48–72hrs."},
+    {q:"When a guest leaves a 1-star review online, how quickly does your team know — and is there a recovery process that fires the same day?",w:"Opens the detractor speed-to-response conversation. Most teams find out days later."},
+    {q:"Can you currently attribute a next-stay booking to a specific post-stay communication — and measure the commercial return on your NPS programme?",w:"Opens the Journey attribution and 30-day next-stay monitoring conversation."}
+  ],
+  metrics:["40%+","<60s","30 days"],
+  metricLabels:["WhatsApp NPS response rate vs 8–12% for email","Time for Journey to flag a detractor to the duty manager","Journey monitoring window for next-stay booking attribution after promoter offer"]
+},
+/* ══ BOTH DIRECTIONS ═══════════════════════════════════════════════════ */
+{
+  id:4,
+  title:"Day-of-arrival upgrade — outbound WhatsApp offer, inbound reply, Journey-owned PMS close",
+  desc:"Journey sends a WhatsApp upgrade offer on the morning of arrival. Guest replies YES. Journey re-queries PMS for live availability, processes the upgrade, fires a multi-channel confirmation, and monitors for VIP arrival tagging — all within Journey's control plane.",
+  direction:"both",channels:["whatsapp","email"],all3:false,
+  personas:["Amir Hassan – hotel guest","Journey orchestration","Autopilot","PMS integration"],
+  td:["Journeys","Proactive Outreach","WhatsApp Business API","Autopilot","PMS integration"],
+  outcome:"25% upgrade acceptance · £65 avg incremental revenue · zero agent cost per upgrade",
+  journeyFlow:[
+    {type:"trigger",label:"Trigger",desc:"PMS fires day-of-arrival event for guests with upgradeable room availability. Journey checks: is an upgrade available and priced? If yes, instantiate flow.",ch:"PMS event · day of arrival"},
+    {type:"send",label:"Step 1 — WhatsApp upgrade offer sent",desc:"Journey sends personalised offer: 'Good morning Amir — your room is ready at 3pm. Fancy a suite upgrade for just £65? Reply YES to confirm — limited availability.'",ch:"WhatsApp · Journey-controlled · T+8am"},
+    {type:"wait",label:"Wait — YES reply received? (3hr window)",desc:"Journey monitors for a YES inbound event. 3-hour window reflects the morning-of urgency and suite sell-through risk.",ch:"Journey wait state · 3hr"},
+    {type:"branch",label:"Branch — YES, NO, question, or silence?",branches:[
+      {outcome:"yes",label:"YES reply",text:"Journey immediately re-queries PMS for live suite availability. If still available, Journey calls the PMS amendment API to upgrade the booking. If suite just sold, Journey offers next-best room."},
+      {outcome:"no",label:"NO reply",text:"Journey acknowledges gracefully: 'No problem — we'll have your room ready at 3pm.' Marks as declined. No further upsell contact for this stay."},
+      {outcome:"alt",label:"Question or counter-offer",text:"Journey routes to Autopilot for FAQ handling (early check-in, room features, breakfast inclusion). If Autopilot can't resolve, routes to front desk agent with full Journey context."},
+      {outcome:"alt",label:"No reply after 3hrs",text:"Journey closes the upsell window. Suite released back to inventory. Standard room remains. Guest receives standard check-in instructions."}
+    ]},
+    {type:"branch",label:"Branch — PMS upgrade confirmed or suite gone?",branches:[
+      {outcome:"yes",label:"Suite confirmed in PMS",text:"Journey fires upgrade confirmation WhatsApp + check-in instructions. Tags guest as VIP arrival in PMS. Fires revenue attribution event to campaign dashboard."},
+      {outcome:"no",label:"Suite sold between offer and reply",text:"Journey sends an apology WhatsApp with next-best upgrade at a reduced rate. Autopilot handles the conversation within Journey's context."}
+    ]},
+    {type:"send",label:"Step 2 — Confirmation WhatsApp + updated email",desc:"WhatsApp: upgrade confirmed, new room number, express check-in lane. Email: updated booking confirmation with suite details and amenity guide.",ch:"WhatsApp + Email · Journey-fired"},
+    {type:"sys",label:"PMS tagged — VIP arrival flag set",desc:"Journey calls PMS to tag Amir as VIP arrival. Front desk notified. Revenue attributed to WhatsApp campaign in Talkdesk.",ch:"PMS API · Journey node"},
+    {type:"close",label:"Journey closes",desc:"Upgrade outcome, revenue, and channel path logged. Journey marks contact complete.",ch:"System"}
+  ],
+  value:["Journey re-queries PMS at the moment of reply — not at send time — so the offer is always live and availability is never over-promised","The WhatsApp conversation is fully within Journey: Autopilot handles questions, Journey processes the YES, and Journey calls the PMS — no handoff, no context loss","VIP arrival tagging is a Journey node: the front desk notification happens automatically on upgrade confirmation, not as a manual back-office step"],
+  setup:{env:"WhatsApp Business API connected. PMS with real-time availability query and upgrade write-back. Journey with day-of-arrival trigger.",data:"Guest: Amir Hassan. Standard room booked. Suite 401 available at £65 upgrade. Arrival: today 3pm.",products:"Journeys · Proactive Outreach · WhatsApp Business API · Autopilot · PMS integration",duration:"10 min full · 5 min lightning (Journey canvas, WhatsApp offer, YES branch, PMS call, confirmation close)"},
+  script:[
+    {t:"journey",title:"1 — Journey canvas: upsell offer to VIP arrival tag",ch:"Journeys · PMS trigger",jnote:"Show the full canvas — particularly the PMS re-query at reply time, which is the key architectural point.",
+     say:"\"Amir is arriving today. Journey receives the day-of-arrival event from the PMS, checks suite availability, and sends the offer. But here's what makes this Journey-native rather than a simple SMS tool: when Amir replies YES, Journey doesn't just send a confirmation. It re-queries the PMS for live availability at that moment — because 3 hours may have passed since the offer was sent. If the suite is still available, Journey books it. If it's gone, Journey handles that too.\"",
+     show:"Open the Journey canvas. Show: PMS trigger → availability check → WhatsApp offer → 3hr wait → four-way branch → PMS re-query node → booking confirmation → VIP tag → close. Point to the PMS re-query node specifically."},
+    {t:"outbound",title:"2 — Journey sends upgrade offer at 8am",ch:"WhatsApp · Journey-controlled",
+     say:"\"Amir gets the WhatsApp this morning while he's having breakfast — before he's left for the hotel, when he's most receptive. 'Fancy a suite upgrade for just £65?' Journey is in a WAIT state, listening for his reply.\"",
+     show:"Show the WhatsApp offer. Show the Journey 3-hour wait timer. Show the suite inventory in the PMS: Suite 401, available, £65 delta.",
+     tip:"Ask: 'Where does your upgrade offer happen today — at the front desk?' Most hotels say yes. The timing shift to morning-of WhatsApp is the insight that changes the conversation."},
+    {t:"inbound",title:"3 — Amir replies YES — Journey re-queries PMS",ch:"WhatsApp · inbound → Journey · PMS re-query",
+     say:"\"Amir replies YES. Journey receives the inbound event and immediately calls the PMS to check if Suite 401 is still available — right now, not three hours ago. It is. Journey books the upgrade, adjusts the rate, and fires the confirmation.\"",
+     show:"Show Amir's YES reply arriving in Journey's activity log. Show Journey's PMS re-query API call: suite_401, available: true. Show the PMS booking amendment. Show Journey's state update: upgrade_confirmed: true, room: Suite 401, revenue_delta: £65."},
+    {t:"outbound",title:"4 — Journey fires confirmation + VIP tag",ch:"WhatsApp + Email + PMS · Journey-fired",
+     say:"\"Journey fires three actions simultaneously: a WhatsApp confirmation with the suite number and express check-in instructions; an updated booking confirmation email with suite amenity details; and a PMS API call to tag Amir as a VIP arrival — so the front desk is notified before he walks in. All Journey nodes. No agent involved.\"",
+     show:"Show the three simultaneous Journey nodes executing: WhatsApp send, email send, PMS API tag. Show Amir's WhatsApp: 'You're upgraded to Suite 401 — use the express lane at 3pm.' Show the PMS VIP flag on Amir's reservation. Show the revenue attribution in the campaign dashboard."},
+    {t:"journey",title:"5 — Show the suite-gone fallback path",ch:"Journeys · PMS conflict branch",
+     say:"\"Let's also show what Journey does if the suite was booked by someone else between the offer and Amir's reply. Journey's PMS re-query returns: unavailable. Journey doesn't just send an error. It routes to Autopilot, which offers the next-best room at a reduced rate — still within the same WhatsApp thread, still within Journey's context.\"",
+     show:"Show the PMS re-query returning unavailable. Show Journey routing to the Autopilot alternative offer sub-flow. Show the WhatsApp response: 'The suite just went — but we have a Deluxe Room available for £35 upgrade. Interested?' Show the Journey state handling the alternative path."}
+  ],
+  objections:[
+    {q:"\"What if the suite price changes between the offer and the reply?\"",a:"Journey reads the rate from the PMS at send time and again at reply time. If the rate has changed, Journey's confirmation message uses the current PMS rate. The offer can include a 'limited time' framing — configurable in the WhatsApp template — to set the expectation."},
+    {q:"\"Our revenue management team controls upgrade pricing dynamically — how does this work?\"",a:"Journey pulls the upgrade delta price from your RM system or PMS at the time of send. The offer reflects current RM pricing. If the RM system changes the rate mid-offer, Journey re-queries at reply time and uses the latest rate before confirming. The RM system prices; Journey communicates and executes."},
+    {q:"\"What if the guest replies YES for two different upgrades?\"",a:"Journey handles one active upsell offer per guest per stay. Once a YES is received and processed, Journey suppresses further upgrade offers for that booking. If the guest wants to make additional changes, they reply in the thread and Journey routes to Autopilot or a concierge agent."}
+  ],
+  discovery:[
+    {q:"What's your current room upgrade conversion rate — and where in the journey does the offer happen?",w:"Most hotels say 8–12% at the front desk. Day-of WhatsApp typically achieves 20–30%. The timing insight changes the conversation."},
+    {q:"When your front desk offers an upgrade today, is the availability check live — or are they working from a report that might be hours old?",w:"Opens the real-time PMS re-query value. Stale inventory data is a common pain point."},
+    {q:"How do you currently attribute upgrade revenue to a specific outreach or campaign?",w:"Opens the Journey campaign attribution conversation."}
+  ],
+  metrics:["25%","£65","0"],
+  metricLabels:["Upgrade acceptance rate on day-of-arrival WhatsApp","Average incremental revenue per upgraded guest","Agent cost per upgrade — fully Journey + Autopilot handled"]
+},
+{
+  id:5,
+  title:"In-stay baggage delay — inbound WhatsApp complaint, Journey-owned resolution and proactive follow-up",
+  desc:"Guest messages the hotel WhatsApp about missing baggage on arrival. Journey receives the inbound event, runs an Autopilot triage sub-flow to file the trace, monitors for carrier updates, fires proactive SMS tracking alerts, and escalates if the bag remains unlocated after 24 hours.",
+  direction:"both",channels:["whatsapp","sms","email"],all3:false,
+  personas:["Sofia Reyes – arriving guest","Journey orchestration","Autopilot","Airline baggage API"],
+  td:["Journeys","Autopilot","Agent Workspace","Proactive Outreach","Airline baggage API"],
+  outcome:"60% baggage cases resolved without agent · proactive updates prevent repeat contacts",
+  journeyFlow:[
+    {type:"trigger",label:"Trigger",desc:"Inbound WhatsApp message classified as baggage delay by Autopilot. Journey starts: guest identified from profile, current booking confirmed, reservation active.",ch:"Inbound WhatsApp · Autopilot classification"},
+    {type:"bot",label:"Autopilot triage sub-flow — PIR collection and trace filing",desc:"Autopilot collects PIR reference via structured WhatsApp prompts. Calls airline baggage API to file the trace. Returns trace reference to guest in the same thread.",ch:"WhatsApp · Autopilot · baggage API · Journey-owned"},
+    {type:"wait",label:"Wait — carrier locates bag? (8hr window)",desc:"Journey monitors for a bag-located event from the airline baggage API webhook. Also monitors for any further inbound WhatsApp from the guest.",ch:"Journey wait state · airline API webhook"},
+    {type:"branch",label:"Branch — bag located, still searching, or guest re-contacts?",branches:[
+      {outcome:"yes",label:"Bag located by carrier",text:"Journey fires a proactive SMS to the guest: bag found, delivery ETA, reference number. Advances to goodwill email step."},
+      {outcome:"no",label:"Not located after 8hrs",text:"Journey sends a proactive status update WhatsApp: 'We\'re still tracing your bag — here\'s the current status and what happens next.' Journey restarts a second 16hr wait."},
+      {outcome:"alt",label:"Guest messages again",text:"Journey routes the inbound message to Autopilot for status update, still within Journey\'s context. If Autopilot can\'t resolve, agent escalation with full trace history."}
+    ]},
+    {type:"wait",label:"Wait — bag located in second window? (16hrs)",desc:"Journey continues monitoring the airline API. If bag located, Journey advances. If still not found after 16hrs (24hrs total), Journey escalates to agent queue.",ch:"Journey wait state · 16hr"},
+    {type:"branch",label:"Branch — located or 24hr threshold reached?",branches:[
+      {outcome:"yes",label:"Bag located (second window)",text:"Journey fires SMS update + goodwill email. Marks as resolved."},
+      {outcome:"no",label:"24hrs elapsed — bag still unlocated",text:"Journey escalates to agent queue with full trace context: PIR, API responses, WhatsApp history, time elapsed. Agent picks up a live disruption with complete history."}
+    ]},
+    {type:"send",label:"Goodwill email — essentials credit + delivery confirmation",desc:"Email: apology, £30 essentials credit applied to room account, bag delivery ETA (or ongoing trace update if second window), CSAT survey link.",ch:"Email · Journey-fired"},
+    {type:"wait",label:"Wait — bag delivery confirmed? (post-delivery check)",desc:"Journey monitors for delivery confirmation from airline API. On confirmation, fires a brief closure WhatsApp.",ch:"Journey wait state · airline API"},
+    {type:"close",label:"Journey closes",desc:"Full trace history, resolution time, and guest satisfaction outcome logged. Case closed in Talkdesk.",ch:"System"}
+  ],
+  value:["Journey monitors the airline API webhook continuously — proactive SMS fires the moment the bag is located, before the guest needs to chase","Autopilot triage runs within Journey's context: the PIR, the API call, and the trace reference are all Journey state — available to any agent who picks up the case","Journey holds the full 24-hour timeline autonomously — escalating to agent only when the case genuinely needs human intervention, not on a fixed timer"],
+  setup:{env:"WhatsApp Business API connected. Airline baggage API integration active. Agent Workspace for escalation. Journey with inbound WhatsApp trigger and Autopilot classification.",data:"Guest: Sofia Reyes. Checked in today. Bag missing — BA flight from MAD. PIR not yet filed. Reservation confirmed.",products:"Journeys · Autopilot · Agent Workspace · Proactive Outreach (SMS + email) · WhatsApp Business API · Airline baggage API",duration:"11 min full · 5 min lightning (Journey canvas, Autopilot triage, bag-located branch, SMS update, goodwill email)"},
+  script:[
+    {t:"journey",title:"1 — Journey receives inbound WhatsApp and classifies intent",ch:"Journeys · inbound WhatsApp trigger",jnote:"Show Journey as the receiver — the inbound message starts a Journey, not just a chat session.",
+     say:"\"Sofia has just arrived. Her bag didn't make it. She messages the hotel WhatsApp from the arrivals hall. That inbound message arrives in Talkdesk, Autopilot classifies it as a baggage delay, and Journey starts. From this moment, Journey owns the full resolution lifecycle — Autopilot handles the triage, Journey monitors the airline API, and an agent only gets involved if the bag isn't found in 24 hours.\"",
+     show:"Open the Journey canvas. Show: inbound WhatsApp trigger → Autopilot classification → triage sub-flow → 8hr API wait → three-way branch → 16hr secondary wait → agent escalation or resolution → goodwill email → delivery confirmation → close."},
+    {t:"bot",title:"2 — Autopilot collects PIR and files trace within Journey",ch:"WhatsApp · Autopilot · airline API · Journey-owned",
+     say:"\"Autopilot replies immediately. It asks Sofia for her PIR reference — the slip from the airline desk. Sofia provides it. Autopilot calls the airline baggage API, files the trace, and sends Sofia the reference number in the same WhatsApp thread. This all happens within Journey's context — the PIR, the API call result, and the trace reference are all Journey state variables.\"",
+     show:"Show Autopilot's guided WhatsApp flow: PIR request, Sofia's response, API call node in Journey, trace reference returned. Show Journey's state: pir: BA4471, trace_filed: true, trace_ref: TRC8821.",
+     tip:"Ask: 'Today, when a guest reports missing baggage, who handles it and what's the process?' Most hotels have no systematic response. This is the contrast."},
+    {t:"outbound",title:"3 — Bag located — Journey fires proactive SMS immediately",ch:"SMS · Journey-fired · airline API event",
+     say:"\"Four hours later, the airline API sends a webhook: bag located at Madrid, on the next flight. Journey receives that event immediately and fires an SMS to Sofia — no agent involved, no manual check. 'Good news — your bag has been found. Expected delivery before noon tomorrow. Reference: TRC8821.' She didn't have to chase. Journey told her before she needed to ask.\"",
+     show:"Show the airline API webhook arriving in Journey's activity log: bag_status: located, eta: tomorrow before noon. Show Journey's branch firing: bag_located: true. Show the SMS send node executing. Show Sofia's SMS."},
+    {t:"outbound",title:"4 — Journey fires goodwill email",ch:"Email · Journey-fired",
+     say:"\"Journey also fires the goodwill email — a formal apology, a £30 essentials credit applied to Sofia's room account automatically, the delivery ETA, and a CSAT survey. The credit is applied as a Journey node — a PMS API call. No manager approval needed for the standard amount.\"",
+     show:"Show the goodwill email send node in Journey. Show the PMS API call node: essentials_credit: £30, applied to reservation. Show Sofia's email: apology, credit confirmation, delivery ETA, CSAT link."},
+    {t:"journey",title:"5 — Show the 24hr escalation path",ch:"Journeys · agent escalation after 24hrs",
+     say:"\"Let's show the other branch — what if the bag still hasn't been found after 24 hours. Journey has been running two API wait windows: 8 hours, then 16 hours. If no bag_located event arrives, Journey escalates to the agent queue. The agent sees the full 24-hour history: Sofia's WhatsApp messages, the PIR, every API response, time elapsed. They're picking up a live case with complete context — not a blank page.\"",
+     show:"Show the 24hr threshold branch in Journey's canvas. Show the agent escalation node. Show the context object: pir, trace_ref, api_responses: [array of status updates], time_elapsed: 24hrs, wa_history. Show in Agent Workspace what the agent receives."}
+  ],
+  objections:[
+    {q:"\"Baggage is the airline's responsibility — why should the hotel get involved?\"",a:"Because Sofia is staying at your hotel. The guest experience is one trip. A hotel that proactively helps with a baggage issue — and fires a goodwill credit the same day — creates loyalty that far exceeds the cost. Journey makes that intervention systematic and scalable, not dependent on individual staff initiative."},
+    {q:"\"What if the airline API doesn't provide real-time webhooks?\"",a:"Journey can also use a polling approach — querying the airline's baggage status endpoint on a configurable schedule (every 2 hours, for example). The branch logic is the same; the trigger mechanism changes. A technical discovery call can confirm what your airline partners' APIs support."},
+    {q:"\"What's the cost of the £30 goodwill credit at scale?\"",a:"The credit is applied only when a baggage delay is confirmed — not as a blanket policy. At a typical baggage delay rate of 0.5–1% of arrivals, the cost is manageable. The alternative cost — a negative review that depresses future bookings — is significantly higher. Journey also tracks CSAT outcomes so you can measure whether the credit achieves its intended effect."}
+  ],
+  discovery:[
+    {q:"When a guest arrives with missing baggage today, what does your team do — and how long before the guest receives any update?",w:"Opens the manual process gap. Most hotels have no systematic same-day response."},
+    {q:"Do you have any proactive communication with guests between check-in and checkout if something goes wrong during their stay?",w:"Opens the in-stay proactive outreach gap — most hotels only respond, never proact."},
+    {q:"What's your CSAT score for guests who experienced a service failure during their stay — and how does it compare to your average?",w:"Service recovery is a known CSAT driver. Grounds the conversation in guest experience impact."}
+  ],
+  metrics:["60%","<5 min","24hr"],
+  metricLabels:["Baggage cases resolved without agent — Journey handles trace, monitoring, and SMS update","Time to file trace and return reference to guest via Autopilot","Maximum autonomous Journey monitoring before human escalation"]
+},
+{
+  id:6,
+  title:"In-stay concierge — inbound WhatsApp request, split routing, Journey-owned confirmation",
+  desc:"Guest sends a WhatsApp message with two requests: a restaurant booking and a late checkout. Journey receives the inbound event, splits the intent, routes each to the right handler — Autopilot for the bookable request, agent for the judgment call — and fires a unified confirmation in the same thread.",
+  direction:"both",channels:["whatsapp","sms","email"],all3:false,
+  personas:["James Park – hotel guest","Journey orchestration","Autopilot","Maya – concierge agent"],
+  td:["Journeys","Autopilot","Agent Workspace","Copilot","Proactive Outreach"],
+  outcome:"Zero front desk visits · both requests resolved in one WhatsApp thread · Journey-owned confirmation",
+  journeyFlow:[
+    {type:"trigger",label:"Trigger",desc:"Inbound WhatsApp message classified as multi-intent by Autopilot. Journey starts: two sub-flows instantiated in parallel — one for each intent.",ch:"Inbound WhatsApp · intent split"},
+    {type:"bot",label:"Sub-flow A — Autopilot handles restaurant booking",desc:"Autopilot queries restaurant API for availability at the requested time. Table confirmed. Booking reference generated. Autopilot signals completion event to Journey.",ch:"WhatsApp · Autopilot · restaurant API · parallel"},
+    {type:"agent",label:"Sub-flow B — Late checkout routed to concierge agent",desc:"Journey routes the late checkout request to the concierge agent queue with context: guest profile, current checkout time, room type, occupancy data. Agent checks housekeeping schedule and approves.",ch:"Agent Workspace · Copilot · parallel"},
+    {type:"wait",label:"Wait — both sub-flows complete?",desc:"Journey holds at a join node, waiting for both sub-flows to return a completion event before sending the unified confirmation.",ch:"Journey join node · both sub-flows"},
+    {type:"send",label:"Journey fires unified WhatsApp confirmation",desc:"'James — both sorted: your table is booked for 8pm at The Rooftop, and 1pm checkout is confirmed.' Sent from Journey the moment both sub-flows complete.",ch:"WhatsApp · Journey-fired"},
+    {type:"send",label:"Email summary + SMS dinner reminder",desc:"Email: both confirmations with full details. SMS scheduled for 7:30pm: 'Reminder — your table at The Rooftop is at 8pm tonight.'",ch:"Email + SMS · Journey-scheduled"},
+    {type:"wait",label:"Wait — restaurant time reached (SMS reminder trigger)",desc:"Journey holds until 30 minutes before the reservation time, then fires the SMS reminder automatically.",ch:"Journey scheduled wait"},
+    {type:"close",label:"Journey closes",desc:"Both requests confirmed. SMS reminder delivered. No-show risk reduced. Journey marks contact complete.",ch:"System"}
+  ],
+  value:["Journey runs both sub-flows in parallel and joins them — the unified confirmation only fires when both are complete, so the guest never receives a partial update","The SMS dinner reminder is a Journey-scheduled node: it fires 30 minutes before the reservation time regardless of when the booking was made — no manual diary entry","Both a bot-handled request (restaurant) and an agent-handled request (late checkout) are coordinated by Journey — the guest sees one seamless conversation"],
+  setup:{env:"WhatsApp Business API connected. Restaurant booking API active. Agent Workspace with housekeeping/occupancy data. Journey with inbound WhatsApp trigger and parallel sub-flow capability.",data:"Guest: James Park. In-stay, checking out tomorrow. Rooftop restaurant table for 2 at 8pm: available. Late checkout 1pm: available.",products:"Journeys · Autopilot · Agent Workspace · Copilot · Proactive Outreach (WhatsApp + email + SMS)",duration:"11 min full · 5 min lightning (canvas, intent split, parallel sub-flows, join node, unified confirmation)"},
+  script:[
+    {t:"journey",title:"1 — Journey canvas: parallel sub-flows and join node",ch:"Journeys · inbound WhatsApp · intent split",jnote:"The join node is the architectural highlight — show it clearly on the canvas.",
+     say:"\"James has sent one WhatsApp with two requests. Journey receives the message, Autopilot splits the intent, and Journey instantiates two sub-flows in parallel. Sub-flow A: restaurant booking — automatable, goes to Autopilot. Sub-flow B: late checkout — needs a judgment call, goes to a concierge agent. The key feature here is the join node: Journey waits for both sub-flows to complete before it sends James a single unified confirmation. Not two messages. One.\"",
+     show:"Open the Journey canvas. Show: inbound WhatsApp → intent split → two parallel branches (Autopilot restaurant / agent checkout) → JOIN node → unified WhatsApp confirmation → email + SMS. Point to the join node explicitly."},
+    {t:"bot",title:"2 — Autopilot handles restaurant booking in parallel",ch:"WhatsApp · Autopilot · restaurant API",
+     say:"\"Sub-flow A starts. Autopilot queries the restaurant API — table for 2 at 8pm is available. It confirms the booking, generates a reference, and signals a completion event back to Journey. James doesn't see this yet. Journey is waiting for sub-flow B to finish before it sends anything.\"",
+     show:"Show the restaurant Autopilot sub-flow node executing. Show the API call: table_for_2 at 20:00, available: true, confirmed. Show the completion event firing back to Journey: restaurant_booked: true, ref: ROOF8421. Show the JOIN node still waiting: checkout_confirmed: false."},
+    {t:"agent",title:"3 — Agent handles late checkout — Journey monitors",ch:"Agent Workspace · Copilot · Journey-monitored",
+     say:"\"Sub-flow B is running in parallel. Maya picks up the late checkout request in Agent Workspace. Journey passed her the context: James's profile, current checkout time, room type, and the housekeeping schedule. She confirms 1pm is available and marks it complete. Journey receives the checkout_confirmed event and the JOIN node can now fire.\"",
+     show:"Show Maya's Agent Workspace: guest profile, checkout request, housekeeping schedule integration. Show Maya confirming 1pm checkout. Show the checkout_confirmed event firing to Journey. Show the JOIN node now with both conditions met: restaurant_booked: true, checkout_confirmed: true."},
+    {t:"outbound",title:"4 — Journey fires unified confirmation",ch:"WhatsApp · Journey-fired",
+     say:"\"Both sub-flows are complete. Journey fires one message: 'James — both sorted: your table is booked for 8pm at The Rooftop, and 1pm checkout is confirmed.' James doesn't know whether that involved a bot, an agent, or both. He just got a single, clean answer. Journey assembled it.\"",
+     show:"Show the JOIN node releasing. Show Journey's unified WhatsApp message to James. Show the email summary send. Show the SMS reminder scheduled for 7:30pm — 30 minutes before the reservation."},
+    {t:"outbound",title:"5 — Journey fires SMS dinner reminder at 7:30pm",ch:"SMS · Journey-scheduled",
+     say:"\"At 7:30pm, Journey automatically fires the SMS reminder — 'Your table at The Rooftop is at 8pm tonight.' James doesn't miss the reservation. The restaurant doesn't have a no-show. Journey scheduled this the moment the restaurant booking was confirmed — a time-based node in the flow. No manual diary entry, no agent remembering to send it.\"",
+     show:"Show Journey's scheduled SMS node. Show the trigger condition: current_time = reservation_time - 30min. Show the SMS firing to James. Show the Journey close state: both_confirmed: true, sms_reminder_sent: true."}
+  ],
+  objections:[
+    {q:"\"Our concierge team is already handling requests well — why add technology?\"",a:"Your concierge team's knowledge is the value. Journey removes the channel friction: they're fielding phone calls and front desk queues instead of focusing on high-touch requests that need human judgment. Autopilot handles the bookable requests automatically; your concierge handles the experiences. Same team, better allocation. And the SMS reminder fires for every booking — no matter how busy the evening is."},
+    {q:"\"What if the restaurant booking API isn't available?\"",a:"Journey can route restaurant requests to the concierge agent for manual confirmation without an API — the guest still gets the same single-thread experience and the join node still works. The API is an enhancement for scale, not a prerequisite for the core experience."},
+    {q:"\"What if the agent is slow to confirm the late checkout — does James wait?\"",a:"Journey's agent sub-flow has a configurable SLA timer. If the agent doesn't respond within, say, 15 minutes, Journey can send James an interim WhatsApp: 'We're checking your late checkout — we'll confirm shortly.' The join node waits for both, but Journey manages the guest's expectations in the meantime."}
+  ],
+  discovery:[
+    {q:"What's the most common reason guests contact your front desk or call centre during a stay?",w:"Typical answers: restaurant bookings, housekeeping requests, late checkout. All handleable in this Journey pattern."},
+    {q:"When a guest makes two requests in the same message today, how does your team handle them — sequentially, or in parallel?",w:"Almost always sequentially, with delays between. Opens the parallel sub-flow and join node conversation."},
+    {q:"Do you currently have a digital channel for in-stay requests that doesn't involve calling or visiting the desk?",w:"Almost universally no. Opens the in-stay digital service gap."}
+  ],
+  metrics:["0","1","30 min"],
+  metricLabels:["Front desk visits required to resolve both requests","WhatsApp thread where both requests were resolved — Journey assembled the unified confirmation","Before dinner reservation: when Journey automatically fires the SMS reminder"]
+},
+/* ══ INBOUND ═══════════════════════════════════════════════════════════ */
+{
+  id:7,
+  title:"Booking amendment — inbound WhatsApp, self-serve date change, Journey-owned PMS close and abandonment recovery",
+  desc:"Guest messages to change their check-in date. Journey receives the inbound event, Autopilot runs the self-service amendment flow within Journey's context, Journey calls the PMS API, fires a confirmation email, and — if the guest abandons mid-flow — re-engages with preserved state.",
+  direction:"inbound",channels:["whatsapp","email","sms"],all3:false,
+  personas:["Clara Müller – hotel guest","Journey orchestration","Autopilot","PMS integration"],
+  td:["Journeys","Autopilot","PMS integration","Proactive Outreach"],
+  outcome:"70% booking amendments self-served · Journey-owned abandonment recovery · consistent email confirmation on every amendment",
+  journeyFlow:[
+    {type:"trigger",label:"Trigger",desc:"Inbound WhatsApp message classified as booking amendment by Autopilot. Journey starts: guest identified from phone number, current reservation pulled from PMS.",ch:"Inbound WhatsApp · Autopilot classification"},
+    {type:"bot",label:"Autopilot checks availability for requested date",desc:"Autopilot asks for the new date and queries the PMS for room type availability. Presents result to guest: available at same rate, or alternative options if not.",ch:"WhatsApp · Autopilot · PMS query · Journey-owned"},
+    {type:"branch",label:"Branch — guest confirms, requests alternative, or abandons?",branches:[
+      {outcome:"yes",label:"Guest confirms new date",text:"Journey calls PMS amendment API. Booking updated. Journey fires confirmation WhatsApp and email."},
+      {outcome:"no",label:"Guest requests alternative date or room type",text:"Autopilot re-queries PMS with new parameters. Loop continues within Journey's context until guest confirms or requests agent."},
+      {outcome:"alt",label:"30min inactivity — abandonment detected",text:"Journey fires an SMS re-engagement: 'Clara — your date change is still in progress. Tap to continue where you left off: [Journey-tracked link].' State preserved."}
+    ]},
+    {type:"sys",label:"PMS amendment called — Journey node",desc:"Journey calls the PMS booking amendment API directly. Booking updated, new confirmation number generated. PMS confirmation event returns to Journey.",ch:"PMS API · Journey node"},
+    {type:"send",label:"Journey fires WhatsApp confirmation + email",desc:"WhatsApp: 'Done — your check-in is now [new date]. See you then!' Email: updated booking confirmation with new dates, room details, and cancellation policy.",ch:"WhatsApp + Email · Journey-fired"},
+    {type:"wait",label:"Wait — any follow-up contact within 24hrs?",desc:"Journey monitors for a follow-up inbound message. If the guest has a further question about the amendment, Journey re-opens the Autopilot flow with full amendment context available.",ch:"Journey wait state · 24hr"},
+    {type:"branch",label:"Branch — further contact or clean close?",branches:[
+      {outcome:"yes",label:"Follow-up message received",text:"Journey routes to Autopilot with full amendment context: original date, new date, any rate changes. Autopilot can answer amendment FAQs without the guest repeating themselves."},
+      {outcome:"no",label:"No follow-up in 24hrs",text:"Journey closes cleanly. Amendment confirmed, email sent, case complete."}
+    ]},
+    {type:"close",label:"Journey closes",desc:"Amendment outcome logged. PMS record updated. Journey marks contact complete. CSAT triggered if enabled.",ch:"System"}
+  ],
+  value:["Journey holds the full amendment session state — if the guest abandons, the SMS re-engagement link resumes the exact step they left, with their partial choices preserved","The PMS amendment is a Journey node: Journey calls the API, receives the confirmation, and fires the email close — no manual step, no risk of mismatch between what was said in chat and what was actually booked","24-hour follow-up monitoring means a guest who has a question about their amendment gets context-aware Autopilot handling, not a blank conversation"],
+  setup:{env:"WhatsApp Business API connected. PMS with real-time availability query and booking amendment API. Journey with inbound WhatsApp trigger and Autopilot classification.",data:"Guest: Clara Müller. Current booking: Superior Room, Friday check-in, 2 nights. Requested: Saturday check-in. Availability: confirmed.",products:"Journeys · Autopilot · PMS integration · Proactive Outreach (WhatsApp + email + SMS)",duration:"9 min full · 5 min lightning (canvas, Autopilot self-serve, PMS call, confirmation, abandonment recovery)"},
+  script:[
+    {t:"journey",title:"1 — Journey receives inbound WhatsApp and starts amendment flow",ch:"Journeys · inbound WhatsApp trigger",jnote:"Establish Journey as the lifecycle owner — including the unhappy path.",
+     say:"\"Clara wants to move her check-in from Friday to Saturday. She messages the hotel WhatsApp. That inbound message starts a Journey. The happy path is straightforward — Autopilot checks availability, Clara confirms, Journey books it, fires the email. But let's also show the unhappy path: what Journey does if Clara walks away mid-flow. That's where Journey earns its place.\"",
+     show:"Open the Journey canvas. Show: inbound WhatsApp → Autopilot availability check → confirmation branch → PMS amendment → confirmation WhatsApp + email → 24hr follow-up wait → close. Point to the abandonment branch: 30min inactivity → SMS re-engagement with preserved state."},
+    {t:"bot",title:"2 — Autopilot checks PMS availability within Journey",ch:"WhatsApp · Autopilot · PMS query",
+     say:"\"Autopilot confirms Clara's identity from her phone number, pulls her booking from the PMS, and queries Saturday availability — same room type, same rate. It replies in under 30 seconds. Clara hasn't had to find a booking reference, log in, or call anyone.\"",
+     show:"Show Autopilot's WhatsApp query: identifies Clara from phone number, pulls reservation #CM4421. Shows PMS query: Saturday, Superior Room, available, same rate. Shows Autopilot's reply to Clara.",
+     tip:"Ask: 'Today, how does a guest change their check-in date — and how long does it take?' Most say call and 5–10 minutes on hold. This is the contrast."},
+    {t:"sys",title:"3 — Clara confirms — Journey calls PMS amendment API",ch:"PMS API · Journey node",jnote:"Show the PMS call as a Journey node — not a separate manual step.",
+     say:"\"Clara confirms Saturday. Journey calls the PMS amendment API directly — not Autopilot, not a form submission, not a staff member re-keying. Journey made the API call, received the confirmation, and the booking is updated in the PMS before Clara has put her phone down.\"",
+     show:"Show Clara's confirmation in the WhatsApp thread. Show Journey's PMS amendment node: API call with new check-in date, PMS response: amendment_confirmed, new_ref: CM4421-A. Show Journey's state update: amendment_confirmed: true, new_checkin: Saturday."},
+    {t:"outbound",title:"4 — Journey fires WhatsApp confirmation + email",ch:"WhatsApp + Email · Journey-fired",
+     say:"\"Journey fires two immediate sends: a WhatsApp confirmation — 'Done, your check-in is now Saturday' — and an updated booking confirmation email with the new dates and cancellation policy. Both are Journey actions on the PMS amendment confirmation event. Clara receives the email seconds after the booking is updated.\"",
+     show:"Show Journey's WhatsApp send node and email send node executing simultaneously. Show Clara's WhatsApp: 'Done — your check-in is now Saturday. See you then!' Show the updated booking confirmation email: new dates, room details, cancellation policy."},
+    {t:"journey",title:"5 — Show the abandonment recovery path",ch:"Journeys · 30min inactivity branch",
+     say:"\"Now let's show what Journey does if Clara had walked away mid-flow — say she asked for Saturday, saw the availability, then went quiet. After 30 minutes of inactivity, Journey fires an SMS re-engagement. The link in that SMS is Journey-tracked — when Clara taps it, Journey reopens the Autopilot session at the step she left. Her requested date is still there. She confirms, Journey books it. She never starts over.\"",
+     show:"Show the 30-min inactivity wait node timing out. Show Journey firing the SMS re-engagement. Show the Journey-tracked link. Click it — show the Autopilot session resuming with Clara's partial state: requested_date: Saturday, confirmation: pending. Show Journey's state: session_resumed: true.",
+     tip:"Contrast explicitly: 'Without Journey, Clara's abandoned chat session just ends. Tomorrow she calls, explains everything again, and an agent re-does the availability check. Journey prevents that.'"}
+  ],
+  objections:[
+    {q:"\"Guests can already manage bookings via our website or app.\"",a:"They can — but the completion rate for web self-service is significantly lower than WhatsApp because it requires login, navigation, and often a forgotten password. WhatsApp is already on their phone, with the conversation history. No new app, no forgotten credentials. Journey's abandonment recovery also means partial attempts get completed — something a web portal can't do."},
+    {q:"\"What if our PMS doesn't support booking amendment via API?\"",a:"Journey routes the confirmed request to an agent with full context — guest identity, current booking, requested date, availability already checked. The agent completes the amendment manually. The guest experience (WhatsApp-native, no hold queue) is the same. Journey's confirmation email still fires when the agent completes the case."},
+    {q:"\"What does the 24-hour follow-up window add?\"",a:"If Clara asks a follow-up question — 'Can I add breakfast to the new booking?' or 'What's the cancellation window for Saturday?' — Journey routes it to Autopilot with the full amendment context. Autopilot knows the original and new dates, the room type, the rate. The guest doesn't repeat themselves, and the conversation feels continuous."}
+  ],
+  discovery:[
+    {q:"How do guests currently change or amend bookings — and what's the most common reason they contact you for it?",w:"Opens the self-serve gap. Date changes, room type changes, and special requests are all automatable in this Journey pattern."},
+    {q:"When a guest abandons a self-service chat mid-way through a booking amendment today, what happens?",w:"Almost universally: they start over or call. Opens the Journey abandonment recovery conversation."},
+    {q:"After a booking amendment, does the guest automatically receive an updated confirmation — or does that depend on staff sending it manually?",w:"Opens the consistent email close conversation. Manual sends are inconsistent; Journey fires on every PMS confirmation event."}
+  ],
+  metrics:["70%","0","100%"],
+  metricLabels:["Booking amendments self-served via WhatsApp — Journey-owned flow","Times guest had to repeat their booking details — Journey identifies from phone number","Completed amendments receiving updated email confirmation — Journey fires on PMS event"]
+}
+];
+
+let activeId=null,activeFilter='all',activeTab={};
+
+function chBadges(chs){
+  const icons={whatsapp:'ti-brand-whatsapp',sms:'ti-device-mobile-message',email:'ti-mail',chat:'ti-message-circle'};
+  return chs.map(c=>`<span class="cb cb-${c}"><i class="ti ${icons[c]}" style="font-size:9px;margin-right:2px"></i>${c[0].toUpperCase()+c.slice(1)}</span>`).join('');
+}
+function dirBadge(d){
+  if(d==='inbound') return `<span class="mtag dir-in"><i class="ti ti-arrow-down-left"></i>Inbound</span>`;
+  if(d==='outbound') return `<span class="mtag dir-out"><i class="ti ti-arrow-up-right"></i>Outbound</span>`;
+  return `<span class="mtag dir-both"><i class="ti ti-arrows-exchange"></i>Inbound + Outbound</span>`;
+}
+function dtag(s){
+  if(s.direction==='inbound') return `<span class="dtag dtag-in"><i class="ti ti-arrow-down-left"></i>Inbound</span>`;
+  if(s.direction==='outbound') return `<span class="dtag dtag-out"><i class="ti ti-arrow-up-right"></i>Outbound</span>`;
+  return `<span class="dtag dtag-both"><i class="ti ti-arrows-exchange"></i>Inbound + Outbound</span>`;
+}
+
+function renderGrid(){
+  const icons={whatsapp:'ti-brand-whatsapp',sms:'ti-device-mobile-message',email:'ti-mail',chat:'ti-message-circle'};
+  const g=document.getElementById('grid');
+  const list=stories.filter(s=>{
+    if(activeFilter==='all') return true;
+    if(activeFilter==='inbound') return s.direction==='inbound';
+    if(activeFilter==='outbound') return s.direction==='outbound';
+    if(activeFilter==='both') return s.direction==='both';
+    return s.channels.includes(activeFilter);
+  });
+  g.innerHTML=list.map(s=>`
+    <div class="scard${activeId===s.id?' sel':''}" onclick="openD(${s.id})" role="button" tabindex="0">
+      <div class="ctop">
+        <span class="snum">Story ${s.id}</span>
+        <div class="chs"><span class="jbadge"><i class="ti ti-route"></i>Journey</span>${chBadges(s.channels)}</div>
+      </div>
+      <div class="stitle">${s.title}</div>
+      <div class="sdesc">${s.desc}</div>
+      <div class="smeta">${dirBadge(s.direction)}<span class="mtag"><i class="ti ti-plane"></i>Travel &amp; Hospitality</span></div>
+      <div class="sfoot">
+        <span class="otag"><i class="ti ti-target"></i>${s.outcome}</span>
+        <button class="vbtn">View <i class="ti ti-chevron-right" style="font-size:12px"></i></button>
+      </div>
+    </div>`).join('');
+  g.querySelectorAll('.scard').forEach(c=>c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')c.click()}));
+}
+
+function openD(id){
+  if(activeId===id){activeId=null;renderGrid();document.getElementById('detail').classList.remove('open');return;}
+  activeId=id;renderGrid();
+  if(!activeTab[id])activeTab[id]='overview';
+  renderPanel(id);
+  const p=document.getElementById('detail');
+  p.classList.add('open');
+  setTimeout(()=>p.scrollIntoView({behavior:'smooth',block:'nearest'}),60);
+}
+function switchTab(id,tab){activeTab[id]=tab;renderPanel(id);}
+
+function renderPanel(id){
+  const s=stories.find(x=>x.id===id);
+  const tab=activeTab[id]||'overview';
+  const icons={whatsapp:'ti-brand-whatsapp',sms:'ti-device-mobile-message',email:'ti-mail',chat:'ti-message-circle'};
+
+  const chFlow=s.channels.map((c,i)=>
+    `<span class="chn ${c}"><i class="ti ${icons[c]}"></i>${c[0].toUpperCase()+c.slice(1)}</span>${i<s.channels.length-1?'<i class="ti ti-arrow-right charr"></i>':''}`
+  ).join('');
+
+  function renderJflow(nodes){
+    return nodes.map(n=>{
+      const ico=JICO[n.type]||'ti-circle';
+      const branches=n.branches?`<div class="jbranches">${n.branches.map(b=>`
+        <div class="jbranch-item">
+          <div class="jbranch-dot ${b.outcome}"><i class="ti ti-${b.outcome==='yes'?'check':b.outcome==='no'?'x':'dots'}"></i></div>
+          <div class="jbranch-text"><span class="jbranch-label">${b.label}:</span>${b.text}</div>
+        </div>`).join('')}</div>`:'';
+      return `<div class="jnode"><div class="jnode-main">
+        <div class="jvl"></div>
+        <div class="jico ${n.type}"><i class="ti ${ico}"></i></div>
+        <div class="jbody"><div class="jt">${n.label}</div><div class="jd">${n.desc}</div>${n.ch?`<span class="jch">${n.ch}</span>`:''}</div>
+      </div>${branches}</div>`;
+    }).join('');
+  }
+
+  const overviewPane=`
+    <div class="ov-cols">
+      <div>
+        <div class="sl"><i class="ti ti-route"></i>Channel sequence</div>
+        <div class="chflow">${chFlow}</div>
+        <div class="sl"><i class="ti ti-users"></i>Personas</div>
+        <div class="personas">${s.personas.map(p=>`<span class="persona"><i class="ti ti-user"></i>${p}</span>`).join('')}</div>
+        <div class="sl"><i class="ti ti-apps"></i>Talkdesk products</div>
+        <div class="tdchips">${s.td.map(t=>`<span class="tdchip${t==='Journeys'?' j':''}">${t}</span>`).join('')}</div>
+        <div class="sl" style="margin-top:1rem"><i class="ti ti-check"></i>Business value</div>
+        <ul class="vlist">${s.value.map(v=>`<li><i class="ti ti-check"></i>${v}</li>`).join('')}</ul>
+      </div>
+      <div>
+        <div class="sl"><i class="ti ti-git-fork"></i>Journey flow</div>
+        <div class="jflow">${renderJflow(s.journeyFlow)}</div>
+      </div>
+    </div>`;
+
+  const scriptPane=`
+    <div class="sl" style="margin-top:0"><i class="ti ti-adjustments"></i>Setup</div>
+    <div class="sg" style="margin-bottom:1.125rem">
+      <div class="sc"><div class="scl">Demo environment</div><div class="scv">${s.setup.env}</div></div>
+      <div class="sc"><div class="scl">Pre-loaded data</div><div class="scv">${s.setup.data}</div></div>
+      <div class="sc"><div class="scl">Products to show</div><div class="scv">${s.setup.products}</div></div>
+      <div class="sc"><div class="scl">Duration</div><div class="scv">${s.setup.duration}</div></div>
+    </div>
+    <div class="sl"><i class="ti ti-script"></i>Talk track</div>
+    <div class="script-legend">
+      <span class="sl-item"><span class="sl-swatch" style="background:var(--p600)"></span>Say</span>
+      <span class="sl-item"><span class="sl-swatch" style="background:#1D9E75"></span>Show</span>
+      <span class="sl-item"><span class="sl-swatch" style="background:#BA7517"></span>Tip</span>
+      <span class="sl-item"><span class="sl-swatch" style="background:var(--j600)"></span>Journey note</span>
+    </div>
+    <div class="ttrack">${s.script.map(step=>`
+      <div class="tstep">
+        <div class="tvl"></div>
+        <div class="tic ${step.t}"><i class="ti ${ICO[step.t]}"></i></div>
+        <div class="tb">
+          <div class="tlabel">
+            <span class="tst">${step.title}</span>
+            <span class="tch">${step.ch}</span>
+            ${step.t==='journey'?`<span class="tj"><i class="ti ti-route" style="font-size:9px"></i> Journey action</span>`:''}
+          </div>
+          ${step.jnote?`<div class="jnote"><div class="jnotel"><i class="ti ti-route"></i>Journey note</div><div class="jnotet">${step.jnote}</div></div>`:''}
+          <div class="say"><div class="sayl">Say</div><div class="sayt">${step.say}</div></div>
+          <div class="show"><div class="showl">Show</div><div class="showt">${step.show}</div></div>
+          ${step.tip?`<div class="tip"><div class="tipl">Tip</div><div class="tipt">${step.tip}</div></div>`:''}
+        </div>
+      </div>`).join('')}
+    </div>`;
+
+  const objPane=`
+    <div class="sl" style="margin-top:0"><i class="ti ti-chart-bar"></i>Proof points</div>
+    <div class="vcards" style="margin-bottom:1.25rem">
+      ${s.metrics.map((m,i)=>`<div class="vcard"><div class="vnum">${m}</div><div class="vlabel">${s.metricLabels[i]}</div></div>`).join('')}
+    </div>
+    <div class="sl"><i class="ti ti-shield-question"></i>Objection handling</div>
+    <div class="objlist">${s.objections.map(o=>`
+      <div class="obj">
+        <div class="objq"><i class="ti ti-help-circle"></i>${o.q}</div>
+        <div class="obja">${o.a}</div>
+      </div>`).join('')}
+    </div>
+    <div class="sl" style="margin-top:1.25rem"><i class="ti ti-message-question"></i>Discovery questions</div>
+    <div class="disclist">${s.discovery.map((d,i)=>`
+      <div class="disc">
+        <div class="dn">${i+1}</div>
+        <div><div class="dq">${d.q}</div><div class="dw">${d.w}</div></div>
+      </div>`).join('')}
+    </div>`;
+
+  const panes={overview:overviewPane,script:scriptPane,objections:objPane};
+
+  document.getElementById('detail').innerHTML=`
+    <div class="dhead">
+      <div>
+        <div class="dhmeta">Story ${s.id} &nbsp;·&nbsp; ${DIR_LABEL[s.direction]}</div>
+        <div class="dhtitle">${s.title}</div>
+        <div class="dhtags">
+          ${dtag(s)}
+          ${s.channels.map(c=>`<span class="dtag dtag-ch"><i class="ti ${icons[c]}"></i>${c[0].toUpperCase()+c.slice(1)}</span>`).join('')}
+          <span class="dtag dtag-j"><i class="ti ti-route"></i>Journeys</span>
+        </div>
+      </div>
+      <button class="xbtn" onclick="closeD()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="tabs">
+      <div class="tab${tab==='overview'?' active':''}" onclick="switchTab(${id},'overview')"><i class="ti ti-map"></i>Story + Journey flow</div>
+      <div class="tab${tab==='script'?' active':''}" onclick="switchTab(${id},'script')"><i class="ti ti-script"></i>Demo script</div>
+      <div class="tab${tab==='objections'?' active':''}" onclick="switchTab(${id},'objections')"><i class="ti ti-shield-question"></i>Objections &amp; discovery</div>
+    </div>
+    <div class="tabcontent">${panes[tab]}</div>`;
+}
+
+function closeD(){activeId=null;document.getElementById('detail').classList.remove('open');renderGrid();}
+function flt(type,el){
+  activeFilter=type;activeId=null;
+  document.getElementById('detail').classList.remove('open');
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');renderGrid();
+}
+function copyLink(){
+  const label=document.getElementById('copy-label');
+  try{navigator.clipboard.writeText(window.location.href).then(()=>{label.textContent='Copied!';setTimeout(()=>label.textContent='Copy link',2000)})}
+  catch(e){label.textContent='Open in browser to copy';setTimeout(()=>label.textContent='Copy link',2500)}
+}
+renderGrid();
+</script></body></html>
