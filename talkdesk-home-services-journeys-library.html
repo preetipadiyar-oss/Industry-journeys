@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Talkdesk — Home Services Demo Library (Journeys)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg-s:#f7f7f5;--bg-t:#f0efe9;
+  --tp:#1a1a18;--ts:#5c5c58;--tt:#8c8c88;
+  --bd:rgba(0,0,0,.10);--bdm:rgba(0,0,0,.18);
+  --rmd:8px;--rlg:12px;
+  --p50:#EEEDFE;--p600:#534AB7;--p800:#3C3489;
+  --b50:#E6F1FB;--b800:#0C447C;
+  --g50:#EAF3DE;--g800:#27500A;
+  --a50:#FAEEDA;--a800:#633806;
+  --pk50:#FBEAF0;--pk800:#72243E;
+  --gr50:#F1EFE8;--gr800:#444441;
+  --c50:#FAECE7;--c800:#993C1D;
+  --tl50:#E1F5EE;--tl800:#085041;
+  --j50:#FFF0FB;--j600:#C026A0;--j800:#86186D;
+  --both50:#F3E8FF;--both800:#6B21A8;
+  --wa50:#E7F5E8;--wa800:#1A5C20;--wa600:#25D366;
+  --td-red:#CC2936;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg-s:#252523;--bg-t:#2e2e2b;
+    --tp:#f0efe9;--ts:#a8a8a2;--tt:#6c6c68;
+    --bd:rgba(255,255,255,.10);--bdm:rgba(255,255,255,.18);
+    --p50:#26215C;--p800:#CECBF6;
+    --b50:#042C53;--b800:#B5D4F4;
+    --g50:#173404;--g800:#C0DD97;
+    --a50:#412402;--a800:#FAC775;
+    --pk50:#4B1528;--pk800:#F4C0D1;
+    --gr50:#2C2C2A;--gr800:#D3D1C7;
+    --c50:#4A1B0C;--c800:#F5C4B3;
+    --tl50:#04342C;--tl800:#9FE1CB;
+    --j50:#3D0A30;--j800:#F5AEED;
+    --both50:#3B0764;--both800:#E9D5FF;
+    --wa50:#0C2E0E;--wa800:#6EE48A;
+  }
+}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg-t);color:var(--tp);min-height:100vh;line-height:1.6}
+nav{background:var(--bg);border-bottom:.5px solid var(--bd);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
+.nb{display:flex;align-items:center;gap:10px}
+.tdl{width:28px;height:28px;border-radius:6px;background:var(--td-red);display:flex;align-items:center;justify-content:center}
+.tdl svg{width:16px;height:16px}
+.nt{font-size:14px;font-weight:500;color:var(--tp)}
+.ns{font-size:12px;color:var(--tt);margin-left:4px}
+.npill{font-size:11px;padding:3px 9px;border-radius:20px;background:var(--j50);color:var(--j800);font-weight:500}
+main{max-width:1060px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.hero{margin-bottom:1.75rem}
+.hero h1{font-size:26px;font-weight:600;margin-bottom:6px}
+.hero p{font-size:14px;color:var(--ts);max-width:600px;line-height:1.6}
+.hmeta{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap}
+.hm{font-size:12px;color:var(--tt);display:flex;align-items:center;gap:4px}
+.hm i{font-size:14px}
+/* JOURNEY CALLOUT */
+.j-callout{background:var(--j50);border:.5px solid var(--j600);border-radius:var(--rlg);padding:12px 16px;margin-bottom:1.5rem;display:flex;gap:10px;align-items:flex-start}
+.j-callout i{font-size:18px;color:var(--j600);flex-shrink:0;margin-top:1px}
+.j-callout-body{flex:1}
+.j-callout-title{font-size:12px;font-weight:600;color:var(--j800);margin-bottom:3px}
+.j-callout-text{font-size:12px;color:var(--ts);line-height:1.6}
+.sbar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg);border:.5px solid var(--bd);border-radius:var(--rmd);margin-bottom:1.5rem;flex-wrap:wrap;gap:8px}
+.sbar span{font-size:12px;color:var(--ts);display:flex;align-items:center;gap:5px}
+.cbtn{font-size:12px;padding:5px 12px;border-radius:var(--rmd);border:.5px solid var(--bdm);background:var(--bg-s);color:var(--tp);cursor:pointer;display:flex;align-items:center;gap:5px;font-family:inherit}
+.cbtn:hover{background:var(--bg-t)}
+.legend{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 14px;background:var(--bg);border:.5px solid var(--bd);border-radius:var(--rmd);margin-bottom:1.25rem;font-size:12px}
+.ll{color:var(--tt);font-weight:500}
+.li{display:flex;align-items:center;gap:5px;color:var(--ts)}
+.ld{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.lsep{width:1px;height:14px;background:var(--bd)}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem}
+.pill{font-size:12px;padding:5px 12px;border-radius:20px;border:.5px solid var(--bdm);background:var(--bg);color:var(--ts);cursor:pointer;transition:all .12s;user-select:none}
+.pill.active{background:var(--p50);border-color:var(--p600);color:var(--p800)}
+.pill:hover:not(.active){background:var(--bg-s)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(295px,1fr));gap:12px}
+.scard{background:var(--bg);border:.5px solid var(--bd);border-radius:var(--rlg);padding:1rem 1.125rem;cursor:pointer;transition:border-color .12s,transform .1s;display:flex;flex-direction:column;gap:9px}
+.scard:hover{border-color:var(--bdm);transform:translateY(-1px)}
+.scard.sel{border:1px solid var(--p600)}
+.ctop{display:flex;justify-content:space-between;align-items:flex-start;gap:6px}
+.snum{font-size:10px;color:var(--tt);font-weight:500;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.chs{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.cb{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500;white-space:nowrap}
+.cb-chat{background:var(--b50);color:var(--b800)}
+.cb-sms{background:var(--g50);color:var(--g800)}
+.cb-email{background:var(--a50);color:var(--a800)}
+.cb-whatsapp{background:var(--wa50);color:var(--wa800)}
+.jbadge{font-size:10px;padding:2px 7px;border-radius:10px;background:var(--j50);color:var(--j800);font-weight:500;display:flex;align-items:center;gap:3px;white-space:nowrap}
+.jbadge i{font-size:10px}
+.stitle{font-size:13px;font-weight:500;color:var(--tp);line-height:1.4}
+.sdesc{font-size:12px;color:var(--ts);line-height:1.55}
+.smeta{display:flex;gap:8px;flex-wrap:wrap}
+.mtag{font-size:11px;color:var(--tt);display:flex;align-items:center;gap:3px}
+.mtag i{font-size:12px}
+.dir-in{color:var(--b800)}
+.dir-out{color:var(--g800)}
+.dir-both{color:var(--both800)}
+.sfoot{border-top:.5px solid var(--bd);padding-top:8px;display:flex;justify-content:space-between;align-items:center}
+.otag{font-size:11px;color:var(--tt);display:flex;align-items:center;gap:3px}
+.vbtn{font-size:12px;color:var(--p600);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:3px;padding:0;font-family:inherit}
+.vbtn:hover{text-decoration:underline}
+/* DETAIL PANEL */
+.dpanel{display:none;background:var(--bg);border:.5px solid var(--bd);border-radius:var(--rlg);margin-top:12px;overflow:hidden}
+.dpanel.open{display:block}
+.dhead{display:flex;justify-content:space-between;align-items:flex-start;padding:1.25rem 1.5rem 0;gap:10px}
+.dhmeta{font-size:10px;color:var(--tt);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+.dhtitle{font-size:17px;font-weight:500;color:var(--tp);line-height:1.3;margin-bottom:10px}
+.dhtags{display:flex;gap:6px;flex-wrap:wrap}
+.dtag{font-size:11px;padding:3px 9px;border-radius:20px;display:flex;align-items:center;gap:4px;font-weight:500}
+.dtag i{font-size:12px}
+.dtag-in{background:var(--b50);color:var(--b800)}
+.dtag-out{background:var(--g50);color:var(--g800)}
+.dtag-both{background:var(--both50);color:var(--both800)}
+.dtag-ch{background:var(--bg-s);color:var(--ts);border:.5px solid var(--bd)}
+.dtag-j{background:var(--j50);color:var(--j800)}
+.xbtn{background:none;border:none;cursor:pointer;color:var(--ts);font-size:20px;padding:0;flex-shrink:0;line-height:1;margin-top:4px}
+.xbtn:hover{color:var(--tp)}
+.tabs{display:flex;gap:0;border-bottom:.5px solid var(--bd);padding:0 1.5rem;margin-top:1rem;overflow-x:auto}
+.tab{font-size:12px;padding:8px 14px;cursor:pointer;color:var(--tt);border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .12s;user-select:none;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.tab i{font-size:13px}
+.tab:hover{color:var(--tp)}
+.tab.active{color:var(--p600);border-bottom-color:var(--p600);font-weight:500}
+.tabcontent{padding:1.25rem 1.5rem 1.5rem}
+/* OVERVIEW */
+.ov-cols{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media(max-width:640px){.ov-cols{grid-template-columns:1fr}}
+.sl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--tt);margin-bottom:8px;margin-top:1.125rem;display:flex;align-items:center;gap:5px}
+.sl:first-child{margin-top:0}
+.sl i{font-size:13px}
+.chflow{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.chn{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:var(--rmd);font-size:12px;font-weight:500}
+.chn.chat{background:var(--b50);color:var(--b800)}
+.chn.sms{background:var(--g50);color:var(--g800)}
+.chn.email{background:var(--a50);color:var(--a800)}
+.chn.whatsapp{background:var(--wa50);color:var(--wa800)}
+.chn i{font-size:13px}
+.charr{color:var(--tt);font-size:14px}
+.personas{display:flex;gap:6px;flex-wrap:wrap}
+.persona{display:flex;align-items:center;gap:5px;background:var(--bg-s);border-radius:var(--rmd);padding:4px 9px;font-size:12px;color:var(--tp)}
+.persona i{font-size:13px;color:var(--ts)}
+.tdchips{display:flex;flex-wrap:wrap;gap:5px}
+.tdchip{font-size:10px;padding:3px 8px;border-radius:8px;background:var(--bg-s);color:var(--ts);border:.5px solid var(--bd)}
+.tdchip.j{background:var(--j50);color:var(--j800);border-color:var(--j600)}
+.vlist{list-style:none;display:flex;flex-direction:column;gap:6px}
+.vlist li{font-size:12px;color:var(--ts);display:flex;align-items:flex-start;gap:7px;line-height:1.5}
+.vlist li i{font-size:13px;color:var(--p600);flex-shrink:0;margin-top:1px}
+/* JOURNEY FLOW DIAGRAM */
+.jflow{display:flex;flex-direction:column;gap:0;position:relative}
+.jnode{display:flex;gap:10px;padding-bottom:0;position:relative}
+.jnode-main{display:flex;gap:10px;padding-bottom:10px;position:relative}
+.jvl{width:1px;background:var(--bd);position:absolute;left:13px;top:26px;bottom:0}
+.jnode:last-child>.jnode-main>.jvl{display:none}
+.jico{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;position:relative;z-index:1}
+.jico.trigger{background:var(--j50);color:var(--j800)}
+.jico.send{background:var(--g50);color:var(--g800)}
+.jico.wait{background:var(--gr50);color:var(--gr800)}
+.jico.branch{background:var(--a50);color:var(--a800)}
+.jico.bot{background:var(--p50);color:var(--p800)}
+.jico.agent{background:var(--pk50);color:var(--pk800)}
+.jico.close{background:var(--tl50);color:var(--tl800)}
+.jbody{flex:1;padding-top:1px}
+.jt{font-size:12px;font-weight:500;color:var(--tp);line-height:1.3}
+.jd{font-size:11px;color:var(--ts);line-height:1.5;margin-top:1px}
+.jch{font-size:10px;padding:1px 5px;border-radius:6px;display:inline-block;margin-top:2px;background:var(--bg-s);color:var(--tt)}
+/* branch children */
+.jbranches{margin-left:35px;border-left:1px dashed var(--bdm);padding-left:10px;margin-bottom:8px;display:flex;flex-direction:column;gap:6px}
+.jbranch-item{display:flex;gap:8px;align-items:flex-start}
+.jbranch-dot{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:1px}
+.jbranch-dot.yes{background:var(--tl50);color:var(--tl800)}
+.jbranch-dot.no{background:var(--c50);color:var(--c800)}
+.jbranch-dot.alt{background:var(--p50);color:var(--p800)}
+.jbranch-text{font-size:11px;color:var(--ts);line-height:1.5}
+.jbranch-label{font-weight:600;color:var(--tp);margin-right:4px}
+/* value cards */
+.vcards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:560px){.vcards{grid-template-columns:1fr}}
+.vcard{background:var(--bg-s);border-radius:var(--rmd);padding:10px 12px;text-align:center}
+.vnum{font-size:20px;font-weight:600;color:var(--p600);margin-bottom:2px}
+.vlabel{font-size:11px;color:var(--ts);line-height:1.4}
+/* journey reason box */
+.j-reason{background:var(--j50);border:.5px solid var(--j600);border-radius:var(--rmd);padding:10px 14px;margin-bottom:1rem}
+.j-reason-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--j800);margin-bottom:4px;display:flex;align-items:center;gap:4px}
+.j-reason-label i{font-size:12px}
+.j-reason-text{font-size:12px;color:var(--ts);line-height:1.6}
+/* SCRIPT */
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:500px){.sg{grid-template-columns:1fr}}
+.sc{background:var(--bg-s);border-radius:var(--rmd);padding:9px 11px}
+.scl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--tt);margin-bottom:4px}
+.scv{font-size:12px;color:var(--ts);line-height:1.55}
+.ttrack{display:flex;flex-direction:column;gap:0}
+.tstep{display:flex;gap:12px;position:relative;padding-bottom:1.25rem}
+.tstep:last-child{padding-bottom:0}
+.tvl{position:absolute;left:15px;top:32px;bottom:0;width:1px;background:var(--bd)}
+.tstep:last-child .tvl{display:none}
+.tic{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;position:relative;z-index:1}
+.tic.inbound{background:var(--b50);color:var(--b800)}
+.tic.outbound{background:var(--g50);color:var(--g800)}
+.tic.bot{background:var(--p50);color:var(--p800)}
+.tic.agent{background:var(--pk50);color:var(--pk800)}
+.tic.sys{background:var(--gr50);color:var(--gr800)}
+.tic.journey{background:var(--j50);color:var(--j800)}
+.tb{flex:1}
+.tlabel{display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap}
+.tst{font-size:13px;font-weight:500;color:var(--tp)}
+.tch{font-size:10px;padding:1px 6px;border-radius:8px;background:var(--bg-s);color:var(--tt);border:.5px solid var(--bd)}
+.tj{font-size:10px;padding:1px 6px;border-radius:8px;background:var(--j50);color:var(--j800);border:.5px solid var(--j600)}
+.say{background:var(--bg-s);border-left:2px solid var(--p600);border-radius:0 var(--rmd) var(--rmd) 0;padding:8px 12px;margin-bottom:6px}
+.sayl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--p800);margin-bottom:3px}
+.sayt{font-size:13px;color:var(--tp);line-height:1.6;font-style:italic}
+.show{background:var(--tl50);border-left:2px solid #1D9E75;border-radius:0 var(--rmd) var(--rmd) 0;padding:8px 12px;margin-bottom:6px}
+.showl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--tl800);margin-bottom:3px}
+.showt{font-size:13px;color:var(--ts);line-height:1.6}
+.tip{background:var(--a50);border-left:2px solid #BA7517;border-radius:0 var(--rmd) var(--rmd) 0;padding:8px 12px;margin-bottom:6px}
+.tipl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--a800);margin-bottom:3px}
+.tipt{font-size:13px;color:var(--ts);line-height:1.6}
+.jnote{background:var(--j50);border-left:2px solid var(--j600);border-radius:0 var(--rmd) var(--rmd) 0;padding:8px 12px;margin-bottom:6px}
+.jnotel{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--j800);margin-bottom:3px}
+.jnotet{font-size:13px;color:var(--ts);line-height:1.6}
+.script-legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.125rem;padding:8px 12px;background:var(--bg-s);border-radius:var(--rmd);border:.5px solid var(--bd)}
+.sl-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--tt)}
+.sl-swatch{width:3px;height:14px;border-radius:2px;flex-shrink:0}
+/* OBJECTIONS */
+.objlist{display:flex;flex-direction:column;gap:10px}
+.obj{border:.5px solid var(--bd);border-radius:var(--rlg);overflow:hidden}
+.objq{padding:10px 14px;background:var(--c50);font-size:13px;font-weight:500;color:var(--c800);display:flex;align-items:flex-start;gap:7px}
+.objq i{font-size:14px;flex-shrink:0;margin-top:1px}
+.obja{padding:10px 14px;font-size:13px;color:var(--ts);line-height:1.6;background:var(--bg)}
+.disclist{display:flex;flex-direction:column;gap:8px}
+.disc{display:flex;align-items:flex-start;gap:9px;padding:10px 14px;background:var(--bg-s);border-radius:var(--rmd)}
+.dn{font-size:11px;font-weight:600;color:var(--p800);background:var(--p50);width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.dq{font-size:13px;color:var(--tp);line-height:1.5}
+.dw{font-size:12px;color:var(--tt);margin-top:2px}
+footer{text-align:center;padding:2rem;font-size:12px;color:var(--tt);border-top:.5px solid var(--bd);margin-top:3rem}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nb">
+    <div class="tdl"><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" fill="white" opacity=".9"/><circle cx="10" cy="10" r="3.5" fill="#CC2936"/></svg></div>
+    <span class="nt">Talkdesk</span><span class="ns">/ Home Services Demo Library</span>
+  </div>
+  <span class="npill"><i class="ti ti-route" style="font-size:11px"></i>&nbsp;Home Services · Journeys · 7 stories</span>
+</nav>
+<main>
+<div class="hero">
+  <h1>Home services story library</h1>
+  <p>Journey-orchestrated stories across SMS, Email and Chat — built for residential HVAC, plumbing, electrical, and pest control companies. Grounded in the customer patterns of companies like Saela, Service Minds, Seer Group, and Redwood Services. Every story uses Talkdesk Journeys as the cross-channel control plane: owning state, decisioning, sequencing, and every channel transition end to end.</p>
+  <div class="hmeta">
+    <span class="hm"><i class="ti ti-route" style="color:var(--j600)"></i>Journeys-first</span>
+    <span class="hm"><i class="ti ti-device-mobile-message"></i>SMS · Email · Chat</span>
+    <span class="hm"><i class="ti ti-arrow-up-right"></i>Outbound (3)</span>
+    <span class="hm"><i class="ti ti-arrows-exchange"></i>Both (3)</span>
+    <span class="hm"><i class="ti ti-arrow-down-left"></i>Inbound (1)</span>
+    <span class="hm"><i class="ti ti-home"></i>HVAC · Plumbing · Electrical · Pest Control</span>
+  </div>
+</div>
+
+<div class="sbar">
+  <span><i class="ti ti-share"></i>Share — open this HTML file in any browser, or host on any static server.</span>
+  <button class="cbtn" onclick="copyLink()"><i class="ti ti-copy"></i><span id="copy-label">Copy link</span></button>
+</div>
+<div class="legend">
+  <span class="ll">Channels:</span>
+  <span class="li"><span class="ld" style="background:#378ADD"></span>Chat</span>
+  <span class="li"><span class="ld" style="background:#639922"></span>SMS</span>
+  <span class="li"><span class="ld" style="background:#BA7517"></span>Email</span>
+  <span class="lsep"></span>
+  <span class="ll">Direction:</span>
+  <span class="li"><span class="ld" style="background:#378ADD"></span>Inbound</span>
+  <span class="li"><span class="ld" style="background:#639922"></span>Outbound</span>
+  <span class="li"><span class="ld" style="background:#9333EA"></span>Both</span>
+  <span class="lsep"></span>
+  <span class="li"><span class="ld" style="background:var(--j600)"></span>All flows orchestrated by Journeys</span>
+</div>
+<div class="filters" id="filters">
+  <span class="pill active" onclick="flt('all',this)">All stories</span>
+  <span class="pill" onclick="flt('inbound',this)">Inbound</span>
+  <span class="pill" onclick="flt('outbound',this)">Outbound</span>
+  <span class="pill" onclick="flt('both',this)">Both directions</span>
+  <span class="pill" onclick="flt('sms',this)">SMS</span>
+  <span class="pill" onclick="flt('email',this)">Email</span>
+  <span class="pill" onclick="flt('chat',this)">Chat</span>
+</div>
+<div class="grid" id="grid"></div>
+<div class="dpanel" id="detail"></div>
+</main>
+<footer>Talkdesk Home Services Demo Library &nbsp;·&nbsp; Journeys-orchestrated · SMS, Email, Chat &nbsp;·&nbsp; For internal demo use only</footer>
+<script>
+const ICO={inbound:'ti-arrow-down-left',outbound:'ti-arrow-up-right',bot:'ti-robot',agent:'ti-headset',sys:'ti-settings',journey:'ti-route'};
+const CH_ICONS={sms:'ti-device-mobile-message',email:'ti-mail',chat:'ti-message-circle'};
+const DIR_LABEL={inbound:'Inbound',outbound:'Outbound',both:'Inbound + Outbound'};
+const JICO={trigger:'ti-bolt',send:'ti-send',wait:'ti-clock',branch:'ti-git-fork',bot:'ti-robot',agent:'ti-headset',close:'ti-circle-check',sys:'ti-settings'};
+
+const stories=[
+/* ══ OUTBOUND ══════════════════════════════════════════════════════════ */
+{
+  id:1,
+  title:"Service plan renewal campaign — multi-step outbound with Journey-owned booking and suppression",
+  desc:"CRM flags customers whose annual maintenance plan expires in 30 days. Journey sends a personalised SMS, monitors for booking reply, branches to email if silent, escalates to agent if neither converts — and suppresses all steps the moment a renewal is confirmed from any channel.",
+  direction:"outbound",channels:["sms","email","chat"],all3:true,
+  personas:["David Chen – HVAC plan customer","Journey orchestration","Autopilot","Scheduling system"],
+  td:["Journeys","Proactive Outreach","Autopilot","CRM integration","Scheduling API"],
+  outcome:"35% renewal conversion · Journey-owned suppression on booking from any channel",
+  journeyFlow:[
+    {type:"trigger",label:"Trigger",desc:"CRM query fires daily: customers with maintenance plan expiring in 25–35 days and no active renewal booking. Journey instantiated per customer with plan type, last service date, assigned technician, and preferred contact.",ch:"CRM sync · daily"},
+    {type:"send",label:"Step 1 — Personalised SMS reminder",desc:"Journey sends: 'Hi David — your HVAC maintenance plan expires in 30 days. Book your annual tune-up now and we'll send the same tech as last time. Reply BOOK to pick a slot.'",ch:"SMS · Day 1 · Journey-controlled"},
+    {type:"wait",label:"Wait — BOOK reply or booking event? (48hr window)",desc:"Journey monitors for two events: inbound SMS reply, or a booking confirmation from the scheduling system via any channel. Either fires the suppression.",ch:"Journey wait state · 48hr"},
+    {type:"branch",label:"Branch — BOOK reply, question, or silence?",branches:[
+      {outcome:"yes",label:"BOOK reply",text:"Journey activates Autopilot scheduling sub-flow: 3 available slots sent in SMS thread. Customer selects. Scheduling API confirms. Confirmation SMS sent. All remaining Journey steps suppressed."},
+      {outcome:"no",label:"Question or free-text reply",text:"Journey routes to Autopilot for FAQ handling (pricing, what's included, same-tech availability). Unresolved → agent with full CRM context."},
+      {outcome:"alt",label:"No reply after 48hrs",text:"Journey advances to email: formal service reminder with pricing, plan benefits, and a Journey-tracked booking link with pre-populated slots."}
+    ]},
+    {type:"wait",label:"Wait — email clicked and booking completed? (72hr window)",desc:"Journey monitors for email link click AND scheduling system booking event. Suppresses all remaining steps the moment either confirms.",ch:"Journey wait state · 72hr"},
+    {type:"branch",label:"Branch — booked via email or still silent?",branches:[
+      {outcome:"yes",label:"Booking confirmed via any channel",text:"Journey immediately suppresses remaining steps. Fires booking confirmation SMS. Schedules pre-visit reminder for T-24hrs."},
+      {outcome:"no",label:"No booking after 72hrs",text:"Journey routes to agent outreach queue with full context: plan expiry date, SMS sent, email sent, link not clicked, last service date. Agent reaches out directly."}
+    ]},
+    {type:"send",label:"Step 2 — Pre-visit reminder (T-24hr)",desc:"Journey sends SMS reminder: date, arrival window, technician name, and a reschedule reply option. Fires exactly 24hrs before the appointment — Journey-scheduled node.",ch:"SMS · T-24hr · Journey-scheduled"},
+    {type:"wait",label:"Wait — visit completed?",desc:"Journey monitors for a visit-completed event from the field service system. On confirmation, advances to post-visit.",ch:"Journey wait state · field system event"},
+    {type:"send",label:"Step 3 — Post-visit plan renewal offer",desc:"Journey sends an SMS: 'Great to see you today, David. Your plan is renewed — here's what's covered next year.' If plan was not renewed at visit, Journey sends a follow-up email offer with a one-click renewal link.",ch:"SMS or Email · Journey-fired"},
+    {type:"close",label:"Journey closes",desc:"Renewal outcome, visit completion, and plan start date logged in CRM. Next renewal date written back. Journey marks contact complete.",ch:"System"}
+  ],
+  value:["Journey suppresses all steps the moment a booking is confirmed from any channel — CRM event, website, phone call logged in scheduling system — no over-messaging","Pre-visit reminder is a Journey-scheduled node: fires 24hrs before the appointment time regardless of when the booking was made or which agent handled it","Post-visit renewal offer branches on outcome: renewed at visit gets a confirmation; not renewed gets a follow-up offer. Journey selects the right content automatically"],
+  setup:{env:"Journey with CRM plan-expiry trigger. SMS Proactive Outreach. Scheduling API with availability query and booking event webhook. Agent Workspace for escalation.",data:"Customer: David Chen. HVAC maintenance plan expires in 28 days. Last service: 13 months ago. Assigned tech: Mike Rivera. No active booking.",products:"Journeys · Proactive Outreach · Autopilot · CRM integration · Scheduling API",duration:"12 min full · 6 min lightning (Journey canvas, SMS send, BOOK reply, scheduling sub-flow, suppression on booking)"},
+  script:[
+    {t:"journey",title:"1 — Journey canvas: plan expiry to post-visit renewal",ch:"Journeys · CRM trigger",jnote:"Show the full lifecycle first — this is a multi-step flow that owns state across days.",
+     say:"\"David's HVAC plan expires next month. Journey doesn't just send a reminder — it owns the full renewal lifecycle. If he replies BOOK, Journey handles slot selection. If he goes silent, Journey moves to email. Once he books — however he books — Journey suppresses everything and schedules his pre-visit reminder automatically. Let's look at the canvas.\"",
+     show:"Open the Journey canvas. Show: CRM trigger → SMS Day 1 → 48hr wait → three-way branch → email fallback → 72hr wait → booked / agent escalation → T-24hr reminder → visit-completed event → post-visit offer → close. Point to the suppression node on booking confirmation."},
+    {t:"outbound",title:"2 — Journey sends personalised SMS",ch:"SMS · Journey-controlled",jnote:"'Same tech as last time' is pulled from CRM — show the personalisation token.",
+     say:"\"Journey sends David an SMS. His name, his plan expiry, and a detail that builds trust: 'we'll send the same tech as last time.' That's pulled directly from the CRM. It's the kind of personalisation that makes a renewal reminder feel like a relationship.\"",
+     show:"Show the SMS send node firing. Show David's SMS. Show the CRM tokens: last_technician_name, plan_expiry_date. Show the Journey 48hr wait timer.",
+     tip:"Ask: 'What does your current plan renewal process look like — and what's your conversion rate from it?' Most home services companies send a generic mailer or robocall. The contrast with a personalised SMS from a known tech lands immediately."},
+    {t:"bot",title:"3 — BOOK reply — Autopilot scheduling sub-flow within Journey",ch:"SMS · Autopilot · Scheduling API",
+     say:"\"David replies BOOK. Journey receives the event and activates the Autopilot scheduling sub-flow. Three available slots surface in the same SMS thread. David picks Tuesday 10–12. Journey calls the scheduling API, confirms the booking, fires the confirmation SMS. And here — watch Journey's canvas — all remaining steps are suppressed.\"",
+     show:"Show David's BOOK reply arriving in Journey's activity log. Show Autopilot's three-slot SMS. Show David's selection. Show the scheduling API call and confirmation. Show Journey's suppression firing: email_step_suppressed: true, agent_queue_suppressed: true."},
+    {t:"journey",title:"4 — T-24hr reminder fires automatically — Journey-scheduled node",ch:"SMS · Journey-scheduled",jnote:"The reminder is tied to the appointment time, not to today.",
+     say:"\"The day before David's appointment, Journey fires the pre-visit SMS automatically. Not because someone triggered it — because Journey scheduled it the moment the booking was confirmed, tied to the appointment time. If David had booked for a date 3 weeks out, the reminder would still fire exactly 24 hours before.\"",
+     show:"Show the Journey-scheduled reminder node. Show the trigger condition: current_time = appointment_time - 24hrs. Show the SMS: 'Reminder — Mike is coming tomorrow between 10am–12pm. Reply RESCHEDULE if needed.' Show Journey re-entering WAIT state for the visit-completed event."},
+    {t:"outbound",title:"5 — Visit complete — Journey fires renewal confirmation",ch:"SMS · Journey-fired on visit-completed event",
+     say:"\"Mike marks the job complete in the field system. That event fires to Journey. Journey immediately sends the renewal confirmation SMS — plan renewed, what's covered next year, next visit date. And Journey writes the new plan start date back to the CRM. David is already in next year's renewal campaign without anyone touching a spreadsheet.\"",
+     show:"Show the visit-completed event in Journey's activity log. Show the post-visit SMS firing. Show Journey's CRM write-back: plan_renewed: true, next_expiry: [today + 12 months]. Show Journey's close state."}
+  ],
+  objections:[
+    {q:"\"We already have a CSR team that calls customers about renewals — this seems to replace that.\"",a:"Journey handles the outbound sequence for customers who respond to SMS and email — the straightforward renewals. Your CSR team gets the agent escalation queue: customers who went silent after two touchpoints and genuinely need a personal conversation. Journey filters the easy ones so your CSRs focus on the relationships that need them."},
+    {q:"\"What if the customer books through your website or calls in — does Journey still send follow-up messages?\"",a:"Journey monitors the scheduling system for booking events from any source. The moment a booking is confirmed — regardless of channel — Journey suppresses all remaining steps. David won't receive an email reminder after he's already called in to book. That's the suppression logic Journey provides that a standard SMS campaign can't."},
+    {q:"\"Our scheduling system is ServiceTitan — does this integrate?\"",a:"ServiceTitan is a common platform in this space and Talkdesk has a connector for it. Journey can both read available slots and receive booking confirmation events from ServiceTitan. A technical discovery call can confirm the specific integration scope for your ServiceTitan configuration."}
+  ],
+  discovery:[
+    {q:"What's your current maintenance plan renewal rate — and at what point do you lose customers who intend to renew but don't action it?",w:"Most home services companies lose 20–30% of intenders at the booking step. Opens the Journey scheduling sub-flow conversation."},
+    {q:"If a customer books through your website after you've sent them a renewal SMS, do they still receive the follow-up email reminder?",w:"Almost always yes — no suppression logic. Opens Journey's cross-channel booking event monitoring."},
+    {q:"When a tech completes a maintenance visit today, does the customer automatically receive a confirmation — and is the next annual date written back to your CRM?",w:"Opens the Journey post-visit close and CRM write-back conversation."}
+  ],
+  metrics:["35%","100%","0"],
+  metricLabels:["Plan renewal conversion across SMS + email multi-step Journey","Completed visits receiving post-visit confirmation SMS — Journey fires on every visit-completed event","Customers receiving follow-up after already booking — Journey suppresses on scheduling system event from any channel"]
+},
+{
+  id:2,
+  title:"New customer onboarding — multi-step welcome sequence with first appointment confirmation",
+  desc:"New customer signs up for a recurring pest control or HVAC maintenance plan. Journey owns the full onboarding sequence: welcome SMS, plan details email, first appointment scheduling, technician introduction, and a 7-day post-first-visit check-in — all with state preserved across the lifecycle.",
+  direction:"outbound",channels:["sms","email","chat"],all3:true,
+  personas:["Marcus Webb – new pest control subscriber","Journey orchestration","Autopilot","Scheduling system"],
+  td:["Journeys","Proactive Outreach","Autopilot","CRM integration","Scheduling API"],
+  outcome:"First-visit no-show rate reduced · onboarding NPS improved · plan churn reduced in Year 1",
+  journeyFlow:[
+    {type:"trigger",label:"Trigger",desc:"New customer record created in CRM with plan_status: active. Journey instantiated: plan type, first visit window, assigned branch, technician pool.",ch:"CRM new customer event"},
+    {type:"send",label:"Step 1 — Welcome SMS (immediate)",desc:"Journey sends: 'Welcome to [Brand], Marcus! Your pest protection plan is active. We'll reach out shortly to schedule your first visit. Questions? Reply anytime.' Immediate, personal, on-brand.",ch:"SMS · T+0 · Journey-controlled"},
+    {type:"send",label:"Step 2 — Plan details email (T+1hr)",desc:"Journey sends a full welcome email: what's covered, treatment schedule, warranty terms, how to request a re-service, and a scheduling link. Journey-tracked link — click fires event into Journey.",ch:"Email · T+1hr · Journey-controlled"},
+    {type:"wait",label:"Wait — first appointment self-scheduled? (24hr window)",desc:"Journey monitors for a scheduling event from the customer. If they book via the email link, Journey registers the booking and suppresses the outbound scheduling step.",ch:"Journey wait state · 24hr"},
+    {type:"branch",label:"Branch — self-scheduled or needs outreach?",branches:[
+      {outcome:"yes",label:"Customer self-scheduled",text:"Journey suppresses outbound scheduling step. Advances to technician introduction SMS (T-24hr before visit)."},
+      {outcome:"no",label:"No self-scheduling after 24hrs",text:"Journey activates Autopilot scheduling chat: initiates a proactive chat session to offer available first-visit slots. Journey-initiated — customer context pre-loaded."}
+    ]},
+    {type:"bot",label:"Autopilot scheduling chat — Journey-initiated",desc:"Journey opens a chat session for the customer with available first-visit slots and the plan type pre-loaded. Customer selects a slot. Scheduling API confirms. Journey advances.",ch:"Chat · Autopilot · Journey-owned session"},
+    {type:"send",label:"Step 3 — Technician introduction SMS (T-24hr)",desc:"Journey sends: 'Your first visit is tomorrow — [Tech Name] will arrive between [window]. Here's what to expect: [brief]. Reply RESCHEDULE if needed.' Includes tech photo link.",ch:"SMS · T-24hr · Journey-scheduled"},
+    {type:"wait",label:"Wait — first visit completed?",desc:"Journey monitors for a visit-completed event from the field system. Advances on confirmation.",ch:"Journey wait state · field system event"},
+    {type:"send",label:"Step 4 — Post-first-visit check-in SMS (T+24hr)",desc:"Journey sends: 'Hi Marcus — how did your first visit go? Tap: 😊 Great · 😐 OK · 😞 Not good'. Journey monitors for reply.",ch:"SMS · T+24hr from visit date"},
+    {type:"branch",label:"Branch — satisfaction score",branches:[
+      {outcome:"yes",label:"Great (😊)",text:"Journey sends a follow-up SMS: 'Glad to hear it — your next visit is scheduled for [date]. We'll remind you beforehand.' CRM updated with retention flag: satisfied_first_visit."},
+      {outcome:"no",label:"OK or Not good (😐/😞)",text:"Journey routes to CSR agent with full onboarding context: plan type, tech assigned, visit details. Agent contacts customer to address the concern. Journey holds for re-score."},
+      {outcome:"alt",label:"No reply (24hrs)",text:"Journey closes as unscored. Next scheduled visit reminder enters the standard maintenance campaign flow."}
+    ]},
+    {type:"close",label:"Journey closes",desc:"Onboarding complete. First-visit satisfaction logged. Next scheduled visit date confirmed in CRM. Customer enters recurring maintenance Journey.",ch:"System"}
+  ],
+  value:["Journey initiates a chat session for customers who don't self-schedule — Journey opens it, context is pre-loaded, no passive link for the customer to find","Technician introduction SMS fires 24 hours before the first visit with the tech's name and what to expect — reducing no-shows and first-visit anxiety for new customers","First-visit satisfaction score captured within 24 hours of the visit: dissatisfied customers are routed to a CSR before they cancel or leave a negative review"],
+  setup:{env:"Journey with CRM new-customer trigger. SMS and email Proactive Outreach. Journey-initiated chat for scheduling. Scheduling API. Field service system with visit-completed event.",data:"Customer: Marcus Webb. New pest control subscriber, quarterly plan. First visit not yet scheduled. Branch: Denver CO. Tech pool available.",products:"Journeys · Proactive Outreach · Autopilot · CRM integration · Scheduling API",duration:"11 min full · 5 min lightning (Journey canvas, welcome SMS, Autopilot scheduling chat, tech intro, post-visit satisfaction)"},
+  script:[
+    {t:"journey",title:"1 — Journey canvas: sign-up to first-visit satisfaction",ch:"Journeys · CRM new customer trigger",jnote:"Show the full onboarding arc — from sign-up through to the satisfaction score that determines whether this customer churns or stays.",
+     say:"\"Marcus just signed up for a quarterly pest control plan. Most companies send a confirmation email and wait for the customer to call and schedule. Journey owns this entire onboarding arc — welcome, plan details, first appointment, tech intro, post-visit check-in. If Marcus doesn't self-schedule, Journey opens a chat session for him. If his first visit goes badly, Journey routes to a CSR before he cancels.\"",
+     show:"Open the Journey canvas. Show the full flow: CRM trigger → welcome SMS → plan email → 24hr wait → self-scheduled / Autopilot chat → T-24hr tech intro → visit-completed → T+24hr satisfaction SMS → satisfaction branch → close."},
+    {t:"outbound",title:"2 — Immediate welcome SMS and plan email",ch:"SMS + Email · Journey-controlled",
+     say:"\"The moment Marcus's CRM record is created, Journey fires two sends: an immediate welcome SMS — personal, on-brand, acknowledges the sign-up — and an hour later, a full plan details email. The email link for self-scheduling is Journey-tracked. If Marcus clicks it and books, Journey knows immediately and suppresses the outbound scheduling step.\"",
+     show:"Show the two send nodes firing in Journey. Show Marcus's welcome SMS. Show the plan details email with the Journey-tracked scheduling link. Show Journey's 24hr wait state: monitoring for scheduling_event from any source.",
+     tip:"Ask: 'What does your current new customer onboarding look like — and when does your first live contact with them happen?' For most companies the answer is 'when they call to schedule.' Journey accelerates that to Day 1."},
+    {t:"bot",title:"3 — No self-schedule — Journey initiates chat",ch:"Chat · Autopilot · Journey-initiated",jnote:"This is Journey initiating the chat — not a passive link the customer has to find.",
+     say:"\"24 hours later, Marcus hasn't scheduled. Journey doesn't just sit and wait. It opens a proactive chat session — Journey-initiated, with Marcus's plan type and available first-visit slots pre-loaded. Autopilot runs the scheduling conversation. Marcus picks a slot, Journey confirms it with the scheduling API. He didn't have to find a link or call in.\"",
+     show:"Show Journey's chat-open node executing. Show the chat session: Marcus's plan type pre-loaded, three available slots presented. Show Marcus selecting a slot. Show the scheduling API confirmation. Show Journey's state: first_visit_scheduled: true, slot: [confirmed]."},
+    {t:"outbound",title:"4 — Technician introduction SMS fires T-24hr",ch:"SMS · Journey-scheduled",
+     say:"\"24 hours before Marcus's first visit, Journey fires a tech introduction SMS. His technician's name, the arrival window, and a brief on what to expect. For a new customer, this reduces no-shows dramatically — they know who's coming, when, and why. If they need to reschedule, they reply and Journey handles it.\"",
+     show:"Show the Journey-scheduled T-24hr node. Show Marcus's SMS: 'Your first visit is tomorrow — Carlos will arrive between 9–11am. He'll inspect the perimeter and treat the main pest entry points. Reply RESCHEDULE if needed.' Show Journey's wait state for the visit-completed event."},
+    {t:"outbound",title:"5 — Post-first-visit satisfaction — Journey-fired T+24hr",ch:"SMS · Journey-fired · satisfaction branch",
+     say:"\"Carlos completes the visit. Journey receives the visit-completed event and schedules the satisfaction SMS for 24 hours later — when Marcus has had time to see if the treatment is working. If he taps 'Not good', Journey routes to a CSR immediately. The goal is to intercept dissatisfaction before it becomes a cancellation or a one-star review.\"",
+     show:"Show the visit-completed event. Show the T+24hr scheduled satisfaction SMS. Show the three-way satisfaction branch: 😊 → CRM retention flag; 😞 → CSR agent queue with full onboarding context; no reply → standard maintenance flow. Show the CSR handoff context object: plan_type, tech_name, visit_notes, concern_flag."}
+  ],
+  objections:[
+    {q:"\"Our CSRs already call new customers to schedule their first visit — this replaces that call.\"",a:"Journey handles the customers who self-schedule via SMS or chat — they don't need a CSR call. Your CSRs get the customers who don't respond to digital scheduling, where a personal call adds genuine value. Journey does the filtering so your team's time goes to the conversations that actually need a human."},
+    {q:"\"We use ServiceTitan for scheduling — how does the Journey-initiated chat integrate?\"",a:"Journey calls the ServiceTitan API to fetch available slots and confirm bookings. The chat session presents those slots to the customer; the booking writes back to ServiceTitan. Journey is the communication and orchestration layer; ServiceTitan remains the system of record."},
+    {q:"\"What if the customer has a question during the scheduling chat that Autopilot can't handle?\"",a:"Journey routes unresolved chat questions to a CSR with the full onboarding context: plan type, available slots already shown, and the customer's question. The CSR picks up a briefed handoff. If no CSR is available, Journey sends an acknowledgement and schedules a callback within 2 hours."}
+  ],
+  discovery:[
+    {q:"What's your new customer no-show rate on the first scheduled visit — and what do you attribute it to?",w:"No-shows on first visits are a significant problem for home services companies. The tech introduction SMS with name and arrival window typically reduces them by 20–40%."},
+    {q:"When a new customer has a poor experience on their first visit, how quickly does your team know — and is there a save process that fires before they cancel?",w:"Opens the Journey satisfaction score and CSR routing conversation."},
+    {q:"How long after sign-up is a new customer's first visit typically scheduled — and is that gap getting shorter or longer as you scale?",w:"Opens the Journey-initiated scheduling chat as a way to close the scheduling gap at scale without adding CSR headcount."}
+  ],
+  metrics:["24hrs","30–40%","100%"],
+  metricLabels:["Time from sign-up to first appointment scheduled — Journey handles outreach the same day","First-visit no-show reduction when tech introduction SMS includes name and arrival window","New customers receiving post-first-visit satisfaction check — Journey fires on every visit-completed event"]
+},
+{
+  id:3,
+  title:"Seasonal demand campaign — outbound pre-season SMS sequence with Journey-owned urgency and capacity management",
+  desc:"Before peak HVAC season (AC tune-ups in spring, furnace checks in fall), Journey runs a pre-season campaign for service plan customers: personalised SMS with available slots, urgency escalation as capacity fills, and a final email push — Journey monitors capacity against a real-time scheduling system to adjust messaging automatically.",
+  direction:"outbound",channels:["sms","email"],all3:false,
+  personas:["Lisa Park – HVAC plan customer","Journey orchestration","Autopilot","Scheduling API / capacity monitor"],
+  td:["Journeys","Proactive Outreach","Autopilot","CRM integration","Scheduling API"],
+  outcome:"60% of seasonal visits booked before peak · capacity filled systematically rather than by inbound spike",
+  journeyFlow:[
+    {type:"trigger",label:"Trigger",desc:"Campaign manager fires T-45 days before peak season. Journey instantiated for all active plan customers not yet booked for seasonal tune-up. Capacity data pulled from scheduling system.",ch:"Campaign trigger · T-45 days"},
+    {type:"send",label:"Step 1 — Early booking SMS (T-45 days)",desc:"Journey sends: 'Hi Lisa — it's almost AC season. Book your tune-up early and get the slot you want — we fill up fast. Reply BOOK to pick a time.'",ch:"SMS · T-45 days"},
+    {type:"wait",label:"Wait — booked? (72hr window)",desc:"Journey monitors for BOOK reply or scheduling system booking event. Suppresses all further steps on confirmation.",ch:"Journey wait state · 72hr"},
+    {type:"branch",label:"Branch — booked or no response?",branches:[
+      {outcome:"yes",label:"Booked — from any channel",text:"Journey suppresses remaining campaign steps. Fires booking confirmation SMS. Schedules T-24hr reminder."},
+      {outcome:"no",label:"No response after 72hrs",text:"Journey checks current capacity: how many slots remain in the customer's preferred service window? Branches on availability."}
+    ]},
+    {type:"branch",label:"Branch — capacity check (T-30 days)",branches:[
+      {outcome:"yes",label:"Slots still plentiful (>40% available)",text:"Journey waits until T-30 days and sends a standard reminder SMS: 'Still time to book your AC tune-up — slots are going fast.'"},
+      {outcome:"no",label:"Slots running low (<40% available)",text:"Journey immediately sends an urgency SMS: 'Lisa — we only have a few slots left in your area this season. Tap here to grab yours before they go.' Journey-tracked email link also queued."}
+    ]},
+    {type:"send",label:"Step 2 — Urgency or standard reminder SMS (T-30 days)",desc:"Content varies by capacity branch. Journey sends the appropriate message with a Journey-tracked scheduling link.",ch:"SMS · T-30 days · capacity-branched"},
+    {type:"wait",label:"Wait — booked? (72hr window)",desc:"Journey continues monitoring for booking event. Suppresses all remaining steps on confirmation.",ch:"Journey wait state · 72hr"},
+    {type:"branch",label:"Branch — booked or still unbooked at T-20?",branches:[
+      {outcome:"yes",label:"Booked",text:"Journey suppresses remaining steps. Fires booking confirmation."},
+      {outcome:"no",label:"Still unbooked at T-20 days",text:"Journey sends final outreach email: full season overview, limited availability message, one-click scheduling link with Journey-tracked deep link. Agent escalation if no email response in 48hrs."}
+    ]},
+    {type:"send",label:"Step 3 — Final email outreach (T-20 days)",desc:"Email: personalised subject ('Lisa — your AC tune-up slot is almost gone'), plan benefits reminder, direct scheduling link. Journey-tracked.",ch:"Email · T-20 days"},
+    {type:"close",label:"Journey closes (booked or season passed)",desc:"Booking outcome and capacity data logged. Unbooked customers flagged in CRM for post-season follow-up. Journey marks contact complete.",ch:"System"}
+  ],
+  value:["Journey queries the scheduling system's live capacity at T-30 days — customers in low-availability zones get urgency messaging; customers in well-supplied zones get standard messaging. One campaign, capacity-aware content","Journey suppresses all steps the moment a booking arrives from any channel — customer booked online, called in, or replied to SMS — no over-messaging","Customers who don't book despite three touches are flagged in CRM for post-season follow-up: Journey creates the re-engagement list automatically"],
+  setup:{env:"Journey with campaign trigger T-45 days pre-season. SMS and email Proactive Outreach. Scheduling API with real-time capacity query. CRM for post-season flag.",data:"Customer: Lisa Park. Active HVAC plan, annual AC tune-up due. Preferred service window: mornings. Capacity in her zone: 65% (plentiful at T-45, drops to 35% by T-30).",products:"Journeys · Proactive Outreach · Autopilot · CRM integration · Scheduling API",duration:"10 min full · 5 min lightning (Journey canvas, capacity branch logic, urgency vs standard SMS, suppression, final email)"},
+  script:[
+    {t:"journey",title:"1 — Journey canvas: capacity-aware seasonal campaign",ch:"Journeys · campaign trigger · T-45 days",jnote:"The capacity branch is the architectural highlight — show it clearly.",
+     say:"\"It's March. AC season is 45 days away. Journey fires the pre-season campaign for every active plan customer. But it's not a blast. Journey queries the scheduling system for live capacity at every branch point. Customers in zones where slots are filling fast get urgency messaging. Customers in well-supplied zones get standard messaging. One Journey, capacity-aware content, no manual segmentation.\"",
+     show:"Open the Journey canvas. Show: campaign trigger → early booking SMS → 72hr wait → suppression or capacity check → capacity branch (plentiful / low) → urgency or standard SMS → 72hr wait → final email → close. Point to the capacity check node at T-30."},
+    {t:"outbound",title:"2 — Journey sends early booking SMS at T-45",ch:"SMS · Journey-controlled",
+     say:"\"Lisa gets the first SMS 45 days before peak season. 'It's almost AC season — book your tune-up early and get the slot you want.' Journey is monitoring for two things: a reply, or a booking event from the scheduling system. Either one triggers the suppression.\"",
+     show:"Show the SMS send node. Show Lisa's SMS. Show Journey's wait state: monitoring for BOOK reply AND scheduling system booking event."},
+    {t:"journey",title:"3 — T-30 days: Journey queries capacity and branches",ch:"Journeys · capacity check node · scheduling API",jnote:"Show the capacity query as a Journey node — this is the architectural differentiator.",
+     say:"\"30 days before season, Lisa hasn't booked. Journey queries the scheduling API: how many morning slots are left in Lisa's service zone? The API returns 35% available — running low. Journey's capacity branch fires the urgency path. Lisa gets: 'We only have a few slots left in your area this season. Grab yours before they're gone.'\"",
+     show:"Show the capacity check node in Journey's canvas. Show the API call: zone, preferred_window, available_capacity_pct: 35. Show the branch firing: low_capacity → urgency SMS path. Show Lisa's urgency SMS.",
+     tip:"Ask: 'How do you currently manage your spring or fall scheduling surge — do you have visibility into capacity zone by zone?' Most home services companies don't, and the season fills up reactively. Journey flips it to proactive."},
+    {t:"inbound",title:"4 — Lisa replies BOOK — Journey activates scheduling sub-flow",ch:"SMS · inbound → Journey · scheduling API",
+     say:"\"Lisa replies BOOK. Journey routes to the Autopilot scheduling sub-flow: three available morning slots in her zone. She picks one. Journey confirms with the scheduling API and suppresses all remaining campaign steps. She won't receive the T-20 email. Journey knows she's booked.\"",
+     show:"Show Lisa's BOOK reply in Journey. Show Autopilot's three-slot SMS. Show the scheduling API confirmation. Show Journey's suppression firing across all remaining nodes."},
+    {t:"outbound",title:"5 — Final email for persistent non-bookers at T-20",ch:"Email · Journey-fired · T-20 days",
+     say:"\"For customers who haven't booked despite two SMS touches, Journey sends a final email at T-20 days. Personalised subject line, limited availability message, and a one-click scheduling link — Journey-tracked. If they don't click within 48 hours, Journey routes to the agent queue. And customers who still don't book are flagged in the CRM automatically — Journey creates the post-season follow-up list without any manual export.\"",
+     show:"Show the final email send node. Show the email: personalised subject, 'slots are almost gone', one-click scheduling link. Show the Journey-tracked link. Show the 48hr wait. Show the agent escalation node. Show the CRM flag on close: seasonal_unbooked: true."}
+  ],
+  objections:[
+    {q:"\"We run seasonal campaigns already — usually an email blast in February. What does Journey add?\"",a:"An email blast goes to everyone at once, with the same message, regardless of capacity or timing. Journey stages the campaign across 45 days, queries live capacity to personalise urgency, suppresses messages when customers book, and escalates non-bookers to agents. The result is less over-messaging, more bookings per contact, and a managed fill of your schedule rather than a spike-and-scramble."},
+    {q:"\"What if our scheduling system doesn't expose capacity data via API?\"",a:"Journey can work with a simpler signal — for example, if your scheduling system can export daily available slot counts even as a CSV or webhook, Journey can consume that. If real-time capacity isn't available, Journey uses time-based urgency instead (T-45 standard, T-30 urgent regardless of actual capacity). The campaign still works; the capacity-aware branching is an enhancement."},
+    {q:"\"Won't three touches across 45 days annoy customers?\"",a:"The suppression logic is the key: the moment a customer books, Journey stops all remaining messages. Most customers who book on touch 1 or 2 receive nothing further. The three touches are a ceiling for non-bookers — and three spread across 45 days is well below the threshold for most customers. Journey also monitors for opt-outs and suppresses those contacts immediately."}
+  ],
+  discovery:[
+    {q:"How do you currently manage your spring and fall scheduling surge — and how much of your seasonal capacity do you typically book proactively vs. reactively?",w:"Most home services companies book 30–40% proactively and scramble for the rest. Opens the Journey-managed proactive booking conversation."},
+    {q:"When you run a seasonal campaign today, do you have visibility into which customers are in zones where capacity is already filling — and do you message them differently?",w:"Almost universally no. Opens the capacity-aware branching conversation."},
+    {q:"How many customers on your service plan don't book their seasonal tune-up in a given year — and what happens to them?",w:"Opens the post-season follow-up flag and re-engagement conversation."}
+  ],
+  metrics:["60%","T-45 to T-20","0"],
+  metricLabels:["Seasonal visits booked proactively before peak — Journey manages the sequence across 45 days","Campaign window — Journey stages three touches with capacity-aware content across this period","Customers receiving further messages after booking — Journey suppresses on scheduling event from any channel"]
+},
+/* ══ BOTH DIRECTIONS ═══════════════════════════════════════════════════ */
+{
+  id:4,
+  title:"Emergency service request — inbound chat triage, technician dispatch, Journey-owned ETA updates",
+  desc:"Customer reports a heating or AC failure via chat. Journey classifies the emergency, runs Autopilot triage, dispatches the nearest available technician via field service API, fires proactive ETA SMS updates, and branches if the technician is delayed — all without a dispatcher manually managing each case.",
+  direction:"both",channels:["chat","sms","email"],all3:true,
+  personas:["Rachel Davies – homeowner","Journey orchestration","Autopilot","Mike – field technician","Dispatch API"],
+  td:["Journeys","Autopilot","Agent Workspace","Proactive Outreach","Field service dispatch API"],
+  outcome:"Same-day emergency response · proactive ETA updates prevent repeat contacts · post-job invoice Journey-fired",
+  journeyFlow:[
+    {type:"trigger",label:"Trigger",desc:"Inbound chat message classified as emergency service request by Autopilot (no heat, no AC, no hot water, gas smell). Journey starts with emergency priority flag and customer account pulled from CRM.",ch:"Inbound chat · Autopilot classification"},
+    {type:"bot",label:"Autopilot triage — safety check and symptom capture",desc:"Autopilot asks 3 structured questions: symptom type, safety check (gas smell / CO alarm / flooding), and confirms the service address. Structures the response as Journey state.",ch:"Chat · Autopilot · 3 questions"},
+    {type:"branch",label:"Branch — safety risk detected?",branches:[
+      {outcome:"yes",label:"Gas smell, CO alarm, or active flooding",text:"Journey immediately routes to emergency agent with safety flag. Sends safety instructions via chat: evacuation steps, utility shutoff. Does NOT dispatch technician until cleared."},
+      {outcome:"no",label:"No immediate safety risk",text:"Journey advances to technician dispatch via field service API."}
+    ]},
+    {type:"sys",label:"Field service API — dispatch nearest available technician",desc:"Journey calls the dispatch API: symptom type, service address, priority: emergency, account tier. API returns assigned technician name, ETA, and job reference.",ch:"Dispatch API · Journey node"},
+    {type:"send",label:"Step 1 — Dispatch confirmation via chat + SMS",desc:"Journey sends dispatch confirmation in the same chat thread and an SMS to the customer's mobile: 'Mike is on his way — ETA 45 minutes. Job reference: EM4821. He'll text when 10 minutes away.'",ch:"Chat + SMS · Journey-fired"},
+    {type:"wait",label:"Wait — monitor for ETA change or arrival (2hr window)",desc:"Journey polls the dispatch API every 15 minutes for ETA updates. Also monitors for technician-arrived and job-completed events from the field system.",ch:"Journey wait state · dispatch API polling"},
+    {type:"branch",label:"Branch — on time, delayed, or no-show?",branches:[
+      {outcome:"yes",label:"Technician arrived on time",text:"Journey fires an arrival SMS: 'Mike has arrived.' Monitors for job-completed event."},
+      {outcome:"no",label:"ETA updated — technician delayed",text:"Journey proactively fires an SMS: 'Mike is running a little behind — new ETA: [updated time]. Sorry for the wait.' Re-enters WAIT state."},
+      {outcome:"alt",label:"No arrival after 2hrs",text:"Journey escalates to dispatch manager with full context. Sends holding SMS to customer. Initiates reassignment process."}
+    ]},
+    {type:"wait",label:"Wait — job completed? (4hr window)",desc:"Journey monitors for job-completed event from field system. On completion, advances to post-job sequence.",ch:"Journey wait state · field system event"},
+    {type:"send",label:"Step 2 — Post-job confirmation + invoice email",desc:"Chat and SMS: job complete confirmation, what was repaired, job reference. Email: itemised invoice with payment link, warranty on parts, and a satisfaction question.",ch:"Chat + SMS + Email · Journey-fired"},
+    {type:"wait",label:"Wait — CSAT reply received? (24hr window)",desc:"Journey monitors for satisfaction reply. Detractor routes to CSR. No reply — Journey closes normally.",ch:"Journey wait state · 24hr"},
+    {type:"close",label:"Journey closes",desc:"Job outcome, satisfaction score, and payment status logged. Journey marks contact complete.",ch:"System"}
+  ],
+  value:["Safety screening is a Journey branch enforced before any dispatch — gas, CO, or flooding routes to an emergency agent first; Journey owns the safety decision logic","Journey polls the dispatch API every 15 minutes for ETA changes: if the technician is delayed, Journey fires an SMS before the customer calls to ask — reactive becomes proactive","Post-job invoice is a Journey node fired on the job-completed event: it fires on every job, consistently, without an admin or dispatcher remembering to send it"],
+  setup:{env:"Journey with inbound chat trigger. Dispatch API with technician assignment, ETA polling, and job-completed events. Agent Workspace for safety escalation. Proactive Outreach for SMS and email.",data:"Customer: Rachel Davies. No heating — furnace failure. Address confirmed. No safety risk. Nearest tech: Mike Rivera, ETA 45 mins.",products:"Journeys · Autopilot · Agent Workspace · Proactive Outreach · Field service dispatch API",duration:"12 min full · 6 min lightning (canvas, safety branch, dispatch API call, ETA delay SMS, post-job close)"},
+  script:[
+    {t:"journey",title:"1 — Journey classifies emergency and opens the flow",ch:"Journeys · inbound chat trigger",jnote:"Show the safety branch before anything else — it's the compliance and trust moment.",
+     say:"\"Rachel's furnace has stopped working. She opens a chat. Autopilot classifies it as an emergency service request and Journey starts. But before any technician is dispatched, Journey runs a safety check. If Rachel reports a gas smell or CO alarm, Journey routes to a live agent immediately and sends safety instructions — no dispatch until that's cleared. Only on a clean safety check does Journey advance to dispatch.\"",
+     show:"Open the Journey canvas. Show: inbound chat → Autopilot triage → safety branch (gas/CO → emergency agent; no risk → dispatch API) → dispatch confirmation → ETA polling → delay/arrival branch → job-completed → post-job invoice → CSAT → close. Point to the safety branch."},
+    {t:"bot",title:"2 — Autopilot triage in 3 questions",ch:"Chat · Autopilot · Journey-monitored",
+     say:"\"Autopilot handles the triage. Three questions: what's the symptom, any gas smell or CO alarm, confirm the address. Rachel answers. No safety risk. Journey's state: symptom: furnace_failure, safety_clear: true, address: confirmed. Journey advances to dispatch.\"",
+     show:"Show Autopilot's three-question chat flow. Show Rachel's answers. Show Journey's state update: symptom, safety_clear: true, address_confirmed: true. Show the safety branch resolving to dispatch path.",
+     tip:"Ask the audience: 'If a customer reports a gas smell via chat today, what happens?' Most companies have no structured response. The Journey safety branch — evacuation instructions and emergency agent routing before any dispatch — is a strong compliance and liability point."},
+    {t:"sys",title:"3 — Journey calls dispatch API — technician assigned",ch:"Dispatch API · Journey node",jnote:"The API call is a Journey node — not a dispatcher manually assigning.",
+     say:"\"Journey calls the dispatch API directly. Symptom, address, priority: emergency. The API returns Mike Rivera — nearest available tech — with a 45-minute ETA and a job reference. Journey fires the dispatch confirmation in the same chat thread and sends an SMS to Rachel's mobile. Both from Journey.\"",
+     show:"Show Journey's dispatch API node. Show the API request and response: tech_name: Mike Rivera, eta_mins: 45, job_ref: EM4821. Show the chat confirmation and the SMS firing simultaneously."},
+    {t:"outbound",title:"4 — Mike runs late — Journey fires proactive ETA update",ch:"SMS · Journey-fired · ETA change event",
+     say:"\"Journey is polling the dispatch API every 15 minutes. 40 minutes in, the API returns a new ETA: Mike is running 20 minutes late — traffic. Journey fires an SMS immediately: 'Mike is running a little behind — new ETA: 1:05pm.' Rachel didn't call to ask. Journey told her before she needed to.\"",
+     show:"Show Journey's dispatch API poll returning an ETA update. Show the delay branch firing. Show Rachel's proactive SMS. Show Journey re-entering WAIT state with the updated ETA."},
+    {t:"outbound",title:"5 — Job complete — Journey fires invoice email automatically",ch:"Email · Journey-fired on job-completed event",
+     say:"\"Mike marks the job complete in the field app. Journey receives the event and fires three sends simultaneously: a chat confirmation of what was repaired, an SMS with the job reference, and an email invoice with an itemised breakdown and a payment link. The invoice fires on every completed job — no admin action, no dispatcher remembering to send it.\"",
+     show:"Show the job-completed event in Journey's activity log. Show the three simultaneous send nodes. Show Rachel's invoice email: itemised repair, parts warranty, payment link. Show Journey's post-job CSAT SMS and the 24hr wait state."}
+  ],
+  objections:[
+    {q:"\"We have a dispatcher who handles emergency calls manually — why automate dispatch?\"",a:"Journey handles the confirmation, the ETA monitoring, and the customer communication loop. Your dispatcher still assigns the technician in the field system — Journey reads that assignment and manages everything after. The dispatcher focuses on logistics; Journey manages the customer relationship automatically."},
+    {q:"\"What if no technician is available within a reasonable ETA?\"",a:"Journey's dispatch API call returns the next available technician with their ETA. If the ETA is beyond your emergency SLA threshold — configurable in Journey — Journey routes to a CSR to communicate directly with the customer and offer an alternative (next-day priority, partner dispatch). Journey holds the context for whichever path is taken."},
+    {q:"\"Our techs don't always update the field app promptly — how reliable is the job-completed event?\"",a:"Journey has a fallback timeout on the job-completed wait node — for example, 4 hours. If no event arrives within that window, Journey flags the job for dispatcher review and sends a check-in SMS to the customer. It's a configurable safety net for jobs where the app update is delayed."}
+  ],
+  discovery:[
+    {q:"When a customer calls about an emergency and the technician is running late, how does the customer find out — do they call you, or do you tell them?",w:"Almost always: the customer calls. Opens the proactive ETA update conversation."},
+    {q:"After a technician completes a job today, does the customer automatically receive an invoice — and how quickly?",w:"Most home services companies have a manual invoice process with 24–48 hour delays. Opens the Journey-fired immediate invoice conversation."},
+    {q:"If a customer reports a gas smell or CO alarm via chat or phone, what is your current scripted response?",w:"Opens the safety branch and compliance conversation. Many companies don't have a consistent protocol."}
+  ],
+  metrics:["<3 min","100%","0"],
+  metricLabels:["Time from chat message to dispatch confirmation SMS — Journey-automated","Jobs where customer receives proactive ETA update if technician is delayed — Journey fires on dispatch API change event","Manual invoice sends required — Journey fires on every job-completed event automatically"]
+},
+{
+  id:5,
+  title:"Churn save — inbound cancellation request, Journey-owned retention flow with escalating offers",
+  desc:"Customer contacts to cancel their service plan. Journey receives the inbound event, Autopilot captures the cancellation reason, and Journey runs a structured retention flow — reason-specific offer, escalating to a CSR if the first offer fails, with a final win-back email if the customer still cancels.",
+  direction:"both",channels:["chat","sms","email"],all3:true,
+  personas:["Sarah Okonkwo – at-risk plan customer","Journey orchestration","Autopilot","CSR agent"],
+  td:["Journeys","Autopilot","Agent Workspace","Copilot","Proactive Outreach"],
+  outcome:"25–35% cancellation save rate · reason-coded churn data for CRM · win-back sequence for lost customers",
+  journeyFlow:[
+    {type:"trigger",label:"Trigger",desc:"Inbound chat or phone event classified as cancellation request. Journey starts: customer account, plan type, tenure, last visit date, and payment history pulled from CRM.",ch:"Inbound chat · cancellation classification"},
+    {type:"bot",label:"Autopilot captures cancellation reason",desc:"Autopilot asks one structured question: 'We're sorry to hear that — can you tell us why you're thinking of cancelling? [Too expensive / Moving / Not seeing results / Service issue / Other]'. Reason captured as Journey state.",ch:"Chat · Autopilot · one structured question"},
+    {type:"branch",label:"Branch — cancellation reason",branches:[
+      {outcome:"yes",label:"Price / cost",text:"Journey presents a tenure-based discount offer: 'As a [X]-year customer, we'd like to offer you [Y]% off for the next 12 months.' Autopilot delivers the offer in chat. Journey monitors for accept/decline."},
+      {outcome:"no",label:"Service issue or no results",text:"Journey routes immediately to CSR with full context: account, tenure, last visit date, tech assigned, and the specific complaint. CSR picks up a briefed handoff with authority to offer a re-service or credit."},
+      {outcome:"alt",label:"Moving",text:"Journey asks for the new zip code. Checks service coverage. If covered: 'Great news — we serve your new area! We can transfer your plan.' If not covered: Journey initiates a clean cancellation and moves to the win-back sequence."},
+      {outcome:"alt",label:"Other",text:"Journey routes to CSR to have a direct conversation. Full account context passed."}
+    ]},
+    {type:"branch",label:"Branch — offer accepted or declined?",branches:[
+      {outcome:"yes",label:"Offer accepted (price branch)",text:"Journey updates the CRM with the discount applied. Fires a confirmation SMS: 'We're glad you're staying — your new rate is [X] starting next billing cycle.' Marks as retained."},
+      {outcome:"no",label:"Offer declined",text:"Journey escalates to CSR with full context: reason given, offer presented, offer declined. CSR has authority to escalate the offer (free month, service credit, plan downgrade option)."}
+    ]},
+    {type:"agent",label:"CSR handles escalated retention conversation",desc:"CSR uses Copilot to see account history, reason, and offer already presented. Journey monitors for retention or cancellation outcome.",ch:"Agent Workspace · Copilot · Journey-monitored"},
+    {type:"branch",label:"Branch — retained or cancelled?",branches:[
+      {outcome:"yes",label:"Retained by CSR",text:"Journey fires confirmation SMS and updates CRM: retained, reason resolved, offer applied. Sets a 30-day follow-up satisfaction check."},
+      {outcome:"no",label:"Cancelled despite CSR effort",text:"Journey processes the cancellation in CRM. Advances to win-back email sequence: 30-day wait, then re-engagement email with a come-back offer."}
+    ]},
+    {type:"send",label:"Win-back email (T+30 days for cancelled customers)",desc:"Journey sends: '[Brand] misses you, Sarah — your home protection plan can be reactivated with one click. Here's an offer for returning customers: [X]% off your first 6 months back.'",ch:"Email · T+30 days · win-back branch only"},
+    {type:"close",label:"Journey closes",desc:"Outcome logged: retained (reason + offer), cancelled (reason + CSR effort), or win-back sent. CRM reason code written. Journey marks contact complete.",ch:"System"}
+  ],
+  value:["Cancellation reason is captured as a structured CRM field — not a free-text note — so churn data is analysable across the customer base","The price-sensitive retention offer is tenure-based: a 5-year customer gets a different offer than a 6-month customer. Journey calculates and presents the right offer automatically","Win-back sequence fires automatically 30 days after cancellation — Journey doesn't need a manual export or campaign setup for every cancelled customer"],
+  setup:{env:"Journey with inbound cancellation trigger. Autopilot for reason capture. Agent Workspace + Copilot for CSR escalation. CRM for tenure data and outcome logging.",data:"Customer: Sarah Okonkwo. 3-year pest control subscriber. Calling to cancel — reason: too expensive. Last visit: 6 weeks ago. Payment: current.",products:"Journeys · Autopilot · Agent Workspace · Copilot · Proactive Outreach (SMS + email)",duration:"11 min full · 5 min lightning (Journey canvas, reason capture branch, price offer, CSR escalation, win-back)"},
+  script:[
+    {t:"journey",title:"1 — Journey canvas: cancellation reason to win-back",ch:"Journeys · cancellation trigger",jnote:"Show the full retention + win-back lifecycle — this is Journey as a revenue protection tool.",
+     say:"\"Sarah is calling to cancel. Most contact centres handle this with whatever the agent knows in the moment. Journey makes it systematic: the cancellation reason is captured, the right offer is selected based on that reason and her tenure, and if she still cancels, a win-back email fires automatically in 30 days. Let's look at the canvas.\"",
+     show:"Open the Journey canvas. Show: inbound cancellation → Autopilot reason capture → four-way reason branch → price: tenure-based offer / service issue: CSR with context / moving: coverage check / other: CSR → accept/decline branch → CSR escalation → retained or cancelled → win-back sequence → close."},
+    {t:"bot",title:"2 — Autopilot captures cancellation reason in one question",ch:"Chat · Autopilot · structured capture",jnote:"One structured question — the answer drives the entire downstream Journey.",
+     say:"\"Autopilot asks Sarah one question: why is she thinking of cancelling? Five structured options. She selects 'Too expensive.' That answer is now a Journey state variable. Journey immediately branches to the price retention path and calculates the right offer based on her 3-year tenure.\"",
+     show:"Show Autopilot's single reason-capture question in chat. Show Sarah selecting 'Too expensive'. Show Journey's state update: cancellation_reason: price, customer_tenure_years: 3. Show the Journey branch firing to the price retention path.",
+     tip:"Ask: 'Today, when a customer cancels, is the reason captured in a structured field in your CRM — or in a free-text note?' Most companies have free text, which makes churn analysis impossible. Journey captures reason codes systematically."},
+    {t:"bot",title:"3 — Journey calculates tenure-based offer and presents it",ch:"Chat · Autopilot · Journey-calculated offer",
+     say:"\"Journey looks up Sarah's tenure: 3 years. That maps to a 15% discount offer for the next 12 months. Autopilot delivers the offer in the same chat: 'As a 3-year customer, we'd like to offer you 15% off for the next year — that brings your quarterly visit to $X.' Sarah sees a number immediately. Not 'let me speak to a manager.'\"",
+     show:"Show Journey's offer calculation: tenure_years: 3 → offer_tier: 15%, offer_amount: [calculated from plan price]. Show Autopilot's chat message presenting the offer. Show Journey's wait state: monitoring for accept or decline."},
+    {t:"agent",title:"4 — Sarah declines — Journey escalates to CSR with full brief",ch:"Agent Workspace · Copilot · Journey-passed context",
+     say:"\"Sarah declines — she wants a bigger discount. Journey escalates to the CSR queue. The CSR opens Agent Workspace and Copilot has the full brief: Sarah's account, 3-year tenure, cancellation reason: price, the 15% offer already presented and declined. The CSR knows exactly where the conversation is and what authority they have to escalate.\"",
+     show:"Show Journey's escalation node firing. Show the context object passed to Agent Workspace: customer, tenure, reason, offer_presented, offer_declined. Show Copilot's brief. Show the CSR picking up the call with everything they need.",
+     tip:"'The CSR picks up a briefed handoff, not a cold case.' This is a strong line — the difference between a CSR who starts from scratch and one who walks in knowing what was already tried."},
+    {t:"outbound",title:"5 — Cancelled — Journey fires win-back email at T+30 days",ch:"Email · Journey-scheduled · T+30 days",
+     say:"\"Despite the CSR's best effort, Sarah cancels. Journey processes the cancellation — CRM updated, reason code written. And Journey schedules a win-back email for exactly 30 days later. No manual campaign setup, no export. Journey fires: 'We miss you, Sarah — here's an offer for returning customers.' That 30-day window is when post-cancellation regret is highest.\"",
+     show:"Show the cancellation outcome in Journey. Show the CRM update: status: cancelled, reason: price, csr_effort: true. Show the T+30 win-back email scheduled in Journey. Show the win-back email: personalised subject, returning customer offer, one-click reactivation link."}
+  ],
+  objections:[
+    {q:"\"Our CSRs are already trained in retention — why add Journey?\"",a:"Journey makes your CSRs faster and more consistent. Instead of starting every cancellation conversation from scratch — asking for the account number, looking up tenure, deciding what to offer — the CSR opens a briefed handoff. They know the reason, the tenure, and what was already tried. That briefing is what Journey provides. Your CSRs still own the conversation; Journey prepares them for it."},
+    {q:"\"What if we don't want to offer discounts — is the retention offer configurable?\"",a:"Completely. The offer logic is a configuration in Journey: which reason codes trigger which offers, what the tenure tiers are, and what the discount thresholds are. If your policy is to offer a free re-service instead of a discount for service complaints, that's a Journey branch configuration. Journey enforces your retention policy consistently — it doesn't create the policy."},
+    {q:"\"We're worried about customers gaming the system — calling to cancel just to get a discount.\"",a:"Journey can include a tenure minimum and a frequency cap: customers who received a retention offer in the last 12 months don't get another one automatically. Those cases route directly to the CSR. The cap is a configuration on the Journey branch condition."}
+  ],
+  discovery:[
+    {q:"What's your current plan cancellation rate — and do you know the top three reasons customers cancel?",w:"Most home services companies have a sense of the rate but poor visibility into structured reasons. Opens the Journey reason-code capture and churn analytics conversation."},
+    {q:"When a customer calls to cancel today, what does your CSR know before the conversation starts?",w:"Opens the Copilot-briefed handoff conversation. Most CSRs start cold."},
+    {q:"Do you have an automated win-back sequence for customers who cancelled — and when does it fire?",w:"Almost universally no. Opens the Journey T+30 win-back conversation."}
+  ],
+  metrics:["25–35%","100%","30 days"],
+  metricLabels:["Cancellation save rate with reason-specific offer + CSR escalation","Cancellations where reason is captured as a structured CRM field — Journey records every one","Win-back email timing — Journey fires automatically, no manual campaign setup required"]
+},
+{
+  id:6,
+  title:"Re-engagement campaign — lapsed customers with Journey-owned multi-touch win-back",
+  desc:"CRM identifies customers who cancelled or lapsed 90+ days ago. Journey runs a multi-touch re-engagement: personalised SMS with a returning customer offer, email with plan benefits refresher, and a final chat offer — monitoring for re-sign at every step and closing the loop with a new-customer onboarding handoff if converted.",
+  direction:"outbound",channels:["sms","email","chat"],all3:true,
+  personas:["Tom Hughes – lapsed pest control customer","Journey orchestration","Autopilot","CRM / scheduling system"],
+  td:["Journeys","Proactive Outreach","Autopilot","CRM integration","Scheduling API"],
+  outcome:"10–15% re-engagement conversion · Journey-owned handoff to new customer onboarding on re-sign",
+  journeyFlow:[
+    {type:"trigger",label:"Trigger",desc:"CRM query fires monthly: customers who cancelled or lapsed 90–365 days ago with no active plan and no prior re-engagement attempt in last 6 months. Journey instantiated with lapse reason (if known), plan history, and last service date.",ch:"CRM monthly query"},
+    {type:"send",label:"Step 1 — Personalised re-engagement SMS",desc:"Journey sends: 'Hi Tom — it's been a while. We'd love to have you back. Returning customers get [X]% off their first 3 months. Reply REACTIVATE or tap here: [link]'",ch:"SMS · Day 1 · Journey-controlled"},
+    {type:"wait",label:"Wait — re-sign event or link click? (72hr window)",desc:"Journey monitors for a REACTIVATE reply, a scheduling system sign-up event, or a Journey-tracked link click. Suppresses all further steps on confirmed re-sign.",ch:"Journey wait state · 72hr"},
+    {type:"branch",label:"Branch — response type or silence?",branches:[
+      {outcome:"yes",label:"REACTIVATE reply or link clicked",text:"Journey activates Autopilot reactivation chat: plan options presented, pricing confirmed, and sign-up processed. On completion, Journey fires the new customer onboarding Journey trigger for this customer."},
+      {outcome:"no",label:"No response after 72hrs",text:"Journey checks: was the lapse reason 'price'? If yes, Journey adjusts the email offer upward. If no or unknown, Journey sends the standard email."},
+      {outcome:"alt",label:"Question or free-text reply",text:"Journey routes to Autopilot for FAQ handling (current pricing, plan changes since they left, new service areas). Unresolved → CSR agent with lapse history."}
+    ]},
+    {type:"send",label:"Step 2 — Personalised email with plan benefits (Day 4)",desc:"Email: what's changed since they left, their previous plan details, the returning customer offer, and a Journey-tracked one-click reactivation link.",ch:"Email · Day 4 · Journey-controlled"},
+    {type:"wait",label:"Wait — email clicked or re-sign event? (72hr window)",desc:"Journey monitors for email click and sign-up confirmation. Suppresses remaining steps on re-sign.",ch:"Journey wait state · 72hr"},
+    {type:"branch",label:"Branch — converted or still lapsed?",branches:[
+      {outcome:"yes",label:"Re-signed via email",text:"Journey suppresses chat step. Fires re-sign confirmation SMS. Triggers new customer onboarding Journey."},
+      {outcome:"no",label:"Email opened but not clicked (72hrs)",text:"Journey sends final proactive chat: Autopilot opens a chat session for the customer. 'Hi Tom — we noticed you checked out our offer. Any questions before you reactivate?' Journey-initiated session."},
+      {outcome:"alt",label:"Email not opened (72hrs)",text:"Journey exits the re-engagement sequence. Marks customer as non-responsive. Re-eligible for next month's campaign run."}
+    ]},
+    {type:"bot",label:"Final Autopilot chat — Journey-initiated",desc:"Journey opens a chat session for customers who opened the email but didn't click. Autopilot runs a low-friction reactivation conversation. Sign-up processed in-chat.",ch:"Chat · Autopilot · Journey-initiated"},
+    {type:"sys",label:"Re-sign confirmed — Journey triggers new customer onboarding",desc:"On re-sign from any branch, Journey triggers the new customer onboarding Journey for this customer — welcome SMS, first appointment scheduling, tech introduction. The win-back is seamless into the onboarding flow.",ch:"CRM event · Journey handoff"},
+    {type:"close",label:"Journey closes",desc:"Re-engagement outcome logged: converted (channel, offer), non-responsive, or FAQ routed. CRM updated. Journey marks contact complete.",ch:"System"}
+  ],
+  value:["Journey triggers the new customer onboarding Journey the moment a re-sign is confirmed — the lapsed customer immediately enters the same welcome and first-appointment sequence as a new customer, with no manual handoff","The email-opened-but-not-clicked branch triggers a Journey-initiated chat — not a passive link, but Journey proactively opening a session for the customer who showed interest but didn't act","Lapse reason drives offer differentiation: price-lapsed customers get a higher discount in the email; service-lapsed customers get a re-service credit offer. Journey selects the right content automatically"],
+  setup:{env:"Journey with CRM monthly lapse query. SMS, email, and chat Proactive Outreach. Autopilot for reactivation chat. Scheduling API for first appointment. New customer onboarding Journey connected.",data:"Customer: Tom Hughes. Cancelled 8 months ago, reason: price. Quarterly pest control plan. Last visit: 10 months ago. No re-engagement attempt in 6 months.",products:"Journeys · Proactive Outreach · Autopilot · CRM integration · Scheduling API",duration:"11 min full · 5 min lightning (canvas, SMS send, email opened branch, Journey-initiated chat, re-sign → onboarding handoff)"},
+  script:[
+    {t:"journey",title:"1 — Journey canvas: lapsed customer to onboarding handoff",ch:"Journeys · CRM lapse trigger",jnote:"Show the onboarding Journey trigger at the end — this is the seamless re-activation moment.",
+     say:"\"Tom cancelled 8 months ago — price was the reason. Journey picks him up in the monthly lapse query and runs a three-touch re-engagement. The important detail is what happens if he re-signs: Journey immediately triggers the new customer onboarding Journey for Tom. He gets a welcome SMS, a first-appointment scheduling flow, and a tech introduction. The win-back flows directly into onboarding without anyone manually handing off.\"",
+     show:"Open the Journey canvas. Show: CRM lapse trigger → SMS Day 1 → REACTIVATE branch / no response → price offer branch → email Day 4 → email-opened-not-clicked → Autopilot chat → re-sign confirmed → onboarding Journey trigger → close. Point to the onboarding Journey handoff node."},
+    {t:"outbound",title:"2 — Journey sends personalised re-engagement SMS",ch:"SMS · Day 1 · Journey-controlled",
+     say:"\"Journey sends Tom an SMS. His name, a returning customer offer — 20% off his first 3 months back — and a REACTIVATE reply option. Journey's lapse reason lookup tells it Tom cancelled for price, so the SMS lead is the discount offer, not a feature pitch. The message is relevant because Journey knows why he left.\"",
+     show:"Show the SMS send node. Show Tom's SMS. Show the CRM lapse reason driving the offer: lapse_reason: price → offer_type: discount_first_3_months. Show Journey's 72hr wait state.",
+     tip:"Ask: 'Do you run win-back campaigns for lapsed customers — and do the messages change based on why they left?' Most home services companies run a generic re-engagement email. Reason-aware messaging is the differentiator."},
+    {t:"outbound",title:"3 — Email Day 4 — what's changed since Tom left",ch:"Email · Day 4 · Journey-tracked link",
+     say:"\"Tom didn't reply to the SMS. Journey sends an email on Day 4. Personalised: his previous plan, what's changed since he cancelled, and a higher discount in the email — 25% off, because Journey knows he's price-sensitive and didn't respond to 20%. The reactivation link is Journey-tracked.\"",
+     show:"Show the email send node. Show Tom's email: previous plan details, 'here's what's new', 25% offer for returning customers. Show the Journey-tracked link. Show Journey monitoring: email_opened, link_clicked, sign_up_event."},
+    {t:"bot",title:"4 — Email opened but not clicked — Journey initiates chat",ch:"Chat · Autopilot · Journey-initiated",jnote:"Show Journey initiating the chat — not a passive follow-up.",
+     say:"\"Tom opened the email but didn't click. Journey detects that state and opens a proactive chat session for Tom. Not a passive link — Journey opens the session with Tom's account pre-loaded: 'Hi Tom — we noticed you checked out our offer. Any questions before you reactivate?' Autopilot handles the conversation. If he has a question Journey can't answer, it routes to a CSR with the full re-engagement history.\"",
+     show:"Show Journey detecting: email_opened: true, link_clicked: false, 72hrs elapsed. Show Journey's chat-open node executing. Show the Autopilot chat session: Tom's account pre-loaded, re-engagement offer visible. Show Autopilot's opening message."},
+    {t:"sys",title:"5 — Re-sign confirmed — Journey triggers onboarding Journey",ch:"CRM event · Journey handoff to onboarding",
+     say:"\"Tom reactivates via the chat. Journey updates the CRM: plan reactivated, re-engagement channel: chat, offer applied. And Journey immediately triggers the new customer onboarding Journey — Story 2 in this library. Tom gets the welcome SMS in the next few minutes, the first appointment scheduling flow, and a tech introduction before his first visit. The win-back and the onboarding are one seamless lifecycle in Journey.\"",
+     show:"Show the re-sign confirmation in Journey. Show the CRM update: plan_active: true, re_engagement_channel: chat. Show Journey triggering the new customer onboarding Journey for Tom. Show the onboarding Journey starting: welcome SMS queued, scheduling flow initiated."}
+  ],
+  objections:[
+    {q:"\"We run re-engagement email campaigns already — what does Journey add?\"",a:"Journey adds three things a single email campaign can't: reason-aware offer differentiation (price-lapsed customers get a different offer than service-lapsed), proactive chat for customers who open but don't click, and an automatic handoff to the onboarding Journey on re-sign. A campaign email blasts everyone with the same message and doesn't know what to do when they respond."},
+    {q:"\"How does Journey know why a customer cancelled if the reason isn't in the CRM?\"",a:"Journey works with whatever is in the CRM — including a missing reason code. If the reason is unknown, Journey defaults to the standard offer path and routes any reply to a CSR who can capture the reason in the conversation. Journey also contributes to filling the reason gap over time: the cancellation save Journey (Story 5) captures structured reason codes on every future cancellation."},
+    {q:"\"Won't re-engaging lapsed customers at 90 days feel too late?\"",a:"90 days is actually well within the window where win-back succeeds. Research across home services consistently shows 60–180 days as the highest-converting re-engagement window — after that, the customer has often found an alternative. Journey can be configured to fire earlier (30 days or 60 days) if your data shows a different optimal window for your specific market."}
+  ],
+  discovery:[
+    {q:"Do you currently run any systematic re-engagement campaign for lapsed customers — and how is it segmented?",w:"Most home services companies have no systematic re-engagement. Opens the Journey lapse campaign conversation."},
+    {q:"When a lapsed customer re-signs, what's the onboarding process — and is it different from a new customer's?",w:"Almost universally: no structured difference. Opens the Journey onboarding handoff conversation."},
+    {q:"What's your current win-back conversion rate from lapsed customers — and at what point after cancellation does that rate drop to near zero?",w:"Most home services companies don't track this. Opens the Journey attribution and conversion window conversation."}
+  ],
+  metrics:["10–15%","100%","Seamless"],
+  metricLabels:["Re-engagement conversion rate across multi-touch Journey (SMS + email + chat)","Re-signed customers who enter the new customer onboarding Journey automatically — no manual handoff","Transition from win-back to onboarding — Journey triggers the onboarding flow the moment re-sign is confirmed"]
+},
+/* ══ INBOUND ═══════════════════════════════════════════════════════════ */
+{
+  id:7,
+  title:"Post-visit treatment effectiveness and re-service request — inbound self-serve with Journey-owned warranty check",
+  desc:"Field system confirms a pest control or HVAC maintenance visit is complete. Journey sends a post-visit SMS satisfaction check, monitors for a 7-day treatment effectiveness response, runs a warranty eligibility check if re-service is requested, and schedules the re-visit automatically — all without a dispatcher or CSR involved in routine cases.",
+  direction:"inbound",channels:["sms","email","chat"],all3:true,
+  personas:["Marcus Webb – recurring plan customer","Journey orchestration","Autopilot","Field service system","Scheduling API"],
+  td:["Journeys","Proactive Outreach","Autopilot","Field service system","Scheduling API","CRM integration"],
+  outcome:"Treatment effectiveness data captured for every visit · re-services scheduled automatically · zero manual chase",
+  journeyFlow:[
+    {type:"trigger",label:"Trigger",desc:"Field system fires visit-completed event. Journey starts: customer profile, treatment type, technician, products used, plan warranty terms, and re-service policy all pulled from CRM and service record.",ch:"Field system event · visit-completed"},
+    {type:"send",label:"Step 1 — Immediate post-visit satisfaction SMS",desc:"Journey sends: 'Hi Marcus — your service visit is complete. How did it go? Tap: 😊 Great · 😐 OK · 😞 Not happy'",ch:"SMS · Journey-fired on visit-completed"},
+    {type:"wait",label:"Wait — satisfaction reply? (24hr window)",desc:"Journey monitors for a reply. Branches on score or silence.",ch:"Journey wait state · 24hr"},
+    {type:"branch",label:"Branch — satisfaction score",branches:[
+      {outcome:"yes",label:"Great (😊)",text:"Journey sends a brief confirmation SMS. Advances to 7-day effectiveness check."},
+      {outcome:"no",label:"OK or Not happy (😐/😞)",text:"Journey routes to CSR agent with full service context: treatment type, products used, technician. Agent contacts customer before they consider cancelling."},
+      {outcome:"alt",label:"No reply (24hrs)",text:"Journey advances to 7-day effectiveness check without a satisfaction score. Logged as unscored."}
+    ]},
+    {type:"wait",label:"Wait — 7-day effectiveness check",desc:"Journey waits exactly 7 days from the visit date — not from the satisfaction reply. This is the standard window to assess pest control or HVAC treatment effectiveness.",ch:"Journey wait state · 7 days from visit_date"},
+    {type:"send",label:"Step 2 — Treatment effectiveness SMS",desc:"Journey sends: 'Hi Marcus — it's been a week since your visit. Are you still seeing signs of the problem? Reply YES (still seeing issues) or NO (all clear).'",ch:"SMS · Day 7 from visit"},
+    {type:"branch",label:"Branch — treatment effective or not?",branches:[
+      {outcome:"yes",label:"Still seeing issues (YES reply)",text:"Journey activates re-service sub-flow: checks warranty eligibility (visit date vs. warranty window). If eligible: free re-service offered and scheduled. If outside warranty: paid re-service options presented."},
+      {outcome:"no",label:"All clear (NO reply)",text:"Journey fires a completion SMS: 'Great — treatment was successful. Your next scheduled visit is [date]. We'll remind you beforehand.' Writes next visit date to CRM."},
+      {outcome:"alt",label:"No reply after 48hrs",text:"Journey sends a final SMS nudge: 'Just checking in — all clear after your recent service? Reply YES or NO.' If still no reply, Journey closes as unscored."}
+    ]},
+    {type:"branch",label:"Branch — warranty eligible?",branches:[
+      {outcome:"yes",label:"Within warranty window",text:"Journey presents free re-service offer in chat: Autopilot shows available slots. Customer selects. Scheduling API confirms. Confirmation SMS sent."},
+      {outcome:"no",label:"Outside warranty window",text:"Journey presents paid re-service options via chat. Autopilot handles pricing and scheduling. Journey routes to CSR if customer disputes the warranty determination."}
+    ]},
+    {type:"bot",label:"Autopilot scheduling chat — Journey-initiated for re-service",desc:"Journey opens a chat session: re-service context pre-loaded (treatment type, warranty status, available slots). Customer selects a slot. Scheduling API confirms.",ch:"Chat · Autopilot · Journey-initiated · re-service branch only"},
+    {type:"sys",label:"CRM write-back — next visit date and outcome logged",desc:"Whether re-service was needed or not, Journey writes the treatment outcome and next scheduled visit date back to the CRM. Customer enters the next cycle of the maintenance reminder Journey.",ch:"CRM write-back · Journey node"},
+    {type:"close",label:"Journey closes",desc:"Visit outcome, satisfaction score, effectiveness result, and re-service decision all logged. Journey marks contact complete.",ch:"System"}
+  ],
+  value:["Journey times the 7-day effectiveness check from the visit date — not from the satisfaction reply date — so the window is clinically accurate regardless of when the customer responded","Warranty eligibility check is a Journey branch: the visit date is compared to the warranty window at reply time, so the correct offer (free vs. paid) is always presented without a CSR manually checking","CRM write-back of the next visit date means this customer automatically enters next year's maintenance reminder Journey — zero manual data entry"],
+  setup:{env:"Journey with field system visit-completed trigger. SMS Proactive Outreach. Journey-initiated chat for re-service scheduling. Scheduling API. CRM write-back configured.",data:"Customer: Marcus Webb. Pest control visit completed today: exterior spray and bait stations, 90-day warranty. Tech: Carlos Ruiz.",products:"Journeys · Proactive Outreach · Autopilot · Field service system · Scheduling API · CRM integration",duration:"10 min full · 5 min lightning (Journey canvas, Day 7 effectiveness SMS, YES branch, warranty check, Autopilot scheduling chat)"},
+  script:[
+    {t:"journey",title:"1 — Journey canvas: post-visit to next annual visit",ch:"Journeys · field system trigger",jnote:"Show the 7-day timing node — timed from visit_date, not from satisfaction reply.",
+     say:"\"Carlos just completed Marcus's pest control visit. The field system fires a visit-completed event. Journey starts. Immediate satisfaction check. 7 days from the visit date — not from when Marcus replies, but from the actual treatment date — Journey sends an effectiveness check. If Marcus is still seeing pests, Journey checks the warranty and schedules a re-service automatically. Let's look at the canvas.\"",
+     show:"Open the Journey canvas. Show: field system trigger → immediate satisfaction SMS → 24hr wait → satisfaction branch → 7-day wait from visit_date → effectiveness SMS → YES/NO branch → warranty check branch → Autopilot scheduling chat → CRM write-back → close. Point to the 7-day wait node: '7 days from visit_date — not from today'."},
+    {t:"outbound",title:"2 — Immediate satisfaction SMS fires on visit-completed event",ch:"SMS · Journey-fired",
+     say:"\"The moment the visit-completed event arrives, Journey fires the satisfaction SMS. Marcus gets it while Carlos is still in his truck. Quick, immediate, on-brand. Journey is monitoring for a reply — and in 7 days, regardless of what Marcus replies, Journey will send the effectiveness check.\"",
+     show:"Show the visit-completed event in Journey's activity log. Show the immediate SMS firing. Show Marcus's satisfaction SMS. Show the Journey 24hr wait state.",
+     tip:"Ask: 'What does your current post-visit follow-up look like — and how consistently does it happen across all your technicians?' Most home services companies have inconsistent follow-up. Journey fires for every visit, consistently."},
+    {t:"outbound",title:"3 — Day 7 — Journey fires effectiveness check",ch:"SMS · Day 7 from visit_date · Journey-fired",jnote:"Show the 7-day timer is from visit_date — this matters clinically and for warranty tracking.",
+     say:"\"7 days from the visit date — not from today, not from when Marcus replied — Journey fires: 'Are you still seeing signs of the problem?' Two options: YES or NO. Journey is listening.\"",
+     show:"Show the 7-day wait node in Journey: timer = visit_date + 7 days. Show the effectiveness SMS sending on Day 7. Show Journey's wait state."},
+    {t:"inbound",title:"4 — Marcus replies YES — Journey checks warranty and initiates chat",ch:"SMS · inbound → Journey · warranty check · chat",
+     say:"\"Marcus replies YES — still seeing pests. Journey receives the event, checks the warranty: visit was today, 90-day warranty, we're on Day 7. Eligible for a free re-service. Journey opens a chat session — Journey-initiated, Marcus's warranty status and available slots pre-loaded. Autopilot presents the slots. Marcus picks one. Journey confirms with the scheduling API.\"",
+     show:"Show Marcus's YES reply in Journey's activity log. Show Journey's warranty check: days_since_visit: 7, warranty_days: 90, eligible: true. Show Journey opening the chat session. Show Autopilot presenting re-service slots. Show Marcus selecting. Show the scheduling API confirmation."},
+    {t:"sys",title:"5 — Journey writes next visit to CRM — customer enters maintenance cycle",ch:"CRM write-back · Journey node",
+     say:"\"Whether Marcus needed a re-service or not, Journey ends by writing two things to the CRM: the treatment effectiveness outcome, and the date of his next scheduled visit — either the re-service date or the next regular visit in 3 months. Marcus is now automatically in the next cycle of the maintenance reminder Journey. Zero manual data entry. Zero chance of falling through the cracks.\"",
+     show:"Show Journey's CRM write-back node: treatment_effective: false, re_service_scheduled: true, next_visit_date: [re-service date]. Show the CRM record updated. Show Journey's close state."}
+  ],
+  objections:[
+    {q:"\"Our technicians call customers a week after the visit — this seems to replace that.\"",a:"Journey's effectiveness check replaces the manual chase for customers who had no issues. Your technicians' time is better spent on the YES replies — customers who need a re-service and benefit from a personal call. Journey filters the cases so your team focuses on the ones that genuinely need them. The tech's call becomes a re-service conversation, not a routine check-in."},
+    {q:"\"What if a customer disputes the warranty determination — says they're within the window but Journey says they're not?\"",a:"Journey's warranty check uses the visit date from the field system against the plan's warranty terms in the CRM. If there's a dispute, Journey routes to a CSR with the full context: visit date, warranty terms, customer's claim. The CSR can override. Journey provides the data; the CSR makes the judgment call on exceptions."},
+    {q:"\"What if the customer replies YES on Day 45 — long after the warranty has expired?\"",a:"Journey's warranty check fires at the moment of the YES reply. Day 45 against a 90-day warranty is still eligible. Day 95 is not. Journey presents the paid re-service option to out-of-warranty customers and routes to Autopilot for pricing. The check is always accurate at reply time, regardless of when the customer responds."}
+  ],
+  discovery:[
+    {q:"What's your current re-service request process — and how do customers request one under warranty today?",w:"Most home services companies require a phone call. Opens the Journey-initiated chat self-serve conversation."},
+    {q:"Do you currently track treatment effectiveness systematically — what percentage of your visits result in a re-service request?",w:"Most companies don't have this data. Opens the Journey effectiveness data capture conversation."},
+    {q:"How do you ensure that every completed visit results in the next scheduled visit being written back to your CRM?",w:"Almost universally: manual data entry or it doesn't happen. Opens the Journey CRM write-back conversation."}
+  ],
+  metrics:["100%","7 days","0"],
+  metricLabels:["Completed visits with post-visit satisfaction check — Journey fires on every visit-completed event","Treatment effectiveness check window — timed from visit date, ensuring clinically accurate warranty tracking","Manual re-service scheduling steps — Journey handles warranty check, slot selection, and CRM write-back automatically"]
+}
+];
+
+let activeId=null,activeFilter='all',activeTab={};
+
+function chBadges(chs){
+  const icons={sms:'ti-device-mobile-message',email:'ti-mail',chat:'ti-message-circle'};
+  return chs.map(c=>`<span class="cb cb-${c}"><i class="ti ${icons[c]}" style="font-size:9px;margin-right:2px"></i>${c[0].toUpperCase()+c.slice(1)}</span>`).join('');
+}
+function dirBadge(d){
+  if(d==='inbound') return `<span class="mtag dir-in"><i class="ti ti-arrow-down-left"></i>Inbound</span>`;
+  if(d==='outbound') return `<span class="mtag dir-out"><i class="ti ti-arrow-up-right"></i>Outbound</span>`;
+  return `<span class="mtag dir-both"><i class="ti ti-arrows-exchange"></i>Inbound + Outbound</span>`;
+}
+function dtag(s){
+  if(s.direction==='inbound') return `<span class="dtag dtag-in"><i class="ti ti-arrow-down-left"></i>Inbound</span>`;
+  if(s.direction==='outbound') return `<span class="dtag dtag-out"><i class="ti ti-arrow-up-right"></i>Outbound</span>`;
+  return `<span class="dtag dtag-both"><i class="ti ti-arrows-exchange"></i>Inbound + Outbound</span>`;
+}
+
+function renderGrid(){
+  const icons={sms:'ti-device-mobile-message',email:'ti-mail',chat:'ti-message-circle'};
+  const g=document.getElementById('grid');
+  const list=stories.filter(s=>{
+    if(activeFilter==='all') return true;
+    if(activeFilter==='inbound') return s.direction==='inbound';
+    if(activeFilter==='outbound') return s.direction==='outbound';
+    if(activeFilter==='both') return s.direction==='both';
+    return s.channels.includes(activeFilter);
+  });
+  g.innerHTML=list.map(s=>`
+    <div class="scard${activeId===s.id?' sel':''}" onclick="openD(${s.id})" role="button" tabindex="0">
+      <div class="ctop">
+        <span class="snum">Story ${s.id}</span>
+        <div class="chs"><span class="jbadge"><i class="ti ti-route"></i>Journey</span>${chBadges(s.channels)}</div>
+      </div>
+      <div class="stitle">${s.title}</div>
+      <div class="sdesc">${s.desc}</div>
+      <div class="smeta">${dirBadge(s.direction)}<span class="mtag"><i class="ti ti-home"></i>Home Services</span></div>
+      <div class="sfoot">
+        <span class="otag"><i class="ti ti-target"></i>${s.outcome}</span>
+        <button class="vbtn">View <i class="ti ti-chevron-right" style="font-size:12px"></i></button>
+      </div>
+    </div>`).join('');
+  g.querySelectorAll('.scard').forEach(c=>c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')c.click()}));
+}
+
+function openD(id){
+  if(activeId===id){activeId=null;renderGrid();document.getElementById('detail').classList.remove('open');return;}
+  activeId=id;renderGrid();
+  if(!activeTab[id])activeTab[id]='overview';
+  renderPanel(id);
+  const p=document.getElementById('detail');
+  p.classList.add('open');
+  setTimeout(()=>p.scrollIntoView({behavior:'smooth',block:'nearest'}),60);
+}
+function switchTab(id,tab){activeTab[id]=tab;renderPanel(id);}
+
+function renderPanel(id){
+  const s=stories.find(x=>x.id===id);
+  const tab=activeTab[id]||'overview';
+  const icons={sms:'ti-device-mobile-message',email:'ti-mail',chat:'ti-message-circle'};
+
+  const chFlow=s.channels.map((c,i)=>
+    `<span class="chn ${c}"><i class="ti ${icons[c]}"></i>${c[0].toUpperCase()+c.slice(1)}</span>${i<s.channels.length-1?'<i class="ti ti-arrow-right charr"></i>':''}`
+  ).join('');
+
+  function renderJflow(nodes){
+    return nodes.map(n=>{
+      const ico=JICO[n.type]||'ti-circle';
+      const branches=n.branches?`<div class="jbranches">${n.branches.map(b=>`
+        <div class="jbranch-item">
+          <div class="jbranch-dot ${b.outcome}"><i class="ti ti-${b.outcome==='yes'?'check':b.outcome==='no'?'x':'dots'}"></i></div>
+          <div class="jbranch-text"><span class="jbranch-label">${b.label}:</span>${b.text}</div>
+        </div>`).join('')}</div>`:'';
+      return `<div class="jnode"><div class="jnode-main">
+        <div class="jvl"></div>
+        <div class="jico ${n.type}"><i class="ti ${ico}"></i></div>
+        <div class="jbody"><div class="jt">${n.label}</div><div class="jd">${n.desc}</div>${n.ch?`<span class="jch">${n.ch}</span>`:''}</div>
+      </div>${branches}</div>`;
+    }).join('');
+  }
+
+  const overviewPane=`
+    <div class="ov-cols">
+      <div>
+        <div class="sl"><i class="ti ti-route"></i>Channel sequence</div>
+        <div class="chflow">${chFlow}</div>
+        <div class="sl"><i class="ti ti-users"></i>Personas</div>
+        <div class="personas">${s.personas.map(p=>`<span class="persona"><i class="ti ti-user"></i>${p}</span>`).join('')}</div>
+        <div class="sl"><i class="ti ti-apps"></i>Talkdesk products</div>
+        <div class="tdchips">${s.td.map(t=>`<span class="tdchip${t==='Journeys'?' j':''}">${t}</span>`).join('')}</div>
+        <div class="sl" style="margin-top:1rem"><i class="ti ti-check"></i>Business value</div>
+        <ul class="vlist">${s.value.map(v=>`<li><i class="ti ti-check"></i>${v}</li>`).join('')}</ul>
+      </div>
+      <div>
+        <div class="sl"><i class="ti ti-git-fork"></i>Journey flow</div>
+        <div class="jflow">${renderJflow(s.journeyFlow)}</div>
+      </div>
+    </div>`;
+
+  const scriptPane=`
+    <div class="sl" style="margin-top:0"><i class="ti ti-adjustments"></i>Setup</div>
+    <div class="sg" style="margin-bottom:1.125rem">
+      <div class="sc"><div class="scl">Demo environment</div><div class="scv">${s.setup.env}</div></div>
+      <div class="sc"><div class="scl">Pre-loaded data</div><div class="scv">${s.setup.data}</div></div>
+      <div class="sc"><div class="scl">Products to show</div><div class="scv">${s.setup.products}</div></div>
+      <div class="sc"><div class="scl">Duration</div><div class="scv">${s.setup.duration}</div></div>
+    </div>
+    <div class="sl"><i class="ti ti-script"></i>Talk track</div>
+    <div class="script-legend">
+      <span class="sl-item"><span class="sl-swatch" style="background:var(--p600)"></span>Say</span>
+      <span class="sl-item"><span class="sl-swatch" style="background:#1D9E75"></span>Show</span>
+      <span class="sl-item"><span class="sl-swatch" style="background:#BA7517"></span>Tip</span>
+      <span class="sl-item"><span class="sl-swatch" style="background:var(--j600)"></span>Journey note</span>
+    </div>
+    <div class="ttrack">${s.script.map(step=>`
+      <div class="tstep">
+        <div class="tvl"></div>
+        <div class="tic ${step.t}"><i class="ti ${ICO[step.t]}"></i></div>
+        <div class="tb">
+          <div class="tlabel">
+            <span class="tst">${step.title}</span>
+            <span class="tch">${step.ch}</span>
+            ${step.t==='journey'?`<span class="tj"><i class="ti ti-route" style="font-size:9px"></i> Journey action</span>`:''}
+          </div>
+          ${step.jnote?`<div class="jnote"><div class="jnotel"><i class="ti ti-route"></i>Journey note</div><div class="jnotet">${step.jnote}</div></div>`:''}
+          <div class="say"><div class="sayl">Say</div><div class="sayt">${step.say}</div></div>
+          <div class="show"><div class="showl">Show</div><div class="showt">${step.show}</div></div>
+          ${step.tip?`<div class="tip"><div class="tipl">Tip</div><div class="tipt">${step.tip}</div></div>`:''}
+        </div>
+      </div>`).join('')}
+    </div>`;
+
+  const objPane=`
+    <div class="sl" style="margin-top:0"><i class="ti ti-chart-bar"></i>Proof points</div>
+    <div class="vcards" style="margin-bottom:1.25rem">
+      ${s.metrics.map((m,i)=>`<div class="vcard"><div class="vnum">${m}</div><div class="vlabel">${s.metricLabels[i]}</div></div>`).join('')}
+    </div>
+    <div class="sl"><i class="ti ti-shield-question"></i>Objection handling</div>
+    <div class="objlist">${s.objections.map(o=>`
+      <div class="obj">
+        <div class="objq"><i class="ti ti-help-circle"></i>${o.q}</div>
+        <div class="obja">${o.a}</div>
+      </div>`).join('')}
+    </div>
+    <div class="sl" style="margin-top:1.25rem"><i class="ti ti-message-question"></i>Discovery questions</div>
+    <div class="disclist">${s.discovery.map((d,i)=>`
+      <div class="disc">
+        <div class="dn">${i+1}</div>
+        <div><div class="dq">${d.q}</div><div class="dw">${d.w}</div></div>
+      </div>`).join('')}
+    </div>`;
+
+  const panes={overview:overviewPane,script:scriptPane,objections:objPane};
+
+  document.getElementById('detail').innerHTML=`
+    <div class="dhead">
+      <div>
+        <div class="dhmeta">Story ${s.id} &nbsp;·&nbsp; ${DIR_LABEL[s.direction]}</div>
+        <div class="dhtitle">${s.title}</div>
+        <div class="dhtags">
+          ${dtag(s)}
+          ${s.channels.map(c=>`<span class="dtag dtag-ch"><i class="ti ${icons[c]}"></i>${c[0].toUpperCase()+c.slice(1)}</span>`).join('')}
+          <span class="dtag dtag-j"><i class="ti ti-route"></i>Journeys</span>
+        </div>
+      </div>
+      <button class="xbtn" onclick="closeD()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="tabs">
+      <div class="tab${tab==='overview'?' active':''}" onclick="switchTab(${id},'overview')"><i class="ti ti-map"></i>Story + Journey flow</div>
+      <div class="tab${tab==='script'?' active':''}" onclick="switchTab(${id},'script')"><i class="ti ti-script"></i>Demo script</div>
+      <div class="tab${tab==='objections'?' active':''}" onclick="switchTab(${id},'objections')"><i class="ti ti-shield-question"></i>Objections &amp; discovery</div>
+    </div>
+    <div class="tabcontent">${panes[tab]}</div>`;
+}
+
+function closeD(){activeId=null;document.getElementById('detail').classList.remove('open');renderGrid();}
+function flt(type,el){
+  activeFilter=type;activeId=null;
+  document.getElementById('detail').classList.remove('open');
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');renderGrid();
+}
+function copyLink(){
+  const label=document.getElementById('copy-label');
+  try{navigator.clipboard.writeText(window.location.href).then(()=>{label.textContent='Copied!';setTimeout(()=>label.textContent='Copy link',2000)})}
+  catch(e){label.textContent='Open in browser to copy';setTimeout(()=>label.textContent='Copy link',2500)}
+}
+renderGrid();
+</script></body></html>
