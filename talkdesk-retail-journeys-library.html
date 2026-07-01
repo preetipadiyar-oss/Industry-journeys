@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Talkdesk — Retail Demo Library (Journeys)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.0.0/tabler-icons.min.css">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#fff;--bg-s:#f7f7f5;--bg-t:#f0efe9;
+  --tp:#1a1a18;--ts:#5c5c58;--tt:#8c8c88;
+  --bd:rgba(0,0,0,.10);--bdm:rgba(0,0,0,.18);
+  --rmd:8px;--rlg:12px;
+  --p50:#EEEDFE;--p600:#534AB7;--p800:#3C3489;
+  --b50:#E6F1FB;--b800:#0C447C;
+  --g50:#EAF3DE;--g800:#27500A;
+  --a50:#FAEEDA;--a800:#633806;
+  --pk50:#FBEAF0;--pk800:#72243E;
+  --gr50:#F1EFE8;--gr800:#444441;
+  --c50:#FAECE7;--c800:#993C1D;
+  --tl50:#E1F5EE;--tl800:#085041;
+  --j50:#FFF0FB;--j600:#C026A0;--j800:#86186D;
+  --both50:#F3E8FF;--both800:#6B21A8;
+  --td-red:#CC2936;
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#1c1c1a;--bg-s:#252523;--bg-t:#2e2e2b;
+    --tp:#f0efe9;--ts:#a8a8a2;--tt:#6c6c68;
+    --bd:rgba(255,255,255,.10);--bdm:rgba(255,255,255,.18);
+    --p50:#26215C;--p800:#CECBF6;
+    --b50:#042C53;--b800:#B5D4F4;
+    --g50:#173404;--g800:#C0DD97;
+    --a50:#412402;--a800:#FAC775;
+    --pk50:#4B1528;--pk800:#F4C0D1;
+    --gr50:#2C2C2A;--gr800:#D3D1C7;
+    --c50:#4A1B0C;--c800:#F5C4B3;
+    --tl50:#04342C;--tl800:#9FE1CB;
+    --j50:#3D0A30;--j800:#F5AEED;
+    --both50:#3B0764;--both800:#E9D5FF;
+  }
+}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg-t);color:var(--tp);min-height:100vh;line-height:1.6}
+nav{background:var(--bg);border-bottom:.5px solid var(--bd);padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100}
+.nb{display:flex;align-items:center;gap:10px}
+.tdl{width:28px;height:28px;border-radius:6px;background:var(--td-red);display:flex;align-items:center;justify-content:center}
+.tdl svg{width:16px;height:16px}
+.nt{font-size:14px;font-weight:500;color:var(--tp)}
+.ns{font-size:12px;color:var(--tt);margin-left:4px}
+.npill{font-size:11px;padding:3px 9px;border-radius:20px;background:var(--j50);color:var(--j800);font-weight:500}
+main{max-width:1060px;margin:0 auto;padding:2rem 1.5rem 4rem}
+.hero{margin-bottom:1.75rem}
+.hero h1{font-size:26px;font-weight:600;margin-bottom:6px}
+.hero p{font-size:14px;color:var(--ts);max-width:600px;line-height:1.6}
+.hmeta{display:flex;gap:16px;margin-top:12px;flex-wrap:wrap}
+.hm{font-size:12px;color:var(--tt);display:flex;align-items:center;gap:4px}
+.hm i{font-size:14px}
+/* JOURNEY CALLOUT */
+.j-callout{background:var(--j50);border:.5px solid var(--j600);border-radius:var(--rlg);padding:12px 16px;margin-bottom:1.5rem;display:flex;gap:10px;align-items:flex-start}
+.j-callout i{font-size:18px;color:var(--j600);flex-shrink:0;margin-top:1px}
+.j-callout-body{flex:1}
+.j-callout-title{font-size:12px;font-weight:600;color:var(--j800);margin-bottom:3px}
+.j-callout-text{font-size:12px;color:var(--ts);line-height:1.6}
+.sbar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--bg);border:.5px solid var(--bd);border-radius:var(--rmd);margin-bottom:1.5rem;flex-wrap:wrap;gap:8px}
+.sbar span{font-size:12px;color:var(--ts);display:flex;align-items:center;gap:5px}
+.cbtn{font-size:12px;padding:5px 12px;border-radius:var(--rmd);border:.5px solid var(--bdm);background:var(--bg-s);color:var(--tp);cursor:pointer;display:flex;align-items:center;gap:5px;font-family:inherit}
+.cbtn:hover{background:var(--bg-t)}
+.legend{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:10px 14px;background:var(--bg);border:.5px solid var(--bd);border-radius:var(--rmd);margin-bottom:1.25rem;font-size:12px}
+.ll{color:var(--tt);font-weight:500}
+.li{display:flex;align-items:center;gap:5px;color:var(--ts)}
+.ld{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.lsep{width:1px;height:14px;background:var(--bd)}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem}
+.pill{font-size:12px;padding:5px 12px;border-radius:20px;border:.5px solid var(--bdm);background:var(--bg);color:var(--ts);cursor:pointer;transition:all .12s;user-select:none}
+.pill.active{background:var(--p50);border-color:var(--p600);color:var(--p800)}
+.pill:hover:not(.active){background:var(--bg-s)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(295px,1fr));gap:12px}
+.scard{background:var(--bg);border:.5px solid var(--bd);border-radius:var(--rlg);padding:1rem 1.125rem;cursor:pointer;transition:border-color .12s,transform .1s;display:flex;flex-direction:column;gap:9px}
+.scard:hover{border-color:var(--bdm);transform:translateY(-1px)}
+.scard.sel{border:1px solid var(--p600)}
+.ctop{display:flex;justify-content:space-between;align-items:flex-start;gap:6px}
+.snum{font-size:10px;color:var(--tt);font-weight:500;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.chs{display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end}
+.cb{font-size:10px;padding:2px 7px;border-radius:10px;font-weight:500;white-space:nowrap}
+.cb-chat{background:var(--b50);color:var(--b800)}
+.cb-sms{background:var(--g50);color:var(--g800)}
+.cb-email{background:var(--a50);color:var(--a800)}
+.jbadge{font-size:10px;padding:2px 7px;border-radius:10px;background:var(--j50);color:var(--j800);font-weight:500;display:flex;align-items:center;gap:3px;white-space:nowrap}
+.jbadge i{font-size:10px}
+.stitle{font-size:13px;font-weight:500;color:var(--tp);line-height:1.4}
+.sdesc{font-size:12px;color:var(--ts);line-height:1.55}
+.smeta{display:flex;gap:8px;flex-wrap:wrap}
+.mtag{font-size:11px;color:var(--tt);display:flex;align-items:center;gap:3px}
+.mtag i{font-size:12px}
+.dir-in{color:var(--b800)}
+.dir-out{color:var(--g800)}
+.dir-both{color:var(--both800)}
+.sfoot{border-top:.5px solid var(--bd);padding-top:8px;display:flex;justify-content:space-between;align-items:center}
+.otag{font-size:11px;color:var(--tt);display:flex;align-items:center;gap:3px}
+.vbtn{font-size:12px;color:var(--p600);background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:3px;padding:0;font-family:inherit}
+.vbtn:hover{text-decoration:underline}
+/* DETAIL PANEL */
+.dpanel{display:none;background:var(--bg);border:.5px solid var(--bd);border-radius:var(--rlg);margin-top:12px;overflow:hidden}
+.dpanel.open{display:block}
+.dhead{display:flex;justify-content:space-between;align-items:flex-start;padding:1.25rem 1.5rem 0;gap:10px}
+.dhmeta{font-size:10px;color:var(--tt);margin-bottom:5px;text-transform:uppercase;letter-spacing:.05em}
+.dhtitle{font-size:17px;font-weight:500;color:var(--tp);line-height:1.3;margin-bottom:10px}
+.dhtags{display:flex;gap:6px;flex-wrap:wrap}
+.dtag{font-size:11px;padding:3px 9px;border-radius:20px;display:flex;align-items:center;gap:4px;font-weight:500}
+.dtag i{font-size:12px}
+.dtag-in{background:var(--b50);color:var(--b800)}
+.dtag-out{background:var(--g50);color:var(--g800)}
+.dtag-both{background:var(--both50);color:var(--both800)}
+.dtag-ch{background:var(--bg-s);color:var(--ts);border:.5px solid var(--bd)}
+.dtag-j{background:var(--j50);color:var(--j800)}
+.xbtn{background:none;border:none;cursor:pointer;color:var(--ts);font-size:20px;padding:0;flex-shrink:0;line-height:1;margin-top:4px}
+.xbtn:hover{color:var(--tp)}
+.tabs{display:flex;gap:0;border-bottom:.5px solid var(--bd);padding:0 1.5rem;margin-top:1rem;overflow-x:auto}
+.tab{font-size:12px;padding:8px 14px;cursor:pointer;color:var(--tt);border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .12s;user-select:none;display:flex;align-items:center;gap:5px;white-space:nowrap}
+.tab i{font-size:13px}
+.tab:hover{color:var(--tp)}
+.tab.active{color:var(--p600);border-bottom-color:var(--p600);font-weight:500}
+.tabcontent{padding:1.25rem 1.5rem 1.5rem}
+/* OVERVIEW */
+.ov-cols{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media(max-width:640px){.ov-cols{grid-template-columns:1fr}}
+.sl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--tt);margin-bottom:8px;margin-top:1.125rem;display:flex;align-items:center;gap:5px}
+.sl:first-child{margin-top:0}
+.sl i{font-size:13px}
+.chflow{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.chn{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:var(--rmd);font-size:12px;font-weight:500}
+.chn.chat{background:var(--b50);color:var(--b800)}
+.chn.sms{background:var(--g50);color:var(--g800)}
+.chn.email{background:var(--a50);color:var(--a800)}
+.chn i{font-size:13px}
+.charr{color:var(--tt);font-size:14px}
+.personas{display:flex;gap:6px;flex-wrap:wrap}
+.persona{display:flex;align-items:center;gap:5px;background:var(--bg-s);border-radius:var(--rmd);padding:4px 9px;font-size:12px;color:var(--tp)}
+.persona i{font-size:13px;color:var(--ts)}
+.tdchips{display:flex;flex-wrap:wrap;gap:5px}
+.tdchip{font-size:10px;padding:3px 8px;border-radius:8px;background:var(--bg-s);color:var(--ts);border:.5px solid var(--bd)}
+.tdchip.j{background:var(--j50);color:var(--j800);border-color:var(--j600)}
+.vlist{list-style:none;display:flex;flex-direction:column;gap:6px}
+.vlist li{font-size:12px;color:var(--ts);display:flex;align-items:flex-start;gap:7px;line-height:1.5}
+.vlist li i{font-size:13px;color:var(--p600);flex-shrink:0;margin-top:1px}
+/* JOURNEY FLOW DIAGRAM */
+.jflow{display:flex;flex-direction:column;gap:0;position:relative}
+.jnode{display:flex;gap:10px;padding-bottom:0;position:relative}
+.jnode-main{display:flex;gap:10px;padding-bottom:10px;position:relative}
+.jvl{width:1px;background:var(--bd);position:absolute;left:13px;top:26px;bottom:0}
+.jnode:last-child>.jnode-main>.jvl{display:none}
+.jico{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:11px;position:relative;z-index:1}
+.jico.trigger{background:var(--j50);color:var(--j800)}
+.jico.send{background:var(--g50);color:var(--g800)}
+.jico.wait{background:var(--gr50);color:var(--gr800)}
+.jico.branch{background:var(--a50);color:var(--a800)}
+.jico.bot{background:var(--p50);color:var(--p800)}
+.jico.agent{background:var(--pk50);color:var(--pk800)}
+.jico.close{background:var(--tl50);color:var(--tl800)}
+.jbody{flex:1;padding-top:1px}
+.jt{font-size:12px;font-weight:500;color:var(--tp);line-height:1.3}
+.jd{font-size:11px;color:var(--ts);line-height:1.5;margin-top:1px}
+.jch{font-size:10px;padding:1px 5px;border-radius:6px;display:inline-block;margin-top:2px;background:var(--bg-s);color:var(--tt)}
+/* branch children */
+.jbranches{margin-left:35px;border-left:1px dashed var(--bdm);padding-left:10px;margin-bottom:8px;display:flex;flex-direction:column;gap:6px}
+.jbranch-item{display:flex;gap:8px;align-items:flex-start}
+.jbranch-dot{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;margin-top:1px}
+.jbranch-dot.yes{background:var(--tl50);color:var(--tl800)}
+.jbranch-dot.no{background:var(--c50);color:var(--c800)}
+.jbranch-dot.alt{background:var(--p50);color:var(--p800)}
+.jbranch-text{font-size:11px;color:var(--ts);line-height:1.5}
+.jbranch-label{font-weight:600;color:var(--tp);margin-right:4px}
+/* value cards */
+.vcards{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:560px){.vcards{grid-template-columns:1fr}}
+.vcard{background:var(--bg-s);border-radius:var(--rmd);padding:10px 12px;text-align:center}
+.vnum{font-size:20px;font-weight:600;color:var(--p600);margin-bottom:2px}
+.vlabel{font-size:11px;color:var(--ts);line-height:1.4}
+/* journey reason box */
+.j-reason{background:var(--j50);border:.5px solid var(--j600);border-radius:var(--rmd);padding:10px 14px;margin-bottom:1rem}
+.j-reason-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--j800);margin-bottom:4px;display:flex;align-items:center;gap:4px}
+.j-reason-label i{font-size:12px}
+.j-reason-text{font-size:12px;color:var(--ts);line-height:1.6}
+/* SCRIPT */
+.sg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media(max-width:500px){.sg{grid-template-columns:1fr}}
+.sc{background:var(--bg-s);border-radius:var(--rmd);padding:9px 11px}
+.scl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--tt);margin-bottom:4px}
+.scv{font-size:12px;color:var(--ts);line-height:1.55}
+.ttrack{display:flex;flex-direction:column;gap:0}
+.tstep{display:flex;gap:12px;position:relative;padding-bottom:1.25rem}
+.tstep:last-child{padding-bottom:0}
+.tvl{position:absolute;left:15px;top:32px;bottom:0;width:1px;background:var(--bd)}
+.tstep:last-child .tvl{display:none}
+.tic{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;position:relative;z-index:1}
+.tic.inbound{background:var(--b50);color:var(--b800)}
+.tic.outbound{background:var(--g50);color:var(--g800)}
+.tic.bot{background:var(--p50);color:var(--p800)}
+.tic.agent{background:var(--pk50);color:var(--pk800)}
+.tic.sys{background:var(--gr50);color:var(--gr800)}
+.tic.journey{background:var(--j50);color:var(--j800)}
+.tb{flex:1}
+.tlabel{display:flex;align-items:center;gap:8px;margin-bottom:5px;flex-wrap:wrap}
+.tst{font-size:13px;font-weight:500;color:var(--tp)}
+.tch{font-size:10px;padding:1px 6px;border-radius:8px;background:var(--bg-s);color:var(--tt);border:.5px solid var(--bd)}
+.tj{font-size:10px;padding:1px 6px;border-radius:8px;background:var(--j50);color:var(--j800);border:.5px solid var(--j600)}
+.say{background:var(--bg-s);border-left:2px solid var(--p600);border-radius:0 var(--rmd) var(--rmd) 0;padding:8px 12px;margin-bottom:6px}
+.sayl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--p800);margin-bottom:3px}
+.sayt{font-size:13px;color:var(--tp);line-height:1.6;font-style:italic}
+.show{background:var(--tl50);border-left:2px solid #1D9E75;border-radius:0 var(--rmd) var(--rmd) 0;padding:8px 12px;margin-bottom:6px}
+.showl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--tl800);margin-bottom:3px}
+.showt{font-size:13px;color:var(--ts);line-height:1.6}
+.tip{background:var(--a50);border-left:2px solid #BA7517;border-radius:0 var(--rmd) var(--rmd) 0;padding:8px 12px;margin-bottom:6px}
+.tipl{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--a800);margin-bottom:3px}
+.tipt{font-size:13px;color:var(--ts);line-height:1.6}
+.jnote{background:var(--j50);border-left:2px solid var(--j600);border-radius:0 var(--rmd) var(--rmd) 0;padding:8px 12px;margin-bottom:6px}
+.jnotel{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.06em;color:var(--j800);margin-bottom:3px}
+.jnotet{font-size:13px;color:var(--ts);line-height:1.6}
+.script-legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1.125rem;padding:8px 12px;background:var(--bg-s);border-radius:var(--rmd);border:.5px solid var(--bd)}
+.sl-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--tt)}
+.sl-swatch{width:3px;height:14px;border-radius:2px;flex-shrink:0}
+/* OBJECTIONS */
+.objlist{display:flex;flex-direction:column;gap:10px}
+.obj{border:.5px solid var(--bd);border-radius:var(--rlg);overflow:hidden}
+.objq{padding:10px 14px;background:var(--c50);font-size:13px;font-weight:500;color:var(--c800);display:flex;align-items:flex-start;gap:7px}
+.objq i{font-size:14px;flex-shrink:0;margin-top:1px}
+.obja{padding:10px 14px;font-size:13px;color:var(--ts);line-height:1.6;background:var(--bg)}
+.disclist{display:flex;flex-direction:column;gap:8px}
+.disc{display:flex;align-items:flex-start;gap:9px;padding:10px 14px;background:var(--bg-s);border-radius:var(--rmd)}
+.dn{font-size:11px;font-weight:600;color:var(--p800);background:var(--p50);width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.dq{font-size:13px;color:var(--tp);line-height:1.5}
+.dw{font-size:12px;color:var(--tt);margin-top:2px}
+footer{text-align:center;padding:2rem;font-size:12px;color:var(--tt);border-top:.5px solid var(--bd);margin-top:3rem}
+</style>
+</head>
+<body>
+<nav>
+  <div class="nb">
+    <div class="tdl"><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" fill="white" opacity=".9"/><circle cx="10" cy="10" r="3.5" fill="#CC2936"/></svg></div>
+    <span class="nt">Talkdesk</span><span class="ns">/ Retail Demo Library</span>
+  </div>
+  <span class="npill"><i class="ti ti-route" style="font-size:11px"></i>&nbsp;Journeys · 7 stories</span>
+</nav>
+<main>
+<div class="hero">
+  <h1>Retail digital story library</h1>
+  <p>Journey-orchestrated omnichannel stories across Chat, SMS and Email. Every story is designed around Talkdesk Journeys as the cross-channel control plane — owning state, decisioning, sequencing, and channel transitions end to end.</p>
+  <div class="hmeta">
+    <span class="hm"><i class="ti ti-route" style="color:var(--j600)"></i>Journeys-first</span>
+    <span class="hm"><i class="ti ti-messages"></i>Chat · SMS · Email</span>
+    <span class="hm"><i class="ti ti-arrow-up-right"></i>Outbound (2)</span>
+    <span class="hm"><i class="ti ti-arrows-exchange"></i>Both (4)</span>
+    <span class="hm"><i class="ti ti-arrow-down-left"></i>Inbound (1)</span>
+    <span class="hm"><i class="ti ti-building-store"></i>Retail vertical</span>
+  </div>
+</div>
+
+<div class="sbar">
+  <span><i class="ti ti-share"></i>Share — open this HTML file in any browser, or host on any static server.</span>
+  <button class="cbtn" onclick="copyLink()"><i class="ti ti-copy"></i><span id="copy-label">Copy link</span></button>
+</div>
+<div class="legend">
+  <span class="ll">Channels:</span>
+  <span class="li"><span class="ld" style="background:#378ADD"></span>Chat</span>
+  <span class="li"><span class="ld" style="background:#639922"></span>SMS</span>
+  <span class="li"><span class="ld" style="background:#BA7517"></span>Email</span>
+  <span class="lsep"></span>
+  <span class="ll">Direction:</span>
+  <span class="li"><span class="ld" style="background:#378ADD"></span>Inbound</span>
+  <span class="li"><span class="ld" style="background:#639922"></span>Outbound</span>
+  <span class="li"><span class="ld" style="background:#9333EA"></span>Both</span>
+  <span class="lsep"></span>
+  <span class="li"><span class="ld" style="background:var(--j600)"></span>All flows orchestrated by Journeys</span>
+</div>
+<div class="filters" id="filters">
+  <span class="pill active" onclick="flt('all',this)">All stories</span>
+  <span class="pill" onclick="flt('inbound',this)">Inbound</span>
+  <span class="pill" onclick="flt('outbound',this)">Outbound</span>
+  <span class="pill" onclick="flt('both',this)">Both directions</span>
+  <span class="pill" onclick="flt('chat',this)">Chat</span>
+  <span class="pill" onclick="flt('sms',this)">SMS</span>
+  <span class="pill" onclick="flt('email',this)">Email</span>
+</div>
+<div class="grid" id="grid"></div>
+<div class="dpanel" id="detail"></div>
+</main>
+<footer>Talkdesk Retail Demo Library &nbsp;·&nbsp; Journeys-orchestrated · Chat, SMS, Email &nbsp;·&nbsp; For internal demo use only</footer>
+<script>
+const ICO={inbound:'ti-arrow-down-left',outbound:'ti-arrow-up-right',bot:'ti-robot',agent:'ti-headset',sys:'ti-settings',journey:'ti-route'};
+const CH_ICONS={chat:'ti-message-circle',sms:'ti-device-mobile-message',email:'ti-mail'};
+const DIR_LABEL={inbound:'Inbound',outbound:'Outbound',both:'Inbound + Outbound'};
+const JICO={trigger:'ti-bolt',send:'ti-send',wait:'ti-clock',branch:'ti-git-fork',bot:'ti-robot',agent:'ti-headset',close:'ti-circle-check'};
+
+const stories=[
+{
+  id:1,
+  title:"Abandoned cart recovery — multi-branch campaign with time-based fallback",
+  desc:"Journey owns the full recovery lifecycle: personalised SMS fires, monitors for reply, branches on response, escalates to email if silent, and routes to agent outreach if email goes unopened — all with state preserved throughout.",
+  direction:"outbound",channels:["sms","email","chat"],all3:true,
+  personas:["Emma Clarke – high-intent abandoner","Journey orchestration","Autopilot","Agent (fallback)"],
+  td:["Journeys","Proactive Outreach","Campaign Manager","Autopilot","Agent Workspace"],
+  outcome:"5–15% cart recovery · full cross-channel attribution in Journey",
+  journeyReason:"This is a canonical Journey use case: multi-step outbound campaign with time-based waits, branching on customer response state, and escalating channel strategy. Journey controls every transition — no link-in-email handoff that loses context. If the customer replies to SMS, Journey handles it. If they click to chat, Journey initiated that chat session and owns the context. If they go silent, Journey moves to the next channel on its own schedule.",
+  journeyFlow:[
+    {type:"trigger",label:"Trigger",desc:"Cart abandon event fires from commerce platform. Journey starts, captures basket value, customer segment, and contact preferences.",ch:"System event"},
+    {type:"send",label:"Step 1 — Send personalised SMS",desc:"Journey sends SMS with offer (SAVE10) and a reply prompt. Journey enters a WAIT state.",ch:"SMS · T+1hr"},
+    {type:"branch",label:"Branch — did the customer reply within 2hrs?",branches:[
+      {outcome:"yes",label:"Replied",text:"Autopilot handles the reply within Journey's context. Customer asks a question — answered in SMS thread. Journey moves to confirmation step."},
+      {outcome:"no",label:"No reply after 2hrs",text:"Journey advances automatically. Moves to email channel. SMS context and basket data carried forward."}
+    ]},
+    {type:"send",label:"Step 2 — Send personalised email (no-reply branch)",desc:"Email sent with cart contents, updated offer, and a Journey-tracked link. Journey monitors open and click events independently.",ch:"Email · T+3hr"},
+    {type:"branch",label:"Branch — email opened and clicked within 24hrs?",branches:[
+      {outcome:"yes",label:"Clicked",text:"Journey opens a Chat session pre-loaded with the customer's basket. Autopilot assists. Journey monitors for purchase event."},
+      {outcome:"no",label:"Email opened, not clicked",text:"Journey sends a final SMS nudge: 'Emma — one tap to pick up where you left off: [link]'. Last touch before agent step."},
+      {outcome:"alt",label:"Email not opened (24hrs)",text:"Journey escalates to agent outreach queue. Agent sees full Journey context: basket value, SMS sent, email sent, zero engagement."}
+    ]},
+    {type:"wait",label:"Wait — purchase event received? (48hr window)",desc:"Journey listens for a purchase confirmation event from the commerce platform across all channels — if Emma buys directly on the website, Journey still receives the event and attributes it.",ch:"Journey wait state · T+48hr"},
+    {type:"branch",label:"Branch — purchased or silent?",branches:[
+      {outcome:"yes",label:"Purchase confirmed",text:"Journey attributes conversion to the step that drove it. Fires order confirmation email. Suppresses all remaining steps immediately. Marks contact complete."},
+      {outcome:"no",label:"No purchase after 48hrs",text:"Journey marks as non-converted. Exits the flow. Suppresses re-entry for 7 days to avoid over-messaging."}
+    ]},
+    {type:"close",label:"Journey closes",desc:"Conversion or non-conversion logged with full step attribution. Campaign performance dashboard updated in real time.",ch:"System"}
+  ],
+  value:["Journey controls every channel transition — SMS → email → chat → agent, with full state carried forward at each step","Time-based waits mean Journey acts on silence as much as on replies — no manual follow-up needed","When chat opens, Journey initiated it — context is not lost through a passive email link click"],
+  setup:{env:"Journey configured with cart abandon trigger. SMS, email, and chat channels active. Autopilot connected within Journey context.",data:"Customer: Emma Clarke. Cart: £84 — trainers + jacket. Abandoned 1hr ago. Opted into marketing.",products:"Journeys · Proactive Outreach · Campaign Manager · Autopilot · Agent Workspace",duration:"12 min full · 6 min lightning (show Journey canvas, step 1, one branch, close)"},
+  script:[
+    {t:"journey",title:"1 — Open the Journey canvas",ch:"Journeys",jnote:"Journey is the orchestrator — show this first, before any customer interaction.",
+     say:"\"Before we look at what Emma sees, let's look at what Journey looks like from your side. This is the control plane. Every channel in this recovery flow — SMS, email, chat, agent — is a node in Journey. Journey owns the timing, the branching, and the state. Emma's basket data travels with her through every step.\"",
+     show:"Open the Journey canvas for the cart recovery flow. Show the full flow: trigger node, SMS send node, wait node (2hrs), branch node, email send node, second wait/branch, chat open node, agent escalation node. Point to the state variables attached to the trigger: basket_value, customer_id, email, phone."},
+    {t:"outbound",title:"2 — Journey sends SMS at T+1hr",ch:"SMS · Journey-controlled",jnote:"Journey fires this — not a standalone campaign tool.",
+     say:"\"One hour after Emma abandons her cart, Journey fires the first outbound action: a personalised SMS. Not from a standalone SMS campaign tool — from Journey. That distinction matters because Journey is now waiting for a response. If Emma replies, Journey handles it. If she doesn't, Journey already knows what to do next.\"",
+     show:"Show the SMS send node firing in Journey's activity log. Show Emma's SMS: 'Hi Emma — your basket is waiting. Use SAVE10 for 10% off in the next 2 hrs.' Show the Journey timer starting — waiting 2 hours for a reply event.",
+     tip:"This is the key demo moment: show the Journey wait state. The question to ask: 'With your current SMS tool, what happens if the customer doesn't reply?' Most say nothing. Journey moves to the next step automatically."},
+    {t:"bot",title:"3 — SMS reply handled within Journey",ch:"SMS · Autopilot · Journey context",
+     say:"\"Emma replies — 'Does this work on sale items?' Journey receives the inbound SMS event and routes it to Autopilot, which answers within the same Journey context. Autopilot's reply goes out, Journey logs the interaction, and if Emma then goes silent, Journey knows a reply happened and can adjust the next branch accordingly.\"",
+     show:"Show Emma's SMS reply arriving as an event in Journey. Show Journey routing to Autopilot. Show Autopilot's reply. Show the Journey state update: 'sms_replied: true'. Show how this changes the branch logic downstream."},
+    {t:"journey",title:"4 — Journey branches on state",ch:"Journeys — branch node",jnote:"Show the branch logic live in the Journey canvas.",
+     say:"\"This is the orchestration moment. Journey isn't just sending messages — it's tracking Emma's state. Has she replied? Has she bought? Is she in the 2-hour window? Based on the answer to those questions, Journey routes her down a different path — SMS to chat, or SMS to email, or email to agent. The customer never knows it's happening. Journey does it automatically.\"",
+     show:"Show the branch node in Journey canvas. Show the two branches: 'SMS replied → chat session' and 'No reply within 2hrs → email'. Show the state variable 'sms_replied' driving the branch condition."},
+    {t:"outbound",title:"5 — Journey opens chat with full context (if silent)",ch:"Chat · Journey-initiated",
+     say:"\"If Emma didn't reply and didn't engage with the email, Journey opens a proactive chat — and this is the important difference from the old model. Journey initiated this chat. The chat session inherits Emma's basket data, her SMS history, and her Journey state. There's no loss of context. An agent picking this up sees the whole picture.\"",
+     show:"Show Journey's chat-open node executing. Show the chat session opened with Emma's basket pre-loaded — not because she clicked a link, but because Journey pushed it. Show the context object passed to chat: basket contents, SMS sent timestamp, email open status, Journey flow ID."}
+  ],
+  objections:[
+    {q:"\"How is this different from a marketing automation tool like Klaviyo or Braze?\"",a:"Marketing automation tools are message schedulers — they send sequences based on time triggers. Journey is a cross-channel orchestration engine: it monitors real-time events (SMS reply, email open, purchase), branches on customer state, and hands off to live chat or an agent with full context preserved. The key difference is what happens when the customer responds mid-sequence — Journey handles it; most MA tools can't."},
+    {q:"\"What if the customer completes the purchase partway through the Journey?\"",a:"Journey monitors the purchase event from the commerce platform in real time. The moment a purchase is detected, Journey exits the recovery flow, attributes the conversion to the correct step, and suppresses any remaining messages. Emma won't receive a 'don't forget your basket' email after she's already bought."},
+    {q:"\"Does Journey work with our existing email and SMS providers?\"",a:"Journeys uses Talkdesk's native channels — Proactive Outreach for SMS and email, Autopilot for chat. It also has integrations for external data sources as triggers. The channel execution is within Talkdesk; Journey is the control layer on top."}
+  ],
+  discovery:[
+    {q:"What happens in your current cart recovery flow when a customer goes silent after the first SMS — does anything fire automatically?",w:"Almost always: no. Opens the automated escalation and time-based branching conversation immediately."},
+    {q:"When a customer moves from SMS to chat in your current setup, does the agent or bot have context from the SMS conversation?",w:"Exposes the context-loss problem that Journey solves. Most teams say 'no' or 'only if the agent searches manually.'"},
+    {q:"How do you currently attribute a cart recovery conversion to a specific channel or message in a multi-step flow?",w:"Opens the cross-channel attribution conversation — Journey tracks every step."}
+  ],
+  metrics:["5–15%","100%","Zero"],
+  metricLabels:["Cart recovery conversion across the multi-step Journey","Cross-channel attribution — every step tracked in Journey","Context lost between SMS, email, and chat — Journey preserves state throughout"]
+},
+{
+  id:2,
+  title:"Shipment exception — proactive branching flow with self-serve reroute",
+  desc:"Journey receives a carrier exception event and owns the complete disruption response: batches and sequences outbound SMS, monitors for REROUTE replies, processes address changes via carrier API, and closes with email — all without leaving Journey's control plane.",
+  direction:"outbound",channels:["sms","email"],all3:false,
+  personas:["Sophie Tan – affected customer","Journey orchestration","Carrier API","Autopilot"],
+  td:["Journeys","Proactive Outreach","Autopilot","Carrier API integration"],
+  outcome:"25% inbound call reduction · 340 customers handled in one Journey run",
+  journeyReason:"Journey is the right tool here because the flow involves a batch trigger (340 customers), time-sensitive outbound sequencing, and branching based on customer reply state. Journey maintains individual state for each of the 340 contacts simultaneously — tracking whether each one replied REROUTE or WAIT — and executes different downstream paths per customer. This is not achievable with a one-shot SMS blast tool.",
+  journeyFlow:[
+    {type:"trigger",label:"Trigger",desc:"Carrier API pushes exception event. Journey instantiates 340 individual contact flows, each carrying the customer's order and contact data.",ch:"Carrier API webhook"},
+    {type:"send",label:"Step 1 — Proactive SMS sent",desc:"Journey sends personalised exception SMS to all 340 customers. Each message carries the specific delay reason and two reply options (WAIT / REROUTE).",ch:"SMS · T+0"},
+    {type:"wait",label:"Wait — monitor for reply (4hr window)",desc:"Journey enters a WAIT state per contact. It is listening for inbound SMS reply events. Each contact's state is tracked independently.",ch:"Journey wait state"},
+    {type:"branch",label:"Branch — reply received?",branches:[
+      {outcome:"yes",label:"REROUTE reply",text:"Journey activates the reroute sub-flow: Autopilot collects the new address via structured SMS prompts within Journey's context. Address validated, carrier API called. Journey moves to confirmation step."},
+      {outcome:"alt",label:"WAIT reply",text:"Journey acknowledges the preference, logs it, and moves directly to the email close step."},
+      {outcome:"no",label:"No reply (4hrs)",text:"Journey treats as WAIT preference. Moves to email close step with standard delay notification."}
+    ]},
+    {type:"wait",label:"Wait — reroute sub-flow complete or WAIT acknowledged",desc:"Journey waits for address confirmation from Autopilot sub-flow (REROUTE path), or acknowledgement send (WAIT path), before advancing to email close.",ch:"Journey wait state"},
+    {type:"branch",label:"Branch — high-value order on REROUTE path?",branches:[
+      {outcome:"yes",label:"Order value >£150 and reroute unconfirmed after 1hr",text:"Journey flags for proactive agent call. Agent sees: customer name, order value, reroute attempt failed, carrier API status. High-touch recovery for premium orders."},
+      {outcome:"no",label:"Standard order — carrier confirmed",text:"Journey advances directly to email close."}
+    ]},
+    {type:"send",label:"Step 2 — Email close",desc:"Journey sends updated tracking email to all contacts — content personalised by branch: reroute confirmation with new ETA, or standard delay update with carrier reference.",ch:"Email"},
+    {type:"wait",label:"Wait — delivery confirmed (72hr window)",desc:"Journey monitors for delivery confirmation event from carrier API. If delivery confirmed, Journey closes cleanly. If not confirmed after 72hrs, Journey re-evaluates.",ch:"Journey wait state · T+72hr"},
+    {type:"branch",label:"Branch — delivered or still outstanding?",branches:[
+      {outcome:"yes",label:"Delivery confirmed",text:"Journey fires a short post-delivery check-in SMS: 'Hi Sophie — your order arrived. All good? Reply YES or tap here if there's an issue.' Journey monitors for 24hrs."},
+      {outcome:"no",label:"Not delivered after 72hrs",text:"Journey escalates to agent queue with full context: original order, reroute status, carrier API responses. Agent picks up a live disruption, not a cold case."}
+    ]},
+    {type:"close",label:"Journey closes",desc:"All 340 contacts resolved. Outcome logged per customer: rerouted, waited, agent-handled, or post-delivery issue flagged. Full dashboard in Talkdesk.",ch:"System"}
+  ],
+  value:["Journey runs 340 individual contact flows simultaneously — each with independent state, branch logic, and timing","Time-based WAIT state means Journey acts on non-response automatically — no manual review of who replied","Reroute sub-flow runs entirely within Journey — carrier API call and address collection all orchestrated by Journey, not a disconnected bot"],
+  setup:{env:"Journey with carrier API webhook trigger. Proactive Outreach for SMS and email. Autopilot address-collection sub-flow within Journey.",data:"340 orders affected by weather delay. Customer: Sophie Tan, order #72190. Carrier API test webhook configured.",products:"Journeys · Proactive Outreach · Autopilot · Carrier API integration",duration:"10 min full · 5 min lightning (show Journey canvas, trigger, branch, reroute sub-flow)"},
+  script:[
+    {t:"journey",title:"1 — Show Journey handling 340 contacts simultaneously",ch:"Journeys · batch instantiation",jnote:"Lead with scale — this is a key Journey differentiator.",
+     say:"\"340 orders have just been flagged by the carrier. With a standard SMS tool, you send a blast — one message, no branching, no tracking of who replied. With Journey, each of those 340 customers gets their own Journey instance. Each one is tracked independently. Sophie gets her flow. Tom gets his flow. If Sophie replies REROUTE and Tom stays silent, they take completely different paths — automatically.\"",
+     show:"Show the Journey canvas. Show the trigger node: carrier API webhook → '340 contacts instantiated'. Show the Journey run dashboard: 340 active instances, each in the WAIT state. Point to the per-contact state object: customer_id, order_number, delay_reason, reply_received: false."},
+    {t:"outbound",title:"2 — Journey sends personalised SMS",ch:"SMS · Journey-controlled",
+     say:"\"Journey sends the outbound SMS — personalised with Sophie's name, her specific order, and the exact delay reason from the carrier. Two reply options: WAIT or REROUTE. Journey is now listening on Sophie's phone number for an inbound SMS event.\"",
+     show:"Show the SMS send node executing for Sophie. Show her SMS: 'Your order #72190 is delayed 48hrs — weather disruption at depot. Reply WAIT to keep your delivery, or REROUTE to change your address.' Show the Journey timer: 4hr wait window."},
+    {t:"inbound",title:"3 — Sophie replies REROUTE",ch:"SMS · inbound event → Journey",
+     say:"\"Sophie replies REROUTE. That reply arrives as an inbound SMS event, Journey receives it, and immediately activates the reroute sub-flow. This is important: Journey is handling this reply, not a standalone chatbot. The address collection happens within Journey's context — so the new address is available to the carrier API call that Journey makes next.\"",
+     show:"Show Sophie's reply arriving as an event in Journey's activity log. Show Journey transitioning from WAIT state to the reroute sub-flow. Show the sub-flow: Autopilot structured address prompts, all within Journey's context. Show the state update: 'reply: REROUTE, new_address: [pending]'.",
+     tip:"Show the branch logic in the Journey canvas: REROUTE goes left, WAIT/no-reply goes right. The canvas view makes the control plane visible — it's a compelling demo moment."},
+    {t:"sys",title:"4 — Journey calls carrier API and confirms",ch:"Carrier API · Journey-orchestrated",
+     say:"\"Sophie completes the address prompts. Journey calls the carrier API with the new address, receives confirmation, and logs it against Sophie's Journey instance. The carrier API call is a Journey node — not a separate integration that hands off and loses context.\"",
+     show:"Show the carrier API node in Journey's flow. Show the API call: order number + new address → confirmation. Show Journey's state update: 'reroute_confirmed: true, new_address: [confirmed]'. Show Sophie's SMS confirmation sent by Journey."},
+    {t:"outbound",title:"5 — Journey sends personalised email close",ch:"Email · Journey content-branched",
+     say:"\"Journey closes every contact with an email — but the content is personalised by branch. Sophie gets a reroute confirmation: new address, updated ETA, carrier reference. Tom, who replied WAIT, gets a standard delay update. Journey selects the right template based on each contact's state. One Journey, two emails, right content for each person.\"",
+     show:"Show the email send node in Journey. Show the conditional content logic: if reroute_confirmed=true → reroute template, else → delay template. Show Sophie's email: new address confirmed. Show a non-rerouted contact's email: standard delay update."}
+  ],
+  objections:[
+    {q:"\"We could do this with a standard SMS campaign tool.\"",a:"A standard SMS campaign sends one message and waits. It cannot monitor individual reply state for 340 contacts simultaneously, branch each contact independently, run a structured address-collection sub-flow within the same context, and then personalise the email close based on what each contact did. Journey does all of that. The branching and state management is what makes it different."},
+    {q:"\"What if the carrier API call fails for one contact?\"",a:"Journey handles errors as branch conditions — a failed API call routes that contact to an agent queue with full context (the customer's reply, their new address, the API error). The other 339 contacts are unaffected. Journey isolates failures per instance."},
+    {q:"\"How does this integrate with our carrier?\"",a:"Talkdesk has pre-built carrier integrations for major logistics providers. The carrier API call is a Journey node — configurable with your carrier's API credentials. A technical discovery call can confirm your specific carrier's integration."}
+  ],
+  discovery:[
+    {q:"When a disruption affects hundreds of customers simultaneously, how do you manage individual response tracking today?",w:"Most teams say they can't — it's a blast with no reply tracking. Opens the per-contact state management conversation."},
+    {q:"Can customers currently self-serve a delivery reroute via SMS — or do they have to call?",w:"Almost universally: no. Opens the self-serve gap."},
+    {q:"How do you personalise the follow-up communication based on what each customer actually chose to do?",w:"Opens the content branching and state-based personalisation conversation."}
+  ],
+  metrics:["340","25%","0"],
+  metricLabels:["Individual contact flows running simultaneously in one Journey","Reduction in disruption-related inbound calls","Contacts where state was lost between SMS and email close"]
+},
+{
+  id:3,
+  title:"WISMO escalation — inbound chat with Journey-owned escalation ladder",
+  desc:"Customer chats about a delayed order. Journey monitors the conversation state in real time — if Autopilot resolves it, Journey closes with a proactive SMS + email. If the customer escalates, Journey owns the handoff to the agent and the outbound close, with state fully preserved throughout.",
+  direction:"both",channels:["chat","sms","email"],all3:true,
+  personas:["Emma Clarke – shopper","Journey orchestration","Autopilot","Sarah – agent"],
+  td:["Journeys","Autopilot","Agent Workspace","Copilot","Proactive Outreach"],
+  outcome:"40% deflection · zero context loss · Journey-owned close",
+  journeyReason:"The escalation ladder is where Journey earns its place: it's not just Autopilot resolving or failing — Journey is watching the conversation state and deciding what happens next. If Autopilot resolves, Journey fires the outbound close. If the customer escalates, Journey moves them to an agent with full context and then fires the outbound close after resolution. Journey owns the entire lifecycle, including the post-resolution actions that happen across different channels.",
+  journeyFlow:[
+    {type:"trigger",label:"Trigger",desc:"Inbound chat event received. Journey starts, identifies the customer, pulls order data from OMS. Autopilot activated as the first-response handler.",ch:"Inbound chat"},
+    {type:"bot",label:"Autopilot handles WISMO query",desc:"Autopilot queries OMS, returns delay status, presents self-serve options (wait, reroute, cancel). Journey monitors for resolution or escalation events.",ch:"Chat · Autopilot"},
+    {type:"branch",label:"Branch — resolved by Autopilot or escalation triggered?",branches:[
+      {outcome:"yes",label:"Autopilot resolved — customer accepted self-serve",text:"Journey advances to outbound close: SMS with confirmation fires, then email with full resolution summary and CSAT."},
+      {outcome:"no",label:"Escalation intent detected",text:"Journey transitions to agent queue. Full context passed: order data, conversation transcript, sentiment score, customer LTV."},
+      {outcome:"alt",label:"Customer went silent (10min inactivity)",text:"Journey sends a re-engagement nudge in chat: 'Still there, Emma? Your order status is ready — tap here to continue.' One retry, then escalates to agent if no response."}
+    ]},
+    {type:"agent",label:"Agent handles escalation — Journey monitors",desc:"Agent works in Agent Workspace with Copilot guidance. Journey is watching for the case-resolved event. SLA timer running: 20 minutes.",ch:"Chat · Agent Workspace · Copilot"},
+    {type:"send",label:"Journey fires outbound close",desc:"On case-resolved event, Journey sends SMS (voucher or confirmation) and email (resolution summary, CSAT link). Content varies by outcome — delay accepted, rerouted, or compensation applied.",ch:"SMS + Email · Journey-fired"},
+    {type:"wait",label:"Wait — CSAT response received? (48hr window)",desc:"Journey monitors for CSAT response. If score received, Journey closes. If score is 1–3 (detractor), Journey flags for service recovery follow-up.",ch:"Journey wait state"},
+    {type:"branch",label:"Branch — CSAT outcome",branches:[
+      {outcome:"yes",label:"Promoter (8–10)",text:"Journey closes. Contact logged as resolved + satisfied. Eligible for loyalty nudge campaign in 14 days."},
+      {outcome:"no",label:"Detractor (1–3)",text:"Journey flags case for service recovery team. Pushes alert with full contact history. Service recovery agent reaches out within 24hrs."},
+      {outcome:"alt",label:"No CSAT response (48hrs)",text:"Journey closes without score. Case logged as unscored. QA team can sample these for review."}
+    ]},
+    {type:"close",label:"Journey closes",desc:"Contact marked resolved. Outcome, channel path, and CSAT score logged. Detractor re-entry flow available if flagged.",ch:"System"}
+  ],
+  value:["Journey watches escalation state — if the customer escalates, Journey moves them to an agent and carries all context forward; no manual triage","Outbound close (SMS + email) is a Journey action fired on the case-resolved event — not manual sends by the agent","Journey owns the full lifecycle: inbound chat → Autopilot → (optional) agent → outbound close — one system, no handoff gaps"],
+  setup:{env:"Journey with inbound chat trigger. Autopilot and Agent Workspace connected. Proactive Outreach for SMS + email close.",data:"Customer: Emma Clarke. Order #48291, delayed 2 days. Courier disruption. LTV: standard tier.",products:"Journeys · Autopilot · Agent Workspace · Copilot · Proactive Outreach (SMS + email)",duration:"12 min full · 6 min lightning (Journey canvas, Autopilot step, branch, outbound close)"},
+  script:[
+    {t:"journey",title:"1 — Show Journey monitoring the chat session",ch:"Journeys · inbound trigger",jnote:"Establish Journey as the control plane before showing the customer interaction.",
+     say:"\"Emma is about to open a chat. But before we show you what Emma sees, let's look at what Journey is doing. The moment that chat opens, Journey starts. It identifies Emma, pulls her order from the OMS, activates Autopilot as the first handler — and it starts watching. Journey is monitoring this conversation for two events: resolved, or escalation. Whichever fires, Journey decides what happens next.\"",
+     show:"Open the Journey canvas for the WISMO flow. Show: inbound chat trigger → OMS data pull → Autopilot node → branch node (resolved vs escalation) → two paths: outbound close, or agent queue → outbound close. Show the state variables: customer_id, order_id, delay_reason, escalation_intent: false."},
+    {t:"bot",title:"2 — Autopilot resolves WISMO in chat",ch:"Chat · Autopilot · Journey-monitored",
+     say:"\"Emma asks about her order. Autopilot hits the OMS, returns the delay status, presents options. This is Autopilot doing what it does best — fast, accurate self-service. But Journey is watching. If Emma is satisfied and the conversation closes, Journey moves to the outbound close. If she escalates, Journey is already ready for that too.\"",
+     show:"Show Emma's chat message and Autopilot's OMS-powered response. Then switch to the Journey activity log — show the conversation state: 'autopilot_active: true, escalation_intent: false'. Show the branch node waiting.",
+     tip:"The Journey activity log view alongside the chat is a strong demo angle — it shows the control plane and the customer experience simultaneously."},
+    {t:"inbound",title:"3 — Escalation detected — Journey branches",ch:"Chat → Journey branch",jnote:"Show the branch firing in the Journey canvas.",
+     say:"\"Emma says 'I want to speak to someone.' Journey detects the escalation event — and it branches. Not Autopilot, not a rule in the chat tool. Journey makes the routing decision and moves Emma to the agent queue. It passes the full context: the chat transcript, the order data, the sentiment score, and Emma's LTV tier.\"",
+     show:"Show the escalation event arriving in Journey's activity log. Show the branch node firing: escalation_intent: true → agent queue. Show the context object passed to Agent Workspace: full transcript, order details, sentiment: negative, LTV tier."},
+    {t:"agent",title:"4 — Agent handles with Copilot — Journey waits",ch:"Agent Workspace · Copilot · Journey-monitored",
+     say:"\"Sarah picks this up in Agent Workspace. Copilot has pre-loaded the context Journey passed. She applies the voucher, resolves the case. And here's the Journey piece: Journey is still watching. It's waiting for the case-resolved event from Agent Workspace. The moment that fires, Journey moves to the next step.\"",
+     show:"Show Agent Workspace: full transcript, order details, Copilot suggested response. Show Sarah resolving the case. Show the case-resolved event firing in Journey's activity log: 'agent_resolved: true'. Show Journey advancing to the outbound close node."},
+    {t:"outbound",title:"5 — Journey fires outbound close automatically",ch:"SMS + Email · Journey-fired",
+     say:"\"Sarah didn't send any messages after resolving the case. Journey did. The moment the case-resolved event fired, Journey automatically sent the SMS with the voucher code and the resolution email with the CSAT survey. The outbound close is a Journey action — it happens on every resolved case, consistently, without relying on an agent to remember to do it.\"",
+     show:"Show Journey's outbound close nodes executing: SMS send node → email send node. Show the SMS (SORRY10 voucher) and the resolution email. Show Journey's final state: 'resolved: true, sms_sent: true, email_sent: true'. Show the contact marked complete in Journey's dashboard."}
+  ],
+  objections:[
+    {q:"\"Couldn't we just configure Autopilot to do the escalation and the close messages?\"",a:"Autopilot is a conversation handler — it manages a single channel session. Journey manages the lifecycle across channels and time. The escalation routing, the agent handoff with structured context, the post-resolution outbound close across SMS and email — those are orchestration actions that span multiple systems. Journey coordinates them. Autopilot executes within a session."},
+    {q:"\"The agent could just send the follow-up SMS and email manually.\"",a:"They could — but consistency is the problem. Journey fires the close on every resolved contact, with the right content, at the right time, every time. Manual sends depend on the agent remembering, having time, and using the right template. Journey removes that variability."},
+    {q:"\"Does Journey slow down the escalation to the agent?\"",a:"No — the branch fires in milliseconds on the escalation event. The agent receives the context object from Journey as soon as they pick up the case. There is no delay compared to a direct escalation; the difference is the agent has full context rather than a blank session."}
+  ],
+  discovery:[
+    {q:"After a chat is resolved today — whether by bot or agent — does the customer automatically receive a follow-up? How consistently does that happen?",w:"Opens the outbound close consistency gap. Manual sends are inconsistent; Journey fires on every resolved event."},
+    {q:"When a customer escalates from bot to agent, what context does the agent receive — and where does that context come from?",w:"Exposes the context handoff question. Journey passes a structured context object; most teams say 'the agent reads the transcript manually.'"},
+    {q:"Can you see the full lifecycle of a contact — from inbound chat to agent resolution to outbound close — in a single view today?",w:"Opens the Journey dashboard and full-lifecycle visibility conversation."}
+  ],
+  metrics:["40%","0","100%"],
+  metricLabels:["WISMO contacts resolved by Autopilot without agent","Context lost on escalation — Journey passes full state to agent","Resolved contacts receiving outbound close — Journey fires on every case-resolved event"]
+},
+{
+  id:4,
+  title:"Post-purchase returns — Journey-owned multi-step deflection with escalation fallback",
+  desc:"Customer emails a return request. Journey receives the inbound email event, runs the eligibility check, attempts self-service deflection via chat, monitors for completion, and escalates to an agent if the customer stalls — all without any transition leaving Journey's control.",
+  direction:"both",channels:["email","chat","sms"],all3:true,
+  personas:["Marcus King – returning customer","Journey orchestration","Autopilot","Agent (fallback)"],
+  td:["Journeys","Email Routing","Autopilot","Agent Workspace","Carrier API","Proactive Outreach"],
+  outcome:"60% self-serve deflection · Journey-owned fallback for the other 40%",
+  journeyReason:"The critical Journey role here is the handoff between email and chat. In the old model, an email contained a chat link — the customer clicked it, opened chat, and Journey lost control. In this Journey-native design, the email contains a Journey-tracked deep link. When the customer opens it, Journey initiates the chat session — it knows who they are, what their order is, and where they are in the return flow. If the customer stalls mid-way, Journey detects the incomplete state after a time window and can re-engage or escalate. Journey owns the transition, not the customer.",
+  journeyFlow:[
+    {type:"trigger",label:"Trigger",desc:"Inbound email received. Journey starts: customer identified, order extracted by Autopilot, eligibility checked against policy.",ch:"Inbound email · T+0"},
+    {type:"branch",label:"Branch — return eligible?",branches:[
+      {outcome:"yes",label:"Eligible",text:"Journey sends an automated email reply with a Journey-tracked deep link to the self-service chat flow. Journey enters a WAIT state."},
+      {outcome:"no",label:"Ineligible / edge case",text:"Journey routes to agent queue with full context. Agent handles the exception — outside policy, high-value dispute, or ambiguous claim."}
+    ]},
+    {type:"wait",label:"Wait — did customer open the deep link? (24hr window)",desc:"Journey tracks whether the customer opened the deep link and started the chat flow. If yes → monitors for completion. If no response after 24hrs → re-engage.",ch:"Journey wait state · T+24hr"},
+    {type:"branch",label:"Branch — link opened or ignored?",branches:[
+      {outcome:"yes",label:"Link opened — customer in chat",text:"Journey monitors the Autopilot session for completion or abandonment."},
+      {outcome:"no",label:"Not opened after 24hrs",text:"Journey sends an SMS re-engagement: 'Marcus — your return is ready to start. Tap here: [link]'. Journey waits a further 12hrs."},
+      {outcome:"alt",label:"No response after SMS nudge",text:"Journey routes to agent queue. Agent sees: email sent, link not opened, SMS sent, no engagement. Reaches out directly."}
+    ]},
+    {type:"bot",label:"Customer in self-service chat — Journey monitors",desc:"Autopilot runs the return flow within Journey's context. Journey monitors for two events: return completed, or customer dropped off mid-flow.",ch:"Chat · Autopilot · Journey-owned session"},
+    {type:"branch",label:"Branch — return completed or abandoned?",branches:[
+      {outcome:"yes",label:"Return completed",text:"Journey fires SMS label delivery. Journey then waits for a carrier scan event confirming the parcel has been dropped off."},
+      {outcome:"no",label:"Abandoned mid-flow (30min inactivity)",text:"Journey sends a resume link via SMS with partial progress saved. If still no completion after 12hrs, escalates to agent with step-by-step abandonment context."}
+    ]},
+    {type:"wait",label:"Wait — parcel dropped off? (72hr window)",desc:"Journey monitors for carrier scan event. Confirms the return is physically in transit — not just label generated.",ch:"Journey wait state · carrier API"},
+    {type:"branch",label:"Branch — parcel received by carrier?",branches:[
+      {outcome:"yes",label:"Carrier scan confirmed",text:"Journey fires a confirmation SMS: 'We've received your return, Marcus. Your refund will be processed within 5 days.' Case auto-closes."},
+      {outcome:"no",label:"No scan after 72hrs",text:"Journey sends a friendly reminder SMS: 'Your return label is still unused — drop it off whenever you're ready.' Journey waits a further 48hrs before closing as abandoned."}
+    ]},
+    {type:"close",label:"Journey closes",desc:"Return confirmed in transit. Refund timeline communicated. CSAT triggered. Case logged with full channel path.",ch:"System"}
+  ],
+  value:["The email reply contains a Journey-tracked deep link — when the customer opens it, Journey initiates the chat session; context is never lost","Journey monitors the self-service chat for completion or abandonment — if the customer stalls, Journey acts; there is no passive exit","Escalation fallback is Journey-managed: the agent receives not just the transcript but the specific step in the return flow where the customer abandoned"],
+  setup:{env:"Journey with inbound email trigger. Email Routing, Autopilot (self-service return flow), Agent Workspace connected. Carrier API for label generation.",data:"Customer: Marcus King. Order #61042, jacket, 12 days old. Return policy: 30 days. Status: eligible.",products:"Journeys · Email Routing · Autopilot · Agent Workspace · Carrier API · Proactive Outreach (SMS)",duration:"12 min full · 6 min lightning (canvas, email trigger, chat branch, SMS close)"},
+  script:[
+    {t:"journey",title:"1 — Show Journey receiving the inbound email",ch:"Journeys · inbound email trigger",jnote:"The email arrival is a Journey trigger — not just a ticket in an inbox.",
+     say:"\"Marcus has emailed to start a return. But this isn't just an email landing in an inbox — it's a Journey trigger. The moment that email arrives, Journey starts a flow: it identifies Marcus, extracts his order number, checks eligibility against the return policy, and decides what to do next. This all happens before any human sees the email.\"",
+     show:"Open the Journey canvas for the returns flow. Show: inbound email trigger → eligibility check (OMS/policy) → branch (eligible / ineligible). Show the state variables attached: customer_id, order_id, return_eligible: true, days_since_purchase: 12."},
+    {t:"bot",title:"2 — Journey sends email reply with tracked deep link",ch:"Email · Journey-controlled",jnote:"This is the critical difference from the old model — no passive link.",
+     say:"\"Journey sends the email reply. And here's where this design differs from the old model. The link in this email isn't a generic chat widget URL. It's a Journey-tracked deep link. When Marcus clicks it, Journey receives that event and initiates a chat session — it doesn't wait for Marcus to open a random chat window. Journey starts the chat and passes his full context to it. The transition is Journey-controlled, not Marcus-clicking-a-link-and-hoping-the-bot-knows-who-he-is.\"",
+     show:"Show the Journey email send node. Show the email content: personalised reply, the tracked deep link. Open the Journey canvas and point to the deep link tracking node — show that clicking this link fires an event back into Journey. Compare to a passive link: 'Old model: customer clicks, chat opens, bot asks for order number. Journey model: customer clicks, Journey opens a named chat session for Marcus with his order pre-loaded.'",
+     tip:"This is the slide-moment for the feedback point: show the architecture explicitly. Journey owns the channel transition. It's not an email that happens to contain a chat link."},
+    {t:"journey",title:"3 — Journey monitors the self-service chat",ch:"Journeys · wait and monitor",jnote:"Show the Journey wait state watching the Autopilot session.",
+     say:"\"Marcus is now in the self-service chat. Autopilot is guiding him through the return flow. But Journey is watching. It's monitoring for two events: return-completed, or customer-dropped-off. If Marcus completes the return, Journey fires the SMS label. If Marcus abandons mid-flow, Journey knows exactly which step he left at and escalates to an agent with that specific context.\"",
+     show:"Show the Journey activity log: 'deep_link_opened: true, chat_session_started: true, return_flow_step: 2_of_3'. Show the wait node monitoring for completion or abandonment. Show the 24hr timeout on the wait node."},
+    {t:"bot",title:"4 — Return completed — Journey fires SMS label",ch:"SMS · Journey-fired",
+     say:"\"Marcus confirms his return reason and item condition. Autopilot approves the return and calls the carrier API. The return-completed event fires back to Journey. Journey immediately sends the SMS with the prepaid label link. No agent action — Journey fires the outbound close on the event.\"",
+     show:"Show the return-completed event in Journey's log. Show Journey's SMS send node executing: label link SMS to Marcus. Show the carrier API call as a Journey node — not a separate integration. Show the case auto-closed by Journey."},
+    {t:"journey",title:"5 — Show the abandonment fallback path",ch:"Journeys · escalation branch",
+     say:"\"Let's also show what happens if Marcus had walked away mid-flow. Journey has been waiting. After 24 hours with no completion event, Journey moves him to the agent queue — and the context object it passes isn't just 'customer started a return.' It's: order ID, return eligibility confirmed, return flow step abandoned at step 2, reason given so far. The agent picks up exactly where Marcus left, not from the beginning.\"",
+     show:"Show the abandonment branch in the Journey canvas. Show the escalation node: context object passed to agent includes return_flow_step_abandoned: 2, return_reason: [provided], carrier_label: null. Show in Agent Workspace what the agent sees — partial completion context, not a blank slate."}
+  ],
+  objections:[
+    {q:"\"If the customer initiates a return via email, isn't email the right channel to complete it?\"",a:"Email is a poor completion channel for multi-step flows — attachment handling, reply threading, and identity verification are all cumbersome. Chat is structurally better for a guided 3-step flow. Journey bridges the channels: email receives the request, chat completes it — but Journey controls the transition so context is never lost. The customer experience is seamless; the architecture is deliberate."},
+    {q:"\"What's the difference between a 'Journey-tracked deep link' and a normal link?\"",a:"A normal link opens a chat widget in anonymous mode — the bot has to re-identify the customer and re-fetch their order. A Journey-tracked deep link carries a session token that Journey generated. When the customer clicks it, Journey receives the event, opens a named session for that specific customer, and passes the full context object to the chat. The customer experience looks the same; the back-end is completely different."},
+    {q:"\"What if the customer replies to the email instead of clicking the link?\"",a:"Journey is monitoring the email thread as well. An email reply fires a new event into Journey, which routes it to an agent with the same context. Journey handles both the click path and the reply path — the customer doesn't need to know which one to use."}
+  ],
+  discovery:[
+    {q:"In your current returns flow, if a customer starts the self-service chat and abandons halfway through, what happens?",w:"Almost universally: nothing. The customer has to start again. Opens the Journey abandonment monitoring and escalation conversation."},
+    {q:"When the email-to-chat transition happens today, does the chat session know who the customer is and what their order is — or does it start from scratch?",w:"The core context-loss question. Journey's tracked deep link solves this directly."},
+    {q:"What's your current deflection rate for return contacts — and how does the escalation fallback work?",w:"Sizes both the deflection opportunity and the fallback gap."}
+  ],
+  metrics:["60%","100%","0"],
+  metricLabels:["Return contacts self-served via Journey-initiated chat","Chat sessions where customer context was pre-loaded — Journey-tracked deep link","Contacts where Journey lost state between email and chat"]
+},
+{
+  id:5,
+  title:"VIP complaint — priority Journey with time-to-response SLA and multi-channel close",
+  desc:"High-LTV customer emails a complaint. Journey detects the VIP flag and starts a priority flow with an SLA timer: if no agent response within 15 minutes, Journey escalates. On resolution, Journey fires a multi-channel close. The entire lifecycle is Journey-governed.",
+  direction:"both",channels:["email","chat","sms"],all3:true,
+  personas:["James Whitfield – VIP £9.2k LTV","Journey orchestration","Rachel – senior agent","Copilot"],
+  td:["Journeys","Omnichannel Routing","Agent Workspace","Copilot","Proactive Outreach"],
+  outcome:"<90s to proactive agent contact · SLA enforced by Journey · consistent Copilot-guided remedy",
+  journeyReason:"Journey is the SLA enforcer here. Without Journey, the routing rule fires and the case sits in the priority queue — but there's no system watching to see if an agent actually picks it up within the SLA window. Journey starts a timer the moment the email arrives, monitors whether an agent contacts the customer, and escalates to a supervisor if the SLA is breached. This is Journey as a quality assurance and governance layer, not just a communication dispatcher.",
+  journeyFlow:[
+    {type:"trigger",label:"Trigger",desc:"Inbound email received. Journey checks CRM: LTV >£5k + complaint keyword → VIP priority flow instantiated. SLA timer starts: 15 minutes.",ch:"Inbound email · CRM check"},
+    {type:"send",label:"Step 1 — Alert senior agent + pre-load Copilot context",desc:"Journey pushes alert to senior agent queue and passes context to Copilot: LTV, purchase history, previous contacts, sentiment analysis of email, complaint category.",ch:"Agent Workspace · Copilot · T+0"},
+    {type:"wait",label:"SLA wait — has agent made proactive contact within 15min?",desc:"Journey monitors for an outbound contact event from the agent — chat, call, or email reply. If the event fires within 15 minutes, Journey logs SLA met and continues.",ch:"Journey SLA timer · 15min"},
+    {type:"branch",label:"Branch — SLA met or breached?",branches:[
+      {outcome:"yes",label:"Agent contacted within 15min",text:"Journey logs SLA compliance time and continues monitoring. Agent works with Copilot. Journey waits for the case-resolved event."},
+      {outcome:"no",label:"SLA breached — 15min elapsed, no contact",text:"Journey immediately alerts supervisor via push notification with customer name, LTV, and elapsed time. Re-assigns case to next available senior agent. Journey timer restarts from 0."}
+    ]},
+    {type:"agent",label:"Agent resolves with Copilot guidance",desc:"Copilot suggests compensation tier based on LTV policy. Agent applies remedy — replacement, refund, or gesture. Case resolved. Journey receives the case-resolved event.",ch:"Chat · Agent Workspace · Copilot"},
+    {type:"send",label:"Journey fires multi-channel close",desc:"Email: personalised apology, remedy details, gift card code if applicable. SMS: 'Your replacement ships today' or 'Your refund is processing.' Content driven by resolution outcome.",ch:"Email + SMS · Journey-fired"},
+    {type:"wait",label:"Wait — 24hr post-resolution check-in",desc:"Journey waits 24 hours after the case close, then sends a brief personal follow-up from the senior agent: 'James — just checking in. Has everything arrived as expected?'",ch:"Journey wait state · T+24hr"},
+    {type:"branch",label:"Branch — CSAT or check-in response",branches:[
+      {outcome:"yes",label:"Positive response or high CSAT (8–10)",text:"Journey closes. James flagged as retained VIP. Eligible for a 'thank you' loyalty gesture campaign in 7 days."},
+      {outcome:"no",label:"Negative or no response",text:"Journey flags for supervisor review. James's next contact is priority-routed regardless of complaint keyword — Journey has marked him as a sensitive account."},
+      {outcome:"alt",label:"No response to check-in (24hrs)",text:"Journey closes normally. QA record updated with SLA compliance data and check-in result: no response."}
+    ]},
+    {type:"close",label:"Journey closes",desc:"Full contact lifecycle logged: SLA time, agent ID, resolution outcome, CSAT score, check-in result. QA dashboard updated.",ch:"System"}
+  ],
+  value:["Journey starts a 15-minute SLA timer the moment the VIP email arrives — breach triggers automatic escalation to supervisor","The proactive chat from agent is a Journey-monitored event — if the agent doesn't fire it, Journey escalates; the SLA is enforced, not just recommended","Multi-channel close (email + SMS) is a Journey action on the case-resolved event — consistent on every VIP complaint, not dependent on individual agent follow-through"],
+  setup:{env:"Journey with inbound email trigger and CRM LTV check. Agent Workspace + Copilot connected. SLA timer configured at 15 minutes.",data:"Customer: James Whitfield. LTV: £9,200. 14 purchases. Damaged item. SLA: agent contact within 15 minutes.",products:"Journeys · Omnichannel Routing · Agent Workspace · Copilot · Proactive Outreach (email + SMS)",duration:"12 min full · 6 min lightning (canvas, SLA timer, agent contact event, close)"},
+  script:[
+    {t:"journey",title:"1 — Journey detects VIP flag and starts SLA timer",ch:"Journeys · CRM check · SLA",jnote:"Lead with the SLA timer — this is the Journey differentiator over basic routing.",
+     say:"\"James has emailed a complaint. Journey receives it, checks the CRM — LTV £9,200, complaint keyword detected — and instantiates the VIP priority flow. And now here's the part that basic routing rules can't do: Journey starts a 15-minute timer. If no agent has proactively contacted James within 15 minutes, Journey escalates to a supervisor automatically. The SLA isn't just recommended — it's enforced.\"",
+     show:"Open the Journey canvas for the VIP complaint flow. Show: inbound email → CRM check → VIP flag detected → priority flow → SLA timer node (15 min). Point to the timer configuration: 15 minutes, escalation action: supervisor alert + reassign. Show the state: 'vip_flag: true, sla_timer_started: T+0, agent_contacted: false'."},
+    {t:"agent",title:"2 — Journey alerts agent and pre-loads Copilot",ch:"Agent Workspace · Copilot · Journey-pushed context",
+     say:"\"Journey immediately pushes an alert to Rachel — the senior agent — and passes the context to Copilot. Rachel doesn't have to open the case and read it. Copilot has already pulled James's LTV, purchase history, and previous contacts. Journey pushed that context. Rachel's first action can be the proactive chat, not reading a case file.\"",
+     show:"Show the Journey context-push to Copilot: LTV, purchase history, sentiment analysis of the email, complaint category. Show the agent alert on Rachel's desktop. Show the Journey timer counting down: 15 minutes, 12 minutes elapsed."},
+    {t:"outbound",title:"3 — Rachel opens proactive chat — Journey registers the event",ch:"Chat · Journey-monitored",jnote:"Show the proactive chat as a Journey event — not just an agent action.",
+     say:"\"Rachel opens a proactive chat to James. That action fires an 'agent_contacted' event into Journey. Journey receives it, stops the SLA timer — SLA met — and transitions to the resolution monitoring state. If Rachel hadn't opened that chat, Journey would have fired the supervisor escalation at the 15-minute mark.\"",
+     show:"Show Rachel opening the proactive chat. Show the 'agent_contacted' event arriving in Journey's activity log. Show the SLA timer stopping: 'SLA met, elapsed: 8min 30sec'. Show Journey's state update: 'agent_contacted: true, sla_breached: false'.",
+     tip:"Show the SLA breach path on the canvas too — supervisor alert node, reassign node. Showing the path that didn't fire makes the governance capability visible."},
+    {t:"agent",title:"4 — Copilot guides resolution — Journey waits for case-resolved",ch:"Chat · Copilot · Journey-monitored",
+     say:"\"Rachel resolves the case with Copilot's compensation guidance. The case-resolved event fires back to Journey. Journey immediately advances to the outbound close — no agent action needed, no reminder required. Journey fires the email and SMS the moment the case is marked resolved.\"",
+     show:"Show Rachel accepting Copilot's suggestion. Show the case closed in Agent Workspace. Show the case-resolved event in Journey's activity log. Show Journey advancing to the outbound close nodes: email send, SMS send."},
+    {t:"outbound",title:"5 — Journey fires multi-channel close consistently",ch:"Email + SMS · Journey-fired",
+     say:"\"The email goes to James — personalised, from the head of CX, with the replacement details and the gift card. The SMS goes immediately — 'Your replacement ships today.' Both are Journey actions. They fire on every resolved VIP complaint, with the right content, without relying on Rachel to remember. That consistency is the quality layer Journey provides.\"",
+     show:"Show Journey's email and SMS send nodes executing simultaneously. Show James's email and SMS. Show the Journey QA record: SLA met, agent_contacted in 8min30sec, outbound_close_sent: true. Show this record available for QA review."}
+  ],
+  objections:[
+    {q:"\"We already have priority routing rules — what does Journey add?\"",a:"Routing rules fire once. Journey monitors continuously. A priority routing rule puts James's email at the top of the queue — but it doesn't check whether an agent actually contacted him within 15 minutes. Journey does. It's the difference between putting someone at the front of the queue and guaranteeing they get served."},
+    {q:"\"The SLA timer seems complex to configure — is this standard functionality?\"",a:"Wait nodes with configurable timeouts and escalation actions are standard Journey functionality. The 15-minute SLA timer is a wait node with a branch condition: 'agent_contacted event received? If yes, continue. If no after 15min, escalate.' It's a two-node configuration in the Journey canvas."},
+    {q:"\"What counts as 'agent contacted' — does it have to be a chat?\"",a:"Journey can monitor for any contact event: outbound chat, outbound call, email reply — whichever your team uses for VIP outreach. The 'agent_contacted' event definition is configurable when you build the Journey. The demo uses proactive chat, but the pattern applies to any channel."}
+  ],
+  discovery:[
+    {q:"If a VIP customer emails a complaint today and no agent contacts them within 15 minutes, does anything happen automatically?",w:"Almost universally: no. A priority rule fires but there's no enforcement. Opens the SLA governance conversation directly."},
+    {q:"How do you currently ensure that every resolved VIP complaint receives a follow-up — email, SMS, or both?",w:"Opens the outbound close consistency gap. Manual sends are inconsistent."},
+    {q:"Can you see, for any given VIP complaint, how long it took the agent to make first contact — and whether that met your SLA?",w:"Opens the Journey QA record and lifecycle visibility conversation."}
+  ],
+  metrics:["15 min","100%","100%"],
+  metricLabels:["SLA enforced by Journey — supervisor escalation auto-fires on breach","Resolved VIP complaints receiving outbound close — Journey fires on every case-resolved event","SLA compliance visibility — every contact logged in Journey's QA record"]
+},
+{
+  id:6,
+  title:"Loyalty enrolment — Journey-owned multi-day nurture with channel escalation",
+  desc:"Journey identifies high-value customers with no loyalty account and runs a multi-day enrolment campaign: email invite, Journey-initiated chat enrolment, and — if the customer doesn't engage within 48 hours — a re-engagement SMS nudge. All state and eligibility carried throughout.",
+  direction:"outbound",channels:["email","chat","sms"],all3:true,
+  personas:["Sophie Clarke – repeat shopper","Journey orchestration","Autopilot","CRM system"],
+  td:["Journeys","Proactive Outreach","Campaign Manager","Autopilot","CRM integration"],
+  outcome:"3–5× enrolment lift · Journey-owned multi-day nurture",
+  journeyReason:"This is a multi-day, multi-step campaign with state that must persist across the whole sequence. Journey tracks whether Sophie opened the email, whether she started the enrolment chat, whether she completed it, and branches the follow-up accordingly. A standard email campaign tool fires a sequence on a schedule — it cannot branch on real-time completion events mid-sequence. Journey can: if Sophie completes enrolment on day 1, Journey suppresses the day-2 SMS nudge automatically.",
+  journeyFlow:[
+    {type:"trigger",label:"Trigger",desc:"CRM segment query: 3+ orders, no loyalty_id, avg basket >£40. 1,200 customers. Journey instantiated per customer with eligibility tier pre-calculated.",ch:"CRM segment · daily sync"},
+    {type:"send",label:"Step 1 — Personalised enrolment email",desc:"Journey sends personalised email with Gold tier offer and double-points incentive. Journey-tracked link embedded — click fires an event into Journey.",ch:"Email · Day 1"},
+    {type:"wait",label:"Wait — email opened and link clicked? (48hr window)",desc:"Journey monitors two independent events: email_opened and link_clicked. Branches differently based on which combination occurs.",ch:"Journey wait state · T+48hr"},
+    {type:"branch",label:"Branch — engagement state after 48hrs",branches:[
+      {outcome:"yes",label:"Enrolled — completion event received",text:"Journey immediately suppresses all remaining steps. Fires welcome SMS with instant voucher. Marks contact as enrolled."},
+      {outcome:"no",label:"Email opened, link clicked, not completed",text:"Journey sends an SMS re-engagement: 'Sophie — you were almost there! One tap to finish joining Gold: [link]'. Journey-initiated chat resumes from where she left off."},
+      {outcome:"alt",label:"Email opened, not clicked (48hrs)",text:"Journey sends SMS with stripped-back offer: 'Sophie — your Gold status is still waiting. Join in one tap: [link]'."},
+      {outcome:"alt",label:"Email not opened (48hrs)",text:"Journey exits this contact gracefully. Marks as non-engaged. Re-eligible for next month's segment run — no spam."}
+    ]},
+    {type:"bot",label:"Journey-initiated chat enrolment (re-engagement branches)",desc:"Chat session opened by Journey for SMS nudge clicks. Autopilot runs one-question enrolment. Journey monitors for completion event from loyalty platform.",ch:"Chat · Autopilot · Journey-owned"},
+    {type:"send",label:"Journey fires welcome SMS on enrolment",desc:"Welcome SMS with Gold voucher (GOLD15) sent immediately on enrolment_completed event. Content personalised by tier.",ch:"SMS · Journey-fired"},
+    {type:"wait",label:"Wait — first loyalty purchase within 30 days?",desc:"Journey monitors for a purchase event where loyalty_id is present. If first purchase detected, Journey fires a milestone message.",ch:"Journey wait state · T+30 days"},
+    {type:"branch",label:"Branch — first purchase made?",branches:[
+      {outcome:"yes",label:"First loyalty purchase confirmed",text:"Journey fires a milestone email: 'Congrats Sophie — you've earned your first Gold points! Here's what you can do with them.' Deepens loyalty engagement."},
+      {outcome:"no",label:"No purchase in 30 days",text:"Journey sends a re-activation nudge: 'Sophie — your Gold voucher expires in 7 days. Use GOLD15 in any store or online.' One final touch."}
+    ]},
+    {type:"close",label:"Journey closes",desc:"Enrolment and first-purchase data logged. Attribution by channel recorded. Journey marks account active in loyalty platform.",ch:"System"}
+  ],
+  value:["Journey tracks enrolment completion across email, chat, and SMS — if Sophie enrolls on any branch, Journey suppresses the rest instantly","The chat enrolment session is Journey-initiated on every path — email click, SMS nudge — so context and pre-loaded data are always present","Multi-day persistence: Journey holds Sophie's state for 72 hours across channels — standard campaign tools can't branch on mid-sequence real-time events"],
+  setup:{env:"Journey with CRM segment trigger (daily sync). Email, chat, and SMS channels connected. Loyalty platform API for enrolment event. Autopilot for one-question chat flow.",data:"Customer: Sophie Clarke. 4 orders, avg basket £52. No loyalty_id. Segment confirmed: Gold-eligible.",products:"Journeys · Proactive Outreach · Campaign Manager · Autopilot · CRM integration · Loyalty platform API",duration:"11 min full · 5 min lightning (canvas, email step, 48hr wait branch, SMS nudge, close)"},
+  script:[
+    {t:"journey",title:"1 — Show Journey's multi-day canvas for 1,200 contacts",ch:"Journeys · CRM trigger",jnote:"Show the campaign at scale — 1,200 individual Journey instances.",
+     say:"\"Sophie is one of 1,200 customers who qualify for this enrolment campaign. Journey instantiates a flow for each of them. Each flow is independent — Sophie's state doesn't affect anyone else's. And each flow persists for up to 72 hours, tracking whether Sophie opened the email, started enrolment, completed it, or went silent. A standard email campaign tool can't do that. It fires a sequence — it can't branch on real-time completion events mid-sequence.\"",
+     show:"Open the Journey canvas for the loyalty enrolment flow. Show the full multi-day flow: CRM trigger → email day 1 → 48hr wait → branch (enrolled / opened-not-enrolled / not-opened) → SMS nudge / chat → close. Show the Journey dashboard: 1,200 instances active, currently in 'email sent, wait state.'"},
+    {t:"outbound",title:"2 — Journey sends personalised email on Day 1",ch:"Email · Day 1 · Journey-tracked link",jnote:"Emphasise the tracked link — not a passive URL.",
+     say:"\"Journey sends Sophie the personalised email. The Gold tier offer, her name, the 'join in 30 seconds' CTA. The link in this email is Journey-tracked. When Sophie clicks it, Journey receives the event and immediately opens a chat enrolment session for her — pre-loaded with her details. The transition from email to chat is Journey-controlled.\"",
+     show:"Show the Journey email send node. Show Sophie's email. Point to the Journey-tracked link in the email — explain the difference from a passive URL. Show the Journey wait state: '48hr window, monitoring email_clicked AND enrolment_completed.'",
+     tip:"This is the key architectural moment — show the tracked link explicitly and explain what happens when it's clicked. This is the fix for the email-chat context-loss problem."},
+    {t:"journey",title:"3 — 48 hours pass — Journey branches",ch:"Journeys · wait state expires",
+     say:"\"Sophie opened the email but didn't complete enrolment. Journey has been waiting — 48 hours, no enrolment-completed event from the loyalty platform. Journey branches. It doesn't give up — it tries a different channel. An SMS nudge, with a direct Journey-initiated chat link. Same context, new channel.\"",
+     show:"Show the 48hr wait node timing out in Journey's canvas. Show the branch firing: 'enrolment_completed: false, email_opened: true → SMS nudge branch'. Show the state carried forward: customer_id, loyalty_tier_eligible, email_sent, email_opened: true, enrolment_started: false."},
+    {t:"outbound",title:"4 — Journey sends SMS nudge with Journey-initiated chat link",ch:"SMS · Day 3 · Journey-initiated chat",
+     say:"\"The SMS goes out: 'Sophie — your Gold status is still waiting for you. Join in one tap.' The link in the SMS is also Journey-tracked. When she taps it, Journey opens a chat session — same context, same eligibility data, same one-question flow. Journey knows Sophie has already seen the email offer. The SMS doesn't re-explain; it just closes.\"",
+     show:"Show the SMS send node. Show Sophie's SMS. Show the Journey-tracked link. Click it — show the chat session opening with Sophie's data pre-loaded: name, email, Gold tier eligibility. Show Autopilot's single confirmation question."},
+    {t:"bot",title:"5 — Enrolment completed — Journey fires welcome SMS",ch:"Chat · Autopilot · loyalty API · Journey-fired close",
+     say:"\"Sophie confirms. Enrolment completed. The loyalty platform fires the completion event back to Journey. Journey immediately sends the welcome SMS with the Gold voucher — and suppresses any remaining steps in the sequence. No double-contact, no 'congrats on joining' email following up a 'please join' SMS. Journey knows she's enrolled.\"",
+     show:"Show the enrolment_completed event arriving in Journey from the loyalty platform. Show Journey suppressing remaining steps. Show the welcome SMS firing: 'Welcome to Gold, Sophie! Use GOLD15 today.' Show Journey's final state: enrolled: true, welcome_sms_sent: true, sequence_suppressed: true."}
+  ],
+  objections:[
+    {q:"\"This is basically a drip campaign — why not use a marketing automation tool?\"",a:"Marketing automation tools send sequences on a schedule. They can't branch on a real-time completion event mid-sequence. If Sophie enrolls on day 1 via the email link, a drip campaign still sends the day-3 SMS nudge unless you manually suppress it. Journey branches on the completion event the moment it fires — the SMS is suppressed instantly, no manual intervention."},
+    {q:"\"What if Sophie enrolls directly on the website rather than through the Journey link?\"",a:"Journey monitors the loyalty platform API for any enrolment event linked to Sophie's customer ID — regardless of how she enrolled. If she enrolls via the website, the loyalty platform fires the event, Journey receives it, and suppresses the remaining sequence. The source of enrolment doesn't affect Journey's state monitoring."},
+    {q:"\"How long does Journey hold state between steps?\"",a:"Journey hold duration is configurable — the 48-hour wait in this flow is a setting on the wait node. Journey can hold state for hours, days, or weeks depending on the use case. After the configured window expires with no completion event, Journey branches to the next step or exits the flow."}
+  ],
+  discovery:[
+    {q:"In your current loyalty campaigns, if a customer enrolls after clicking the email but before you send a follow-up SMS, do they still receive the SMS?",w:"Almost always yes — because standard campaign tools can't suppress mid-sequence based on real-time events. Opens the Journey completion-monitoring conversation."},
+    {q:"How many steps does your current loyalty enrolment campaign have — and how do you personalise which steps a customer sees based on their behaviour?",w:"Opens the multi-branch personalisation capability."},
+    {q:"What's your current loyalty enrolment rate from campaigns — and what's your attribution model for which channel drove the enrolment?",w:"Opens the Journey attribution and cross-channel tracking conversation."}
+  ],
+  metrics:["3–5×","100%","Zero"],
+  metricLabels:["Enrolment lift vs. generic single-step campaign email","Enrolled customers who receive welcome SMS — Journey fires on completion event","Customers contacted after they already enrolled — Journey suppresses remaining steps instantly"]
+},
+{
+  id:7,
+  title:"Damaged product complaint — inbound chat triage, agent resolution, Journey-owned close",
+  desc:"Customer contacts via chat about a damaged item received. Journey receives the inbound event, Autopilot triages and attempts self-serve resolution. If the damage is confirmed, Journey routes to an agent with full context, monitors resolution, and fires a replacement confirmation and CSAT — all without manual follow-up.",
+  direction:"inbound",channels:["chat","email","sms"],all3:true,
+  personas:["Priya Sharma – online shopper","Journey orchestration","Autopilot","Agent"],
+  td:["Journeys","Autopilot","Agent Workspace","Copilot","Proactive Outreach"],
+  outcome:"Same-session resolution · 100% of resolved complaints receive Journey-fired close",
+  journeyReason:"Inbound complaints benefit from Journey because the lifecycle spans multiple systems and actions: chat triage, agent resolution, replacement order, and outbound close. Without Journey, each step depends on the agent remembering to trigger the next one. Journey watches for the case-resolved event and fires the close automatically — every time, consistently, regardless of which agent handled the case.",
+  journeyFlow:[
+    {type:"trigger",label:"Trigger",desc:"Inbound chat event received. Journey starts: customer identified, order history pulled from OMS, contact reason classified by Autopilot as damage claim.",ch:"Inbound chat"},
+    {type:"bot",label:"Autopilot triages the damage claim",desc:"Autopilot confirms order number, guides customer to upload a photo of the damage, checks purchase date against 30-day claim policy, and classifies severity. Escalates to agent with structured context.",ch:"Chat · Autopilot"},
+    {type:"wait",label:"Wait — agent SLA: pick up within 10min",desc:"Journey starts a 10-minute SLA timer from the moment the case hits the agent queue. If no agent picks up, Journey re-queues with an urgency flag.",ch:"Journey SLA timer"},
+    {type:"agent",label:"Journey routes to agent with structured context",desc:"Agent receives: order details, damage photo, severity classification, customer LTV tier, and Autopilot's eligibility verdict. Copilot surfaces recommended remedy based on LTV tier policy.",ch:"Agent Workspace · Copilot · Journey-passed context"},
+    {type:"branch",label:"Branch — resolution outcome",branches:[
+      {outcome:"yes",label:"Replacement approved",text:"Journey fires replacement confirmation email + SMS with dispatch tracking link. Journey then monitors for replacement dispatch event from OMS."},
+      {outcome:"no",label:"Refund approved",text:"Journey fires refund confirmation email with 5-day processing timeline. Journey monitors for refund-processed event from payment system."},
+      {outcome:"alt",label:"Escalated — agent unable to resolve",text:"Journey moves to supervisor queue with full context. SLA timer restarts. Mirrors the VIP escalation pattern in Story 5."}
+    ]},
+    {type:"wait",label:"Wait — replacement dispatched or refund processed? (72hr window)",desc:"Journey monitors the OMS (for replacement dispatch) or payment system (for refund) for a confirmation event. Tracks fulfilment, not just the agent's decision.",ch:"Journey wait state · OMS / payment API"},
+    {type:"branch",label:"Branch — fulfilment confirmed?",branches:[
+      {outcome:"yes",label:"Replacement dispatched / refund processed",text:"Journey fires a fulfilment SMS: 'Your replacement is on its way — tracking: [link]' or 'Your refund has been processed — allow 3–5 days.' Then triggers CSAT."},
+      {outcome:"no",label:"Not fulfilled after 72hrs",text:"Journey flags to ops team: replacement or refund stuck. Sends agent a task notification with the case details and fulfilment SLA breach."}
+    ]},
+    {type:"wait",label:"Wait — CSAT response received? (7-day window)",desc:"Journey monitors for a CSAT survey response. Longer window than standard — damage complaints often need the replacement to arrive before the customer can rate the experience.",ch:"Journey wait state · T+7 days"},
+    {type:"branch",label:"Branch — CSAT outcome",branches:[
+      {outcome:"yes",label:"Positive CSAT (7–10)",text:"Journey closes. Customer flagged as successfully recovered. Eligible for a loyalty reward gesture in 14 days."},
+      {outcome:"no",label:"Negative CSAT (1–6)",text:"Journey flags for service recovery follow-up. Agent outreach within 24hrs with full case history. Customer marked as sensitive account."},
+      {outcome:"alt",label:"No CSAT response (7 days)",text:"Journey closes as unscored. Case available for QA sampling."}
+    ]},
+    {type:"close",label:"Journey closes",desc:"Full lifecycle logged: triage, SLA compliance, resolution outcome, fulfilment confirmation, CSAT score. OMS complaint record updated.",ch:"System"}
+  ],
+  value:["Journey passes a structured triage context to the agent — order, damage description, photo, LTV tier — no re-reading the transcript from scratch","Outbound close is personalised by outcome: replacement gets email + SMS tracking link; refund gets email + processing timeline. Journey selects the right template on the case-resolved event","CSAT is triggered by Journey on every resolved complaint — not manually, not occasionally. Consistent data collection across every case"],
+  setup:{env:"Journey with inbound chat trigger. Autopilot triage flow (damage claim). Agent Workspace + Copilot. Proactive Outreach for email + SMS close.",data:"Customer: Priya Sharma. Order #91203, jacket received with broken zip. Purchased 8 days ago. Policy: 30-day damage claim. LTV: standard.",products:"Journeys · Autopilot · Agent Workspace · Copilot · Proactive Outreach (email + SMS)",duration:"11 min full · 5 min lightning (canvas, triage, agent context, resolution branch, close)"},
+  script:[
+    {t:"journey",title:"1 — Journey receives inbound chat and starts triage",ch:"Journeys · inbound chat trigger",jnote:"Establish Journey as the lifecycle owner before showing the customer interaction.",
+     say:"\"Priya has opened a chat about a damaged jacket she received. This is a complaint — the kind of contact that, without Journey, involves an agent reading a transcript, deciding what to do, remembering to send a follow-up, and hoping the CSAT goes out. Journey owns this lifecycle from the first message to the post-resolution close.\"",
+     show:"Open the Journey canvas for the damaged product flow. Show: inbound chat trigger → OMS data pull → Autopilot triage → agent handoff with context → resolution branch (replacement / refund / escalated) → outbound close → CSAT. Show the state variables: customer_id, order_id, contact_reason: damage_claim."},
+    {t:"bot",title:"2 — Autopilot triages the damage claim",ch:"Chat · Autopilot · Journey-monitored",
+     say:"\"Autopilot handles the triage. It asks Priya for her order number — already pulled from her profile, just needs confirmation — and guides her to upload a photo of the damage. It confirms the item is within the 30-day claim window. Then it escalates: damage claims aren't self-served. But Autopilot's triage means the agent receives a brief, not a blank chat.\"",
+     show:"Show the Autopilot triage flow in chat: order confirmation, photo upload prompt, eligibility check (8 days, within 30-day window). Show the escalation to agent workspace. Show the Journey state update: 'triage_complete: true, damage_photo: attached, claim_eligible: true'."},
+    {t:"agent",title:"3 — Agent receives Journey-structured context",ch:"Agent Workspace · Copilot · Journey-passed",jnote:"Show the structured context object — this is what Journey delivers to the agent.",
+     say:"\"The agent picks this up in Agent Workspace. And here's what Journey passed: the order details, the damage description, the photo Priya uploaded, her LTV tier, and Autopilot's triage summary — claim eligible, within window, damage confirmed visually. Copilot has already surfaced the recommended remedy: replacement with express delivery for a standard-tier customer. The agent doesn't start from scratch. They make a decision and close.\"",
+     show:"Show Agent Workspace: structured context object from Journey visible in the side panel. Order #91203, damage photo, eligibility: confirmed, LTV: standard. Show Copilot's recommended remedy: replacement with express delivery. Show the agent accepting and logging the resolution.",
+     tip:"Point out that the agent's job in this flow is a decision, not a discovery. Journey did the discovery. This is the AHT reduction argument."},
+    {t:"journey",title:"4 — Journey receives case-resolved event and branches",ch:"Journeys · resolution branch",
+     say:"\"The agent marks the case resolved — outcome: replacement approved. That event fires back to Journey. Journey receives the outcome, selects the right outbound close template — replacement confirmation, not refund confirmation — and fires both the email and the SMS simultaneously. No agent action required after the case is closed.\"",
+     show:"Show the case-resolved event arriving in Journey's activity log: 'resolution_outcome: replacement'. Show Journey's branch node selecting the replacement path. Show the email send node and SMS send node executing simultaneously."},
+    {t:"outbound",title:"5 — Journey fires personalised outbound close",ch:"Email + SMS · Journey-fired",
+     say:"\"Priya receives two messages. The email: a personal apology, the replacement order details, and express delivery confirmation. The SMS: a tracking link the moment the replacement is dispatched. Both are Journey actions — fired on the case-resolved event, with content selected by the resolution outcome. If the agent had approved a refund instead, Priya would have received different content. Journey handles the personalisation. The agent just closed the case.\"",
+     show:"Show Priya's replacement confirmation email: apology, replacement order details, express delivery ETA. Show the SMS: 'Your replacement is on its way — tracking: [link]'. Show Journey's final state: resolved: true, close_sent: true, csat_triggered: true. Show the CSAT triggered automatically."}
+  ],
+  objections:[
+    {q:"\"The agent could just send the follow-up email manually after resolving the case.\"",a:"They could — but consistency is the problem. In a team of 30 agents across shifts, manual sends result in some customers receiving a follow-up and some not, with varying content and timing. Journey fires the close on every resolved complaint, with the right template for the outcome, within seconds of case close. That consistency is also what makes your CSAT data reliable."},
+    {q:"\"Damage claims need photos — how does that work in Autopilot?\"",a:"Autopilot can prompt for image uploads in a chat session — the photo is attached to the case and passed to the agent via the Journey context object. The agent sees it in Agent Workspace alongside the triage summary. No separate email thread, no 'please resend your photo' from the agent."},
+    {q:"\"What if the agent needs more information before resolving — does Journey time out?\"",a:"Journey's wait state on the case-resolved event has a configurable timeout — for example 4 hours. If the case isn't resolved within that window, Journey can send the agent a reminder, escalate to a supervisor, or flag the case for QA review. The timeout is a configuration on the wait node, not a hard limitation."}
+  ],
+  discovery:[
+    {q:"After a damage complaint is resolved today, does the customer automatically receive a confirmation — and does that change based on whether they got a replacement or a refund?",w:"Opens both the consistent outbound close and the outcome-based personalisation gaps. Most teams send the same template regardless of outcome, or nothing at all."},
+    {q:"When an agent picks up a complaint escalated from chat, how much context do they have — and how long do they spend reading the transcript before they can act?",w:"Opens the structured triage context and AHT reduction conversation."},
+    {q:"How do you currently track CSAT specifically for complaints — and how complete is that data across all resolved cases?",w:"Opens the Journey-triggered CSAT consistency conversation. Incomplete data is a common problem when sends are manual."}
+  ],
+  metrics:["100%","<2 min","100%"],
+  metricLabels:["Resolved complaints receiving Journey-fired outbound close — every case, every outcome","Average agent time-to-decision with Journey-structured triage context vs. reading full transcript","Resolved complaints with CSAT triggered — Journey fires on every case-resolved event"]
+}
+];
+
+let activeId=null,activeFilter='all',activeTab={};
+
+function chBadges(chs){return chs.map(c=>`<span class="cb cb-${c}">${c[0].toUpperCase()+c.slice(1)}</span>`).join('')}
+function dirBadge(d){
+  if(d==='inbound') return `<span class="mtag dir-in"><i class="ti ti-arrow-down-left"></i>Inbound</span>`;
+  if(d==='outbound') return `<span class="mtag dir-out"><i class="ti ti-arrow-up-right"></i>Outbound</span>`;
+  return `<span class="mtag dir-both"><i class="ti ti-arrows-exchange"></i>Inbound + Outbound</span>`;
+}
+function dtag(s){
+  if(s.direction==='inbound') return `<span class="dtag dtag-in"><i class="ti ti-arrow-down-left"></i>Inbound</span>`;
+  if(s.direction==='outbound') return `<span class="dtag dtag-out"><i class="ti ti-arrow-up-right"></i>Outbound</span>`;
+  return `<span class="dtag dtag-both"><i class="ti ti-arrows-exchange"></i>Inbound + Outbound</span>`;
+}
+
+function renderGrid(){
+  const g=document.getElementById('grid');
+  const list=stories.filter(s=>{
+    if(activeFilter==='all') return true;
+    if(activeFilter==='inbound') return s.direction==='inbound';
+    if(activeFilter==='outbound') return s.direction==='outbound';
+    if(activeFilter==='both') return s.direction==='both';
+    return s.channels.includes(activeFilter);
+  });
+  g.innerHTML=list.map(s=>`
+    <div class="scard${activeId===s.id?' sel':''}" onclick="openD(${s.id})" role="button" tabindex="0">
+      <div class="ctop">
+        <span class="snum">Story ${s.id}</span>
+        <div class="chs"><span class="jbadge"><i class="ti ti-route"></i>Journey</span>${chBadges(s.channels)}</div>
+      </div>
+      <div class="stitle">${s.title}</div>
+      <div class="sdesc">${s.desc}</div>
+      <div class="smeta">${dirBadge(s.direction)}<span class="mtag"><i class="ti ti-building-store"></i>Retail</span></div>
+      <div class="sfoot">
+        <span class="otag"><i class="ti ti-target"></i>${s.outcome}</span>
+        <button class="vbtn">View <i class="ti ti-chevron-right" style="font-size:12px"></i></button>
+      </div>
+    </div>`).join('');
+  g.querySelectorAll('.scard').forEach(c=>c.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' ')c.click()}));
+}
+
+function openD(id){
+  if(activeId===id){activeId=null;renderGrid();document.getElementById('detail').classList.remove('open');return;}
+  activeId=id;renderGrid();
+  if(!activeTab[id])activeTab[id]='overview';
+  renderPanel(id);
+  const p=document.getElementById('detail');
+  p.classList.add('open');
+  setTimeout(()=>p.scrollIntoView({behavior:'smooth',block:'nearest'}),60);
+}
+function switchTab(id,tab){activeTab[id]=tab;renderPanel(id);}
+
+function renderPanel(id){
+  const s=stories.find(x=>x.id===id);
+  const tab=activeTab[id]||'overview';
+  const icons={chat:'ti-message-circle',sms:'ti-device-mobile-message',email:'ti-mail'};
+
+  const chFlow=s.channels.map((c,i)=>
+    `<span class="chn ${c}"><i class="ti ${icons[c]}"></i>${c[0].toUpperCase()+c.slice(1)}</span>${i<s.channels.length-1?'<i class="ti ti-arrow-right charr"></i>':''}`
+  ).join('');
+
+  // journey flow nodes
+  function renderJflow(nodes){
+    return nodes.map(n=>{
+      const ico=JICO[n.type]||'ti-circle';
+      const branches=n.branches?`<div class="jbranches">${n.branches.map(b=>`
+        <div class="jbranch-item">
+          <div class="jbranch-dot ${b.outcome}"><i class="ti ti-${b.outcome==='yes'?'check':b.outcome==='no'?'x':'dots'}"></i></div>
+          <div class="jbranch-text"><span class="jbranch-label">${b.label}:</span>${b.text}</div>
+        </div>`).join('')}</div>`:'';
+      return `<div class="jnode"><div class="jnode-main">
+        <div class="jvl"></div>
+        <div class="jico ${n.type}"><i class="ti ${ico}"></i></div>
+        <div class="jbody">
+          <div class="jt">${n.label}</div>
+          <div class="jd">${n.desc}</div>
+          ${n.ch?`<span class="jch">${n.ch}</span>`:''}
+        </div>
+      </div>${branches}</div>`;
+    }).join('');
+  }
+
+  const overviewPane=`
+    <div class="ov-cols">
+      <div>
+        <div class="sl"><i class="ti ti-route"></i>Channel sequence</div>
+        <div class="chflow">${chFlow}</div>
+        <div class="sl"><i class="ti ti-users"></i>Personas</div>
+        <div class="personas">${s.personas.map(p=>`<span class="persona"><i class="ti ti-user"></i>${p}</span>`).join('')}</div>
+        <div class="sl"><i class="ti ti-apps"></i>Talkdesk products</div>
+        <div class="tdchips">${s.td.map(t=>`<span class="tdchip${t==='Journeys'?' j':''}">${t}</span>`).join('')}</div>
+        <div class="sl" style="margin-top:1rem"><i class="ti ti-check"></i>Business value</div>
+        <ul class="vlist">${s.value.map(v=>`<li><i class="ti ti-check"></i>${v}</li>`).join('')}</ul>
+      </div>
+      <div>
+        <div class="sl"><i class="ti ti-git-fork"></i>Journey flow</div>
+        <div class="jflow">${renderJflow(s.journeyFlow)}</div>
+      </div>
+    </div>`;
+
+  const scriptPane=`
+    <div class="sl" style="margin-top:0"><i class="ti ti-adjustments"></i>Setup</div>
+    <div class="sg" style="margin-bottom:1.125rem">
+      <div class="sc"><div class="scl">Demo environment</div><div class="scv">${s.setup.env}</div></div>
+      <div class="sc"><div class="scl">Pre-loaded data</div><div class="scv">${s.setup.data}</div></div>
+      <div class="sc"><div class="scl">Products to show</div><div class="scv">${s.setup.products}</div></div>
+      <div class="sc"><div class="scl">Duration</div><div class="scv">${s.setup.duration}</div></div>
+    </div>
+    <div class="sl"><i class="ti ti-script"></i>Talk track</div>
+    <div class="script-legend">
+      <span class="sl-item"><span class="sl-swatch" style="background:var(--p600)"></span>Say</span>
+      <span class="sl-item"><span class="sl-swatch" style="background:#1D9E75"></span>Show</span>
+      <span class="sl-item"><span class="sl-swatch" style="background:#BA7517"></span>Tip</span>
+      <span class="sl-item"><span class="sl-swatch" style="background:var(--j600)"></span>Journey note</span>
+    </div>
+    <div class="ttrack">${s.script.map(step=>`
+      <div class="tstep">
+        <div class="tvl"></div>
+        <div class="tic ${step.t}"><i class="ti ${ICO[step.t]}"></i></div>
+        <div class="tb">
+          <div class="tlabel">
+            <span class="tst">${step.title}</span>
+            <span class="tch">${step.ch}</span>
+            ${step.t==='journey'?`<span class="tj"><i class="ti ti-route" style="font-size:9px"></i> Journey action</span>`:''}
+          </div>
+          ${step.jnote?`<div class="jnote"><div class="jnotel"><i class="ti ti-route"></i>Journey note</div><div class="jnotet">${step.jnote}</div></div>`:''}
+          <div class="say"><div class="sayl">Say</div><div class="sayt">${step.say}</div></div>
+          <div class="show"><div class="showl">Show</div><div class="showt">${step.show}</div></div>
+          ${step.tip?`<div class="tip"><div class="tipl">Tip</div><div class="tipt">${step.tip}</div></div>`:''}
+        </div>
+      </div>`).join('')}
+    </div>`;
+
+  const objPane=`
+    <div class="sl" style="margin-top:0"><i class="ti ti-chart-bar"></i>Proof points</div>
+    <div class="vcards" style="margin-bottom:1.25rem">
+      ${s.metrics.map((m,i)=>`<div class="vcard"><div class="vnum">${m}</div><div class="vlabel">${s.metricLabels[i]}</div></div>`).join('')}
+    </div>
+    <div class="sl"><i class="ti ti-shield-question"></i>Objection handling</div>
+    <div class="objlist">${s.objections.map(o=>`
+      <div class="obj">
+        <div class="objq"><i class="ti ti-help-circle"></i>${o.q}</div>
+        <div class="obja">${o.a}</div>
+      </div>`).join('')}
+    </div>
+    <div class="sl" style="margin-top:1.25rem"><i class="ti ti-message-question"></i>Discovery questions</div>
+    <div class="disclist">${s.discovery.map((d,i)=>`
+      <div class="disc">
+        <div class="dn">${i+1}</div>
+        <div><div class="dq">${d.q}</div><div class="dw">${d.w}</div></div>
+      </div>`).join('')}
+    </div>`;
+
+  const panes={overview:overviewPane,script:scriptPane,objections:objPane};
+
+  document.getElementById('detail').innerHTML=`
+    <div class="dhead">
+      <div>
+        <div class="dhmeta">Story ${s.id} &nbsp;·&nbsp; ${DIR_LABEL[s.direction]}</div>
+        <div class="dhtitle">${s.title}</div>
+        <div class="dhtags">
+          ${dtag(s)}
+          ${s.channels.map(c=>`<span class="dtag dtag-ch"><i class="ti ${icons[c]}"></i>${c[0].toUpperCase()+c.slice(1)}</span>`).join('')}
+          <span class="dtag dtag-j"><i class="ti ti-route"></i>Journeys</span>
+        </div>
+      </div>
+      <button class="xbtn" onclick="closeD()"><i class="ti ti-x"></i></button>
+    </div>
+    <div class="tabs">
+      <div class="tab${tab==='overview'?' active':''}" onclick="switchTab(${id},'overview')"><i class="ti ti-map"></i>Story + Journey flow</div>
+      <div class="tab${tab==='script'?' active':''}" onclick="switchTab(${id},'script')"><i class="ti ti-script"></i>Demo script</div>
+      <div class="tab${tab==='objections'?' active':''}" onclick="switchTab(${id},'objections')"><i class="ti ti-shield-question"></i>Objections &amp; discovery</div>
+    </div>
+    <div class="tabcontent">${panes[tab]}</div>`;
+}
+
+function closeD(){activeId=null;document.getElementById('detail').classList.remove('open');renderGrid();}
+function flt(type,el){
+  activeFilter=type;activeId=null;
+  document.getElementById('detail').classList.remove('open');
+  document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');renderGrid();
+}
+function copyLink(){
+  const label=document.getElementById('copy-label');
+  try{navigator.clipboard.writeText(window.location.href).then(()=>{label.textContent='Copied!';setTimeout(()=>label.textContent='Copy link',2000)})}
+  catch(e){label.textContent='Open in browser to copy';setTimeout(()=>label.textContent='Copy link',2500)}
+}
+renderGrid();
+</script></body></html>
