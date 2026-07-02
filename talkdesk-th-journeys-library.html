@@ -148,9 +148,14 @@ main{max-width:1060px;margin:0 auto;padding:2rem 1.5rem 4rem}
 .tdchips{display:flex;flex-wrap:wrap;gap:5px}
 .tdchip{font-size:10px;padding:3px 8px;border-radius:8px;background:var(--bg-s);color:var(--ts);border:.5px solid var(--bd)}
 .tdchip.j{background:var(--j50);color:var(--j800);border-color:var(--j600)}
-.vlist{list-style:none;display:flex;flex-direction:column;gap:6px}
-.vlist li{font-size:12px;color:var(--ts);display:flex;align-items:flex-start;gap:7px;line-height:1.5}
-.vlist li i{font-size:13px;color:var(--p600);flex-shrink:0;margin-top:1px}
+.vtable{width:100%;border-collapse:collapse;font-size:12px}
+.vtable tr{border-bottom:.5px solid var(--bd)}
+.vtable tr:last-child{border-bottom:none}
+.vtable td{padding:8px 10px;vertical-align:top;line-height:1.5}
+.vtable td:first-child{width:52%;color:var(--tp);font-weight:500}
+.vtable td:last-child{width:48%;color:var(--ts)}
+.vtable cite{font-style:normal;font-size:10px;color:var(--tt);background:var(--bg-s);border:.5px solid var(--bd);border-radius:4px;padding:1px 6px;margin-left:4px;font-weight:500;white-space:nowrap;display:inline-block;margin-top:2px}
+.vtable-head td{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--tt);padding:5px 10px;background:var(--bg-s);border-bottom:.5px solid var(--bdm)}
 /* JOURNEY FLOW DIAGRAM */
 .jflow{display:flex;flex-direction:column;gap:0;position:relative}
 .jnode{display:flex;gap:10px;padding-bottom:0;position:relative}
@@ -327,7 +332,7 @@ const stories=[
     {type:"send",label:"Step 2 — Pre-arrival confirmation email",desc:"Comprehensive itinerary email: check-in instructions, room details, all booked ancillaries, hotel map, and contact details. Sent to all guests regardless of upsell outcome.",ch:"Email · Journey-fired"},
     {type:"close",label:"Journey closes",desc:"Upsell outcome and revenue logged. Guest profile updated in PMS. Journey marks contact complete.",ch:"System"}
   ],
-  value:["Journey monitors each quick-reply as an independent event — spa tap, dinner tap, and free-text reply each route to a different branch automatically","No passive email link: when the email is sent on the no-response branch, the link is Journey-tracked — click fires back into Journey and resumes the upsell flow","Upsell suppression: if the guest books via any channel (website, reception, WhatsApp), Journey detects the PMS event and stops further upsell messages immediately"],
+  value:["Guests are 80% more likely to accept an upsell in the pre-arrival window than at check-in (Oaky, 2024) — digital pre-arrival outreach is the highest-converting moment in the guest upsell journey","Pre-arrival upsell revenue grew 19.6% year-over-year in 2024 for properties using automated outreach (Revinate, 2024) — the growth comes from timing and personalization, not new inventory or discounting","SMS open rate: 98%, read within minutes (Validity / Tatango) — pre-arrival offers sent via SMS or messaging are seen before the guest arrives, not buried in an inbox at check-in"],
   setup:{env:"WhatsApp Business API connected. PMS integration with real-time availability query and write-back. Journey with T-48hr pre-arrival trigger.",data:"Guest: Lena Fischer. 3-night stay, Superior Room, check-in tomorrow 3pm. Spa and dining not booked.",products:"Journeys · Proactive Outreach · WhatsApp Business API · Autopilot · PMS integration · Campaign Manager",duration:"12 min full · 6 min lightning (Journey canvas, WhatsApp send, quick-reply branch, booking confirmation, email close)"},
   script:[
     {t:"journey",title:"1 — Journey canvas: from PMS trigger to upsell close",ch:"Journeys · PMS trigger",jnote:"Show the full canvas before any customer interaction — establish Journey as the control plane.",
@@ -386,7 +391,7 @@ const stories=[
     {type:"wait",label:"Wait — flight departed? (post-departure check)",desc:"Journey monitors for flight departure event from GDS feed. If the passenger's new flight departs successfully, Journey closes cleanly.",ch:"Journey wait state · GDS feed"},
     {type:"close",label:"Journey closes",desc:"Outcome logged per passenger: self-served rebook, agent-assisted, or unresponsive. Disruption dashboard updated in Talkdesk.",ch:"System"}
   ],
-  value:["Journey runs 280 independent passenger flows simultaneously — each with individual state, reply tracking, and branch logic","SMS escalation fires automatically after 90 minutes of WhatsApp silence — Journey moves through channels on its own schedule","GDS rebooking is a Journey node: Journey makes the API call, receives the confirmation, and fires the itinerary email — no handoff, no context loss"],
+  value:["SMS open rate: 98%, 90% read within 3 minutes (Validity / Tatango) — proactive disruption alerts reach passengers before they call, shifting the contact from reactive inbound to managed outbound","SMS abandoned cart recovery CTR: 19–20% average (Attentive, 2024) — two-way messaging that allows passengers to self-select a rebooking option converts a fraction of affected travelers without agent involvement","Customer acquisition costs 5–25× more than retention (Harvard Business Review) — passengers who receive proactive, helpful communication during a disruption are significantly more likely to rebook with the same carrier or OTA"],
   setup:{env:"WhatsApp Business API and GDS integration connected. Journey with flight disruption trigger. SMS configured as fallback channel.",data:"280 passengers on BA447 LHR–FCO, cancelled. Marco Bianchi: business class, connection FCO–MXP at risk. GDS test webhook active.",products:"Journeys · Proactive Outreach · WhatsApp Business API · Autopilot · GDS integration · Campaign Manager",duration:"12 min full · 6 min lightning (Journey canvas, WhatsApp send, numbered reply, GDS call, itinerary close)"},
   script:[
     {t:"journey",title:"1 — Journey instantiates 280 individual passenger flows",ch:"Journeys · GDS trigger",jnote:"Lead with scale and per-contact state — this is the core Journey differentiator over a broadcast SMS tool.",
@@ -446,7 +451,7 @@ const stories=[
     {type:"wait",label:"Wait — next-stay booking within 30 days?",desc:"Journey monitors for a PMS reservation event linked to this guest. If a booking is made, Journey fires a confirmation and marks the guest as re-acquired.",ch:"Journey wait state · 30 days"},
     {type:"close",label:"Journey closes",desc:"NPS score, recovery outcome, and next-stay conversion logged per guest. CRM updated. Journey marks contact complete.",ch:"System"}
   ],
-  value:["WhatsApp NPS achieves 40%+ response rate vs 8–12% for email — the feedback is actually collected","Detractor flag reaches the duty manager in under 60 seconds — before the guest posts a review online","Journey monitors next-stay booking after a promoter offer — the commercial impact of the NPS programme is fully attributed"],
+  value:["SMS open rate: 98% vs. ~20% for email (Validity) — NPS surveys delivered via messaging achieve materially higher response rates than email, producing statistically representative feedback rather than a biased sample","Customers with positive support experiences have 14% higher LTV and purchase 2.6× more frequently (Forrester) — post-stay follow-up that closes the loop on a negative experience directly protects repeat booking value","5% increase in customer retention increases profitability by 25–95% (Bain & Company) — retaining a guest who had a negative experience by responding before they post a public review is among the highest-ROI post-stay actions"],
   setup:{env:"WhatsApp Business API connected. PMS checkout trigger active. Agent Workspace for detractor recovery. CRM integration for loyalty and stay history.",data:"Guest: Yuki Tanaka. Just checked out, 3-night stay, Gold loyalty member. No prior complaints on record.",products:"Journeys · Proactive Outreach · WhatsApp Business API · Autopilot · CRM integration · Campaign Manager",duration:"11 min full · 5 min lightning (Journey canvas, WhatsApp NPS, detractor branch, promoter email, next-stay wait)"},
   script:[
     {t:"journey",title:"1 — Journey canvas: checkout to post-stay lifecycle",ch:"Journeys · PMS checkout trigger",jnote:"Show the full post-stay lifecycle on the canvas before anything else.",
@@ -507,7 +512,7 @@ const stories=[
     {type:"sys",label:"PMS tagged — VIP arrival flag set",desc:"Journey calls PMS to tag Amir as VIP arrival. Front desk notified. Revenue attributed to WhatsApp campaign in Talkdesk.",ch:"PMS API · Journey node"},
     {type:"close",label:"Journey closes",desc:"Upgrade outcome, revenue, and channel path logged. Journey marks contact complete.",ch:"System"}
   ],
-  value:["Journey re-queries PMS at the moment of reply — not at send time — so the offer is always live and availability is never over-promised","The WhatsApp conversation is fully within Journey: Autopilot handles questions, Journey processes the YES, and Journey calls the PMS — no handoff, no context loss","VIP arrival tagging is a Journey node: the front desk notification happens automatically on upgrade confirmation, not as a manual back-office step"],
+  value:["Guests are 80% more likely to accept an upsell pre-arrival than at front desk check-in (Oaky, 2024) — moving the upgrade offer to the morning of arrival is the same offer at 3–5× the conversion rate","Pre-arrival upsell revenue grew 19.6% YoY for automated properties (Revinate, 2024) — incremental room revenue from the same inventory, with no discount to base ADR","SMS open rate: 98%, 90% read within 3 minutes (Validity) — morning-of upgrade offers via SMS reach guests while they are in travel planning mode, before cognitive load peaks at check-in"],
   setup:{env:"WhatsApp Business API connected. PMS with real-time availability query and upgrade write-back. Journey with day-of-arrival trigger.",data:"Guest: Amir Hassan. Standard room booked. Suite 401 available at £65 upgrade. Arrival: today 3pm.",products:"Journeys · Proactive Outreach · WhatsApp Business API · Autopilot · PMS integration",duration:"10 min full · 5 min lightning (Journey canvas, WhatsApp offer, YES branch, PMS call, confirmation close)"},
   script:[
     {t:"journey",title:"1 — Journey canvas: upsell offer to VIP arrival tag",ch:"Journeys · PMS trigger",jnote:"Show the full canvas — particularly the PMS re-query at reply time, which is the key architectural point.",
@@ -566,7 +571,7 @@ const stories=[
     {type:"wait",label:"Wait — bag delivery confirmed? (post-delivery check)",desc:"Journey monitors for delivery confirmation from airline API. On confirmation, fires a brief closure WhatsApp.",ch:"Journey wait state · airline API"},
     {type:"close",label:"Journey closes",desc:"Full trace history, resolution time, and guest satisfaction outcome logged. Case closed in Talkdesk.",ch:"System"}
   ],
-  value:["Journey monitors the airline API webhook continuously — proactive SMS fires the moment the bag is located, before the guest needs to chase","Autopilot triage runs within Journey's context: the PIR, the API call, and the trace reference are all Journey state — available to any agent who picks up the case","Journey holds the full 24-hour timeline autonomously — escalating to agent only when the case genuinely needs human intervention, not on a fixed timer"],
+  value:["SMS open rate: 98%, 90% read within 3 minutes (Validity / Tatango) — proactive baggage status updates via SMS reach guests in the arrivals hall, before they seek out a desk or call the hotel","Customers with positive support experiences have 14% higher LTV and purchase 2.6× more frequently (Forrester) — guests who receive proactive communication during a service failure rate the property significantly higher than those who don't","5% increase in customer retention increases profitability by 25–95% (Bain & Company) — converting a baggage delay from a silent frustration into a managed, communicated recovery protects future booking value"],
   setup:{env:"WhatsApp Business API connected. Airline baggage API integration active. Agent Workspace for escalation. Journey with inbound WhatsApp trigger and Autopilot classification.",data:"Guest: Sofia Reyes. Checked in today. Bag missing — BA flight from MAD. PIR not yet filed. Reservation confirmed.",products:"Journeys · Autopilot · Agent Workspace · Proactive Outreach (SMS + email) · WhatsApp Business API · Airline baggage API",duration:"11 min full · 5 min lightning (Journey canvas, Autopilot triage, bag-located branch, SMS update, goodwill email)"},
   script:[
     {t:"journey",title:"1 — Journey receives inbound WhatsApp and classifies intent",ch:"Journeys · inbound WhatsApp trigger",jnote:"Show Journey as the receiver — the inbound message starts a Journey, not just a chat session.",
@@ -617,7 +622,7 @@ const stories=[
     {type:"wait",label:"Wait — restaurant time reached (SMS reminder trigger)",desc:"Journey holds until 30 minutes before the reservation time, then fires the SMS reminder automatically.",ch:"Journey scheduled wait"},
     {type:"close",label:"Journey closes",desc:"Both requests confirmed. SMS reminder delivered. No-show risk reduced. Journey marks contact complete.",ch:"System"}
   ],
-  value:["Journey runs both sub-flows in parallel and joins them — the unified confirmation only fires when both are complete, so the guest never receives a partial update","The SMS dinner reminder is a Journey-scheduled node: it fires 30 minutes before the reservation time regardless of when the booking was made — no manual diary entry","Both a bot-handled request (restaurant) and an agent-handled request (late checkout) are coordinated by Journey — the guest sees one seamless conversation"],
+  value:["SMS open rate: 98%, read within minutes (Validity) — in-stay requests resolved via messaging are confirmed in the same session, avoiding the front desk queue and reducing repeat follow-up contacts","Customers with positive support experiences have 14% higher LTV and purchase 2.6× more frequently (Forrester) — frictionless in-stay service resolution is a direct driver of repeat booking and review score","Restaurant no-show rates drop significantly with pre-service reminders (OpenTable benchmark) — automated 30-minute-prior SMS reminders protect F&B revenue at zero marginal labor cost"],
   setup:{env:"WhatsApp Business API connected. Restaurant booking API active. Agent Workspace with housekeeping/occupancy data. Journey with inbound WhatsApp trigger and parallel sub-flow capability.",data:"Guest: James Park. In-stay, checking out tomorrow. Rooftop restaurant table for 2 at 8pm: available. Late checkout 1pm: available.",products:"Journeys · Autopilot · Agent Workspace · Copilot · Proactive Outreach (WhatsApp + email + SMS)",duration:"11 min full · 5 min lightning (canvas, intent split, parallel sub-flows, join node, unified confirmation)"},
   script:[
     {t:"journey",title:"1 — Journey canvas: parallel sub-flows and join node",ch:"Journeys · inbound WhatsApp · intent split",jnote:"The join node is the architectural highlight — show it clearly on the canvas.",
@@ -675,7 +680,7 @@ const stories=[
     ]},
     {type:"close",label:"Journey closes",desc:"Amendment outcome logged. PMS record updated. Journey marks contact complete. CSAT triggered if enabled.",ch:"System"}
   ],
-  value:["Journey holds the full amendment session state — if the guest abandons, the SMS re-engagement link resumes the exact step they left, with their partial choices preserved","The PMS amendment is a Journey node: Journey calls the API, receives the confirmation, and fires the email close — no manual step, no risk of mismatch between what was said in chat and what was actually booked","24-hour follow-up monitoring means a guest who has a question about their amendment gets context-aware Autopilot handling, not a blank conversation"],
+  value:["SMS open rate: 98%, 90% read within 3 minutes (Validity) — booking amendment confirmations sent via SMS are read immediately, giving guests confidence their change was processed before they need to follow up","Customer acquisition costs 5–25× more than retention (Harvard Business Review) — a fast, frictionless amendment process directly reduces the risk of a guest canceling rather than modifying","Customers with positive support experiences have 14% higher LTV (Forrester) — every self-serve interaction that resolves cleanly without friction contributes to the experience quality that drives repeat bookings"],
   setup:{env:"WhatsApp Business API connected. PMS with real-time availability query and booking amendment API. Journey with inbound WhatsApp trigger and Autopilot classification.",data:"Guest: Clara Müller. Current booking: Superior Room, Friday check-in, 2 nights. Requested: Saturday check-in. Availability: confirmed.",products:"Journeys · Autopilot · PMS integration · Proactive Outreach (WhatsApp + email + SMS)",duration:"9 min full · 5 min lightning (canvas, Autopilot self-serve, PMS call, confirmation, abandonment recovery)"},
   script:[
     {t:"journey",title:"1 — Journey receives inbound WhatsApp and starts amendment flow",ch:"Journeys · inbound WhatsApp trigger",jnote:"Establish Journey as the lifecycle owner — including the unhappy path.",
@@ -800,8 +805,18 @@ function renderPanel(id){
         <div class="personas">${s.personas.map(p=>`<span class="persona"><i class="ti ti-user"></i>${p}</span>`).join('')}</div>
         <div class="sl"><i class="ti ti-apps"></i>Talkdesk products</div>
         <div class="tdchips">${s.td.map(t=>`<span class="tdchip${t==='Journeys'?' j':''}">${t}</span>`).join('')}</div>
-        <div class="sl" style="margin-top:1rem"><i class="ti ti-check"></i>Business value</div>
-        <ul class="vlist">${s.value.map(v=>`<li><i class="ti ti-check"></i>${v}</li>`).join('')}</ul>
+        <div class="sl" style="margin-top:1rem"><i class="ti ti-chart-bar"></i>Business value</div>
+        <table class="vtable">
+          <tr class="vtable-head"><td>Metric</td><td>Why it matters</td></tr>
+          ${s.value.map(v=>{
+            const dash = v.indexOf(' — ');
+            const metric = dash > -1 ? v.slice(0, dash) : v;
+            const impact = dash > -1 ? v.slice(dash + 3) : '';
+            const metricCited = metric.replace(/\(([^)]+,\s*\d{4}[^)]*)\)/g,'<cite>$1</cite>');
+            const impactCited = impact.replace(/\(([^)]+,\s*\d{4}[^)]*)\)/g,'<cite>$1</cite>');
+            return `<tr><td>${metricCited}</td><td>${impactCited}</td></tr>`;
+          }).join('')}
+        </table>
       </div>
       <div>
         <div class="sl"><i class="ti ti-git-fork"></i>Journey flow</div>

@@ -148,9 +148,14 @@ main{max-width:1060px;margin:0 auto;padding:2rem 1.5rem 4rem}
 .tdchips{display:flex;flex-wrap:wrap;gap:5px}
 .tdchip{font-size:10px;padding:3px 8px;border-radius:8px;background:var(--bg-s);color:var(--ts);border:.5px solid var(--bd)}
 .tdchip.j{background:var(--j50);color:var(--j800);border-color:var(--j600)}
-.vlist{list-style:none;display:flex;flex-direction:column;gap:6px}
-.vlist li{font-size:12px;color:var(--ts);display:flex;align-items:flex-start;gap:7px;line-height:1.5}
-.vlist li i{font-size:13px;color:var(--p600);flex-shrink:0;margin-top:1px}
+.vtable{width:100%;border-collapse:collapse;font-size:12px}
+.vtable tr{border-bottom:.5px solid var(--bd)}
+.vtable tr:last-child{border-bottom:none}
+.vtable td{padding:8px 10px;vertical-align:top;line-height:1.5}
+.vtable td:first-child{width:52%;color:var(--tp);font-weight:500}
+.vtable td:last-child{width:48%;color:var(--ts)}
+.vtable cite{font-style:normal;font-size:10px;color:var(--tt);background:var(--bg-s);border:.5px solid var(--bd);border-radius:4px;padding:1px 6px;margin-left:4px;font-weight:500;white-space:nowrap;display:inline-block;margin-top:2px}
+.vtable-head td{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--tt);padding:5px 10px;background:var(--bg-s);border-bottom:.5px solid var(--bdm)}
 /* JOURNEY FLOW DIAGRAM */
 .jflow{display:flex;flex-direction:column;gap:0;position:relative}
 .jnode{display:flex;gap:10px;padding-bottom:0;position:relative}
@@ -328,7 +333,7 @@ const stories=[
     {type:"send",label:"Step 3 — Post-visit plan renewal offer",desc:"Journey sends an SMS: 'Great to see you today, David. Your plan is renewed — here's what's covered next year.' If plan was not renewed at visit, Journey sends a follow-up email offer with a one-click renewal link.",ch:"SMS or Email · Journey-fired"},
     {type:"close",label:"Journey closes",desc:"Renewal outcome, visit completion, and plan start date logged in CRM. Next renewal date written back. Journey marks contact complete.",ch:"System"}
   ],
-  value:["Journey suppresses all steps the moment a booking is confirmed from any channel — CRM event, website, phone call logged in scheduling system — no over-messaging","Pre-visit reminder is a Journey-scheduled node: fires 24hrs before the appointment time regardless of when the booking was made or which agent handled it","Post-visit renewal offer branches on outcome: renewed at visit gets a confirmation; not renewed gets a follow-up offer. Journey selects the right content automatically"],
+  value:["HVAC maintenance plan customers return at 89% vs. 42% for non-plan customers, and deliver 2.3× higher lifetime value (CallJolt, 2026) — plan retention is the single most impactful metric in residential home services","SMS open rate: 98%, 90% read within 3 minutes (Validity / Tatango) — renewal reminders via SMS are seen immediately, prompting action before the plan lapses rather than after","5% increase in customer retention increases profitability by 25–95% (Bain & Company) — every plan renewal saved at $600/yr compounds over the customer's lifetime; preventing a lapse is far cheaper than re-acquiring"],
   setup:{env:"Journey with CRM plan-expiry trigger. SMS Proactive Outreach. Scheduling API with availability query and booking event webhook. Agent Workspace for escalation.",data:"Customer: David Chen. HVAC maintenance plan expires in 28 days. Last service: 13 months ago. Assigned tech: Mike Rivera. No active booking.",products:"Journeys · Proactive Outreach · Autopilot · CRM integration · Scheduling API",duration:"12 min full · 6 min lightning (Journey canvas, SMS send, BOOK reply, scheduling sub-flow, suppression on booking)"},
   script:[
     {t:"journey",title:"1 — Journey canvas: plan expiry to post-visit renewal",ch:"Journeys · CRM trigger",jnote:"Show the full lifecycle first — this is a multi-step flow that owns state across days.",
@@ -389,7 +394,7 @@ const stories=[
     ]},
     {type:"close",label:"Journey closes",desc:"Onboarding complete. First-visit satisfaction logged. Next scheduled visit date confirmed in CRM. Customer enters recurring maintenance Journey.",ch:"System"}
   ],
-  value:["Journey initiates a chat session for customers who don't self-schedule — Journey opens it, context is pre-loaded, no passive link for the customer to find","Technician introduction SMS fires 24 hours before the first visit with the tech's name and what to expect — reducing no-shows and first-visit anxiety for new customers","First-visit satisfaction score captured within 24 hours of the visit: dissatisfied customers are routed to a CSR before they cancel or leave a negative review"],
+  value:["62% of pest control customers who cancel in the first 90 days say the company 'stopped caring' after sign-up (ResultCalls, 2026) — structured onboarding communication directly addresses the leading cause of early churn","One lost pest control customer = ~$1,200 in lost lifetime revenue (ResultCalls, 2026) — early identification of dissatisfied customers before they cancel is the highest-ROI action in the first 90 days","SMS open rate: 98%, 90% read within 3 minutes (Validity) — technician introduction and post-visit satisfaction messages via SMS are read the day of the visit, enabling same-day intervention before the customer decides to cancel"],
   setup:{env:"Journey with CRM new-customer trigger. SMS and email Proactive Outreach. Journey-initiated chat for scheduling. Scheduling API. Field service system with visit-completed event.",data:"Customer: Marcus Webb. New pest control subscriber, quarterly plan. First visit not yet scheduled. Branch: Denver CO. Tech pool available.",products:"Journeys · Proactive Outreach · Autopilot · CRM integration · Scheduling API",duration:"11 min full · 5 min lightning (Journey canvas, welcome SMS, Autopilot scheduling chat, tech intro, post-visit satisfaction)"},
   script:[
     {t:"journey",title:"1 — Journey canvas: sign-up to first-visit satisfaction",ch:"Journeys · CRM new customer trigger",jnote:"Show the full onboarding arc — from sign-up through to the satisfaction score that determines whether this customer churns or stays.",
@@ -451,7 +456,7 @@ const stories=[
     {type:"send",label:"Step 3 — Final email outreach (T-20 days)",desc:"Email: personalised subject ('Lisa — your AC tune-up slot is almost gone'), plan benefits reminder, direct scheduling link. Journey-tracked.",ch:"Email · T-20 days"},
     {type:"close",label:"Journey closes (booked or season passed)",desc:"Booking outcome and capacity data logged. Unbooked customers flagged in CRM for post-season follow-up. Journey marks contact complete.",ch:"System"}
   ],
-  value:["Journey queries the scheduling system's live capacity at T-30 days — customers in low-availability zones get urgency messaging; customers in well-supplied zones get standard messaging. One campaign, capacity-aware content","Journey suppresses all steps the moment a booking arrives from any channel — customer booked online, called in, or replied to SMS — no over-messaging","Customers who don't book despite three touches are flagged in CRM for post-season follow-up: Journey creates the re-engagement list automatically"],
+  value:["SMS open rate: 98% vs. ~20% for email (Validity / Tatango) — seasonal booking reminders via SMS are seen immediately, reducing the cycle time between send and booking confirmation","5% increase in customer retention increases profitability by 25–95% (Bain & Company) — seasonal campaign conversion directly prevents the plan lapse that is the most common path to customer loss in home services","Customer acquisition costs 5–25× more than retention (Harvard Business Review) — keeping a plan customer active through a seasonal visit is materially cheaper than re-acquiring them after a lapse"],
   setup:{env:"Journey with campaign trigger T-45 days pre-season. SMS and email Proactive Outreach. Scheduling API with real-time capacity query. CRM for post-season flag.",data:"Customer: Lisa Park. Active HVAC plan, annual AC tune-up due. Preferred service window: mornings. Capacity in her zone: 65% (plentiful at T-45, drops to 35% by T-30).",products:"Journeys · Proactive Outreach · Autopilot · CRM integration · Scheduling API",duration:"10 min full · 5 min lightning (Journey canvas, capacity branch logic, urgency vs standard SMS, suppression, final email)"},
   script:[
     {t:"journey",title:"1 — Journey canvas: capacity-aware seasonal campaign",ch:"Journeys · campaign trigger · T-45 days",jnote:"The capacity branch is the architectural highlight — show it clearly.",
@@ -513,7 +518,7 @@ const stories=[
     {type:"wait",label:"Wait — CSAT reply received? (24hr window)",desc:"Journey monitors for satisfaction reply. Detractor routes to CSR. No reply — Journey closes normally.",ch:"Journey wait state · 24hr"},
     {type:"close",label:"Journey closes",desc:"Job outcome, satisfaction score, and payment status logged. Journey marks contact complete.",ch:"System"}
   ],
-  value:["Safety screening is a Journey branch enforced before any dispatch — gas, CO, or flooding routes to an emergency agent first; Journey owns the safety decision logic","Journey polls the dispatch API every 15 minutes for ETA changes: if the technician is delayed, Journey fires an SMS before the customer calls to ask — reactive becomes proactive","Post-job invoice is a Journey node fired on the job-completed event: it fires on every job, consistently, without an admin or dispatcher remembering to send it"],
+  value:["SMS open rate: 98%, 90% read within 3 minutes (Validity / Tatango) — dispatch confirmation and ETA update SMS are read immediately, reducing repeat inbound calls from customers waiting for status updates","Invoice sent at job close increases same-day payment rates vs. end-of-day invoicing (ServiceTitan benchmark) — same-day payment collection improves cash flow and reduces accounts receivable follow-up","5% increase in customer retention increases profitability by 25–95% (Bain & Company) — emergency service quality is the highest-stakes retention moment; customers who experience a managed, communicated emergency response are significantly more likely to renew"],
   setup:{env:"Journey with inbound chat trigger. Dispatch API with technician assignment, ETA polling, and job-completed events. Agent Workspace for safety escalation. Proactive Outreach for SMS and email.",data:"Customer: Rachel Davies. No heating — furnace failure. Address confirmed. No safety risk. Nearest tech: Mike Rivera, ETA 45 mins.",products:"Journeys · Autopilot · Agent Workspace · Proactive Outreach · Field service dispatch API",duration:"12 min full · 6 min lightning (canvas, safety branch, dispatch API call, ETA delay SMS, post-job close)"},
   script:[
     {t:"journey",title:"1 — Journey classifies emergency and opens the flow",ch:"Journeys · inbound chat trigger",jnote:"Show the safety branch before anything else — it's the compliance and trust moment.",
@@ -575,7 +580,7 @@ const stories=[
     {type:"send",label:"Win-back email (T+30 days for cancelled customers)",desc:"Journey sends: '[Brand] misses you, Sarah — your home protection plan can be reactivated with one click. Here's an offer for returning customers: [X]% off your first 6 months back.'",ch:"Email · T+30 days · win-back branch only"},
     {type:"close",label:"Journey closes",desc:"Outcome logged: retained (reason + offer), cancelled (reason + CSR effort), or win-back sent. CRM reason code written. Journey marks contact complete.",ch:"System"}
   ],
-  value:["Cancellation reason is captured as a structured CRM field — not a free-text note — so churn data is analysable across the customer base","The price-sensitive retention offer is tenure-based: a 5-year customer gets a different offer than a 6-month customer. Journey calculates and presents the right offer automatically","Win-back sequence fires automatically 30 days after cancellation — Journey doesn't need a manual export or campaign setup for every cancelled customer"],
+  value:["5% increase in customer retention increases profitability by 25–95% (Bain & Company) — saving a single cohort of canceling customers at $600/yr average plan value compounds into significant annual recurring revenue","62% of pest control cancellations in the first 90 days cite poor communication as the primary driver (ResultCalls, 2026) — structured reason capture and a matched retention offer addresses the root cause, not just the symptom","Customer acquisition costs 5–25× more than retention (Harvard Business Review) — re-engaging a canceling customer through a targeted offer is materially more efficient than replacing them with a new acquisition"],
   setup:{env:"Journey with inbound cancellation trigger. Autopilot for reason capture. Agent Workspace + Copilot for CSR escalation. CRM for tenure data and outcome logging.",data:"Customer: Sarah Okonkwo. 3-year pest control subscriber. Calling to cancel — reason: too expensive. Last visit: 6 weeks ago. Payment: current.",products:"Journeys · Autopilot · Agent Workspace · Copilot · Proactive Outreach (SMS + email)",duration:"11 min full · 5 min lightning (Journey canvas, reason capture branch, price offer, CSR escalation, win-back)"},
   script:[
     {t:"journey",title:"1 — Journey canvas: cancellation reason to win-back",ch:"Journeys · cancellation trigger",jnote:"Show the full retention + win-back lifecycle — this is Journey as a revenue protection tool.",
@@ -637,7 +642,7 @@ const stories=[
     {type:"sys",label:"Re-sign confirmed — Journey triggers new customer onboarding",desc:"On re-sign from any branch, Journey triggers the new customer onboarding Journey for this customer — welcome SMS, first appointment scheduling, tech introduction. The win-back is seamless into the onboarding flow.",ch:"CRM event · Journey handoff"},
     {type:"close",label:"Journey closes",desc:"Re-engagement outcome logged: converted (channel, offer), non-responsive, or FAQ routed. CRM updated. Journey marks contact complete.",ch:"System"}
   ],
-  value:["Journey triggers the new customer onboarding Journey the moment a re-sign is confirmed — the lapsed customer immediately enters the same welcome and first-appointment sequence as a new customer, with no manual handoff","The email-opened-but-not-clicked branch triggers a Journey-initiated chat — not a passive link, but Journey proactively opening a session for the customer who showed interest but didn't act","Lapse reason drives offer differentiation: price-lapsed customers get a higher discount in the email; service-lapsed customers get a re-service credit offer. Journey selects the right content automatically"],
+  value:["Customer acquisition costs 5–25× more than retention (Harvard Business Review) — re-engaging a lapsed customer at near-zero cost vs. $100–200+ per new customer acquired produces better unit economics for the same revenue recovered","SMS open rate: 98% vs. ~20% for email (Validity) — re-engagement messages via SMS are seen immediately, reaching lapsed customers in the window where offer responsiveness is highest","5% increase in customer retention increases profitability by 25–95% (Bain & Company) — every re-signed customer who completes the onboarding Journey enters the highest-churn period with the same structured support as a new customer"],
   setup:{env:"Journey with CRM monthly lapse query. SMS, email, and chat Proactive Outreach. Autopilot for reactivation chat. Scheduling API for first appointment. New customer onboarding Journey connected.",data:"Customer: Tom Hughes. Cancelled 8 months ago, reason: price. Quarterly pest control plan. Last visit: 10 months ago. No re-engagement attempt in 6 months.",products:"Journeys · Proactive Outreach · Autopilot · CRM integration · Scheduling API",duration:"11 min full · 5 min lightning (canvas, SMS send, email opened branch, Journey-initiated chat, re-sign → onboarding handoff)"},
   script:[
     {t:"journey",title:"1 — Journey canvas: lapsed customer to onboarding handoff",ch:"Journeys · CRM lapse trigger",jnote:"Show the onboarding Journey trigger at the end — this is the seamless re-activation moment.",
@@ -703,7 +708,7 @@ const stories=[
     {type:"sys",label:"CRM write-back — next visit date and outcome logged",desc:"Whether re-service was needed or not, Journey writes the treatment outcome and next scheduled visit date back to the CRM. Customer enters the next cycle of the maintenance reminder Journey.",ch:"CRM write-back · Journey node"},
     {type:"close",label:"Journey closes",desc:"Visit outcome, satisfaction score, effectiveness result, and re-service decision all logged. Journey marks contact complete.",ch:"System"}
   ],
-  value:["Journey times the 7-day effectiveness check from the visit date — not from the satisfaction reply date — so the window is clinically accurate regardless of when the customer responded","Warranty eligibility check is a Journey branch: the visit date is compared to the warranty window at reply time, so the correct offer (free vs. paid) is always presented without a CSR manually checking","CRM write-back of the next visit date means this customer automatically enters next year's maintenance reminder Journey — zero manual data entry"],
+  value:["SMS open rate: 98%, 90% read within 3 minutes (Validity / Tatango) — treatment effectiveness check sent 7 days post-visit via SMS is read the same day, enabling same-week re-service scheduling while the issue is still relevant","5% increase in customer retention increases profitability by 25–95% (Bain & Company) — a customer who requests and receives a warranty re-service promptly is significantly more likely to renew their plan than one who goes uncontacted","HVAC maintenance plan customers deliver 2.3× higher lifetime value than non-plan customers (CallJolt, 2026) — every completed re-service that keeps a customer on-plan protects a revenue stream worth materially more than the cost of the visit"],
   setup:{env:"Journey with field system visit-completed trigger. SMS Proactive Outreach. Journey-initiated chat for re-service scheduling. Scheduling API. CRM write-back configured.",data:"Customer: Marcus Webb. Pest control visit completed today: exterior spray and bait stations, 90-day warranty. Tech: Carlos Ruiz.",products:"Journeys · Proactive Outreach · Autopilot · Field service system · Scheduling API · CRM integration",duration:"10 min full · 5 min lightning (Journey canvas, Day 7 effectiveness SMS, YES branch, warranty check, Autopilot scheduling chat)"},
   script:[
     {t:"journey",title:"1 — Journey canvas: post-visit to next annual visit",ch:"Journeys · field system trigger",jnote:"Show the 7-day timing node — timed from visit_date, not from satisfaction reply.",
@@ -827,8 +832,18 @@ function renderPanel(id){
         <div class="personas">${s.personas.map(p=>`<span class="persona"><i class="ti ti-user"></i>${p}</span>`).join('')}</div>
         <div class="sl"><i class="ti ti-apps"></i>Talkdesk products</div>
         <div class="tdchips">${s.td.map(t=>`<span class="tdchip${t==='Journeys'?' j':''}">${t}</span>`).join('')}</div>
-        <div class="sl" style="margin-top:1rem"><i class="ti ti-check"></i>Business value</div>
-        <ul class="vlist">${s.value.map(v=>`<li><i class="ti ti-check"></i>${v}</li>`).join('')}</ul>
+        <div class="sl" style="margin-top:1rem"><i class="ti ti-chart-bar"></i>Business value</div>
+        <table class="vtable">
+          <tr class="vtable-head"><td>Metric</td><td>Why it matters</td></tr>
+          ${s.value.map(v=>{
+            const dash = v.indexOf(' — ');
+            const metric = dash > -1 ? v.slice(0, dash) : v;
+            const impact = dash > -1 ? v.slice(dash + 3) : '';
+            const metricCited = metric.replace(/\(([^)]+,\s*\d{4}[^)]*)\)/g,'<cite>$1</cite>');
+            const impactCited = impact.replace(/\(([^)]+,\s*\d{4}[^)]*)\)/g,'<cite>$1</cite>');
+            return `<tr><td>${metricCited}</td><td>${impactCited}</td></tr>`;
+          }).join('')}
+        </table>
       </div>
       <div>
         <div class="sl"><i class="ti ti-git-fork"></i>Journey flow</div>

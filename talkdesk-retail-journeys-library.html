@@ -144,9 +144,14 @@ main{max-width:1060px;margin:0 auto;padding:2rem 1.5rem 4rem}
 .tdchips{display:flex;flex-wrap:wrap;gap:5px}
 .tdchip{font-size:10px;padding:3px 8px;border-radius:8px;background:var(--bg-s);color:var(--ts);border:.5px solid var(--bd)}
 .tdchip.j{background:var(--j50);color:var(--j800);border-color:var(--j600)}
-.vlist{list-style:none;display:flex;flex-direction:column;gap:6px}
-.vlist li{font-size:12px;color:var(--ts);display:flex;align-items:flex-start;gap:7px;line-height:1.5}
-.vlist li i{font-size:13px;color:var(--p600);flex-shrink:0;margin-top:1px}
+.vtable{width:100%;border-collapse:collapse;font-size:12px}
+.vtable tr{border-bottom:.5px solid var(--bd)}
+.vtable tr:last-child{border-bottom:none}
+.vtable td{padding:8px 10px;vertical-align:top;line-height:1.5}
+.vtable td:first-child{width:52%;color:var(--tp);font-weight:500}
+.vtable td:last-child{width:48%;color:var(--ts)}
+.vtable cite{font-style:normal;font-size:10px;color:var(--tt);background:var(--bg-s);border:.5px solid var(--bd);border-radius:4px;padding:1px 6px;margin-left:4px;font-weight:500;white-space:nowrap;display:inline-block;margin-top:2px}
+.vtable-head td{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--tt);padding:5px 10px;background:var(--bg-s);border-bottom:.5px solid var(--bdm)}
 /* JOURNEY FLOW DIAGRAM */
 .jflow{display:flex;flex-direction:column;gap:0;position:relative}
 .jnode{display:flex;gap:10px;padding-bottom:0;position:relative}
@@ -325,7 +330,7 @@ const stories=[
     ]},
     {type:"close",label:"Journey closes",desc:"Conversion or non-conversion logged with full step attribution. Campaign performance dashboard updated in real time.",ch:"System"}
   ],
-  value:["Journey controls every channel transition — SMS → email → chat → agent, with full state carried forward at each step","Time-based waits mean Journey acts on silence as much as on replies — no manual follow-up needed","When chat opens, Journey initiated it — context is not lost through a passive email link click"],
+  value:["SMS abandoned cart recovery converts at 15–20% vs. 5–8% for email alone (CartBoss, 2024) — multi-channel sequences roughly double recovered cart revenue vs. email only","Global cart abandonment rate: ~70% (Baymard Institute, 2024) — the majority of potential revenue is never captured; multi-step outreach is the primary lever to recover it","SMS open rate: 98%, with 90% of messages read within 3 minutes (Validity / Tatango) — time-sensitive cart offers reach customers while purchase intent is still active"],
   setup:{env:"Journey configured with cart abandon trigger. SMS, email, and chat channels active. Autopilot connected within Journey context.",data:"Customer: Emma Clarke. Cart: £84 — trainers + jacket. Abandoned 1hr ago. Opted into marketing.",products:"Journeys · Proactive Outreach · Campaign Manager · Autopilot · Agent Workspace",duration:"12 min full · 6 min lightning (show Journey canvas, step 1, one branch, close)"},
   script:[
     {t:"journey",title:"1 — Open the Journey canvas",ch:"Journeys",jnote:"Journey is the orchestrator — show this first, before any customer interaction.",
@@ -389,7 +394,7 @@ const stories=[
     ]},
     {type:"close",label:"Journey closes",desc:"All 340 contacts resolved. Outcome logged per customer: rerouted, waited, agent-handled, or post-delivery issue flagged. Full dashboard in Talkdesk.",ch:"System"}
   ],
-  value:["Journey runs 340 individual contact flows simultaneously — each with independent state, branch logic, and timing","Time-based WAIT state means Journey acts on non-response automatically — no manual review of who replied","Reroute sub-flow runs entirely within Journey — carrier API call and address collection all orchestrated by Journey, not a disconnected bot"],
+  value:["WISMO queries account for 30–50% of all retail inbound contact volume (Forrester Research) — proactive outbound alerts during disruptions directly reduce this spike before it reaches your agents","Average cost to handle a customer service contact: $5–8 (Gartner) — deflecting routine disruption queries with automated SMS prevents a predictable and avoidable support cost","SMS open rate: 98% within minutes vs. ~20% for email (Validity) — proactive disruption alerts via SMS reach customers before they call, not after"],
   setup:{env:"Journey with carrier API webhook trigger. Proactive Outreach for SMS and email. Autopilot address-collection sub-flow within Journey.",data:"340 orders affected by weather delay. Customer: Sophie Tan, order #72190. Carrier API test webhook configured.",products:"Journeys · Proactive Outreach · Autopilot · Carrier API integration",duration:"10 min full · 5 min lightning (show Journey canvas, trigger, branch, reroute sub-flow)"},
   script:[
     {t:"journey",title:"1 — Show Journey handling 340 contacts simultaneously",ch:"Journeys · batch instantiation",jnote:"Lead with scale — this is a key Journey differentiator.",
@@ -449,7 +454,7 @@ const stories=[
     ]},
     {type:"close",label:"Journey closes",desc:"Contact marked resolved. Outcome, channel path, and CSAT score logged. Detractor re-entry flow available if flagged.",ch:"System"}
   ],
-  value:["Journey watches escalation state — if the customer escalates, Journey moves them to an agent and carries all context forward; no manual triage","Outbound close (SMS + email) is a Journey action fired on the case-resolved event — not manual sends by the agent","Journey owns the full lifecycle: inbound chat → Autopilot → (optional) agent → outbound close — one system, no handoff gaps"],
+  value:["WISMO queries = 30–50% of retail inbound contact volume (Forrester) — self-service deflection of routine order status contacts is the single largest lever to reduce agent workload in retail","SMS open rate: 98% vs. ~20% for email (Validity) — post-resolution follow-up via SMS is read immediately, producing higher CSAT survey response rates and more representative feedback","Customers with positive support experiences have 14% higher lifetime value and purchase 2.6× more frequently (Forrester) — fast, context-aware escalation handling directly compounds into LTV"],
   setup:{env:"Journey with inbound chat trigger. Autopilot and Agent Workspace connected. Proactive Outreach for SMS + email close.",data:"Customer: Emma Clarke. Order #48291, delayed 2 days. Courier disruption. LTV: standard tier.",products:"Journeys · Autopilot · Agent Workspace · Copilot · Proactive Outreach (SMS + email)",duration:"12 min full · 6 min lightning (Journey canvas, Autopilot step, branch, outbound close)"},
   script:[
     {t:"journey",title:"1 — Show Journey monitoring the chat session",ch:"Journeys · inbound trigger",jnote:"Establish Journey as the control plane before showing the customer interaction.",
@@ -515,7 +520,7 @@ const stories=[
     ]},
     {type:"close",label:"Journey closes",desc:"Return confirmed in transit. Refund timeline communicated. CSAT triggered. Case logged with full channel path.",ch:"System"}
   ],
-  value:["The email reply contains a Journey-tracked deep link — when the customer opens it, Journey initiates the chat session; context is never lost","Journey monitors the self-service chat for completion or abandonment — if the customer stalls, Journey acts; there is no passive exit","Escalation fallback is Journey-managed: the agent receives not just the transcript but the specific step in the return flow where the customer abandoned"],
+  value:["Return and refund contacts typically represent 15–25% of retail inbound volume — deflecting eligible returns to automated self-service removes a high-volume, low-complexity ticket type from agent queues","Fast, transparent returns increase repeat purchase rates 3× vs. friction-filled return experiences (eDesk, 2025) — the return process is a retention event, not just a cost center","Customer acquisition costs 5–25× more than retention (Harvard Business Review) — a smooth return experience that avoids a negative interaction is among the highest-ROI retention investments"],
   setup:{env:"Journey with inbound email trigger. Email Routing, Autopilot (self-service return flow), Agent Workspace connected. Carrier API for label generation.",data:"Customer: Marcus King. Order #61042, jacket, 12 days old. Return policy: 30 days. Status: eligible.",products:"Journeys · Email Routing · Autopilot · Agent Workspace · Carrier API · Proactive Outreach (SMS)",duration:"12 min full · 6 min lightning (canvas, email trigger, chat branch, SMS close)"},
   script:[
     {t:"journey",title:"1 — Show Journey receiving the inbound email",ch:"Journeys · inbound email trigger",jnote:"The email arrival is a Journey trigger — not just a ticket in an inbox.",
@@ -575,7 +580,7 @@ const stories=[
     ]},
     {type:"close",label:"Journey closes",desc:"Full contact lifecycle logged: SLA time, agent ID, resolution outcome, CSAT score, check-in result. QA dashboard updated.",ch:"System"}
   ],
-  value:["Journey starts a 15-minute SLA timer the moment the VIP email arrives — breach triggers automatic escalation to supervisor","The proactive chat from agent is a Journey-monitored event — if the agent doesn't fire it, Journey escalates; the SLA is enforced, not just recommended","Multi-channel close (email + SMS) is a Journey action on the case-resolved event — consistent on every VIP complaint, not dependent on individual agent follow-through"],
+  value:["Customers with positive support experiences have 14% higher LTV and purchase 2.6× more frequently (Forrester) — for a customer worth $9k+, every unresolved escalation is a measurable churn risk","5% increase in customer retention can increase profits by 25–95% (Bain & Company) — consistent VIP handling directly protects the revenue contribution of your most valuable segment","SMS open rate: 98% within minutes (Validity) — post-resolution confirmation and follow-up via SMS is read the same day, producing same-day CSAT responses rather than day-old or unread ones"],
   setup:{env:"Journey with inbound email trigger and CRM LTV check. Agent Workspace + Copilot connected. SLA timer configured at 15 minutes.",data:"Customer: James Whitfield. LTV: £9,200. 14 purchases. Damaged item. SLA: agent contact within 15 minutes.",products:"Journeys · Omnichannel Routing · Agent Workspace · Copilot · Proactive Outreach (email + SMS)",duration:"12 min full · 6 min lightning (canvas, SLA timer, agent contact event, close)"},
   script:[
     {t:"journey",title:"1 — Journey detects VIP flag and starts SLA timer",ch:"Journeys · CRM check · SLA",jnote:"Lead with the SLA timer — this is the Journey differentiator over basic routing.",
@@ -636,7 +641,7 @@ const stories=[
     ]},
     {type:"close",label:"Journey closes",desc:"Enrolment and first-purchase data logged. Attribution by channel recorded. Journey marks account active in loyalty platform.",ch:"System"}
   ],
-  value:["Journey tracks enrolment completion across email, chat, and SMS — if Sophie enrolls on any branch, Journey suppresses the rest instantly","The chat enrolment session is Journey-initiated on every path — email click, SMS nudge — so context and pre-loaded data are always present","Multi-day persistence: Journey holds Sophie's state for 72 hours across channels — standard campaign tools can't branch on mid-sequence real-time events"],
+  value:["Loyalty program members generate 22% higher annual revenue per customer than non-members (Bond Brand Loyalty, 2024) — enrolment growth directly increases revenue per customer with no additional acquisition cost","Customer acquisition costs 5–25× more than retention (Harvard Business Review) — each loyalty enrolment converts an existing customer into a higher-value segment without a new acquisition spend","SMS open rate: 98% (Validity) — welcome voucher and first-purchase prompt delivered via SMS is read immediately, driving same-session first loyalty purchase rather than waiting for an email to be opened days later"],
   setup:{env:"Journey with CRM segment trigger (daily sync). Email, chat, and SMS channels connected. Loyalty platform API for enrolment event. Autopilot for one-question chat flow.",data:"Customer: Sophie Clarke. 4 orders, avg basket £52. No loyalty_id. Segment confirmed: Gold-eligible.",products:"Journeys · Proactive Outreach · Campaign Manager · Autopilot · CRM integration · Loyalty platform API",duration:"11 min full · 5 min lightning (canvas, email step, 48hr wait branch, SMS nudge, close)"},
   script:[
     {t:"journey",title:"1 — Show Journey's multi-day canvas for 1,200 contacts",ch:"Journeys · CRM trigger",jnote:"Show the campaign at scale — 1,200 individual Journey instances.",
@@ -701,7 +706,7 @@ const stories=[
     ]},
     {type:"close",label:"Journey closes",desc:"Full lifecycle logged: triage, SLA compliance, resolution outcome, fulfilment confirmation, CSAT score. OMS complaint record updated.",ch:"System"}
   ],
-  value:["Journey passes a structured triage context to the agent — order, damage description, photo, LTV tier — no re-reading the transcript from scratch","Outbound close is personalised by outcome: replacement gets email + SMS tracking link; refund gets email + processing timeline. Journey selects the right template on the case-resolved event","CSAT is triggered by Journey on every resolved complaint — not manually, not occasionally. Consistent data collection across every case"],
+  value:["5% increase in customer retention increases profitability by 25–95% (Bain & Company) — resolving complaints consistently and quickly is the highest-leverage retention action available to a retail team","Customers with positive support experiences have 14% higher LTV and purchase 2.6× more frequently (Forrester) — complaint handling quality is a direct predictor of long-term customer value","SMS open rate: 98% within minutes (Validity) — resolution confirmation and CSAT sent via SMS are read the same day, producing faster feedback loops and higher response rates than next-day email"],
   setup:{env:"Journey with inbound chat trigger. Autopilot triage flow (damage claim). Agent Workspace + Copilot. Proactive Outreach for email + SMS close.",data:"Customer: Priya Sharma. Order #91203, jacket received with broken zip. Purchased 8 days ago. Policy: 30-day damage claim. LTV: standard.",products:"Journeys · Autopilot · Agent Workspace · Copilot · Proactive Outreach (email + SMS)",duration:"11 min full · 5 min lightning (canvas, triage, agent context, resolution branch, close)"},
   script:[
     {t:"journey",title:"1 — Journey receives inbound chat and starts triage",ch:"Journeys · inbound chat trigger",jnote:"Establish Journey as the lifecycle owner before showing the customer interaction.",
@@ -826,8 +831,18 @@ function renderPanel(id){
         <div class="personas">${s.personas.map(p=>`<span class="persona"><i class="ti ti-user"></i>${p}</span>`).join('')}</div>
         <div class="sl"><i class="ti ti-apps"></i>Talkdesk products</div>
         <div class="tdchips">${s.td.map(t=>`<span class="tdchip${t==='Journeys'?' j':''}">${t}</span>`).join('')}</div>
-        <div class="sl" style="margin-top:1rem"><i class="ti ti-check"></i>Business value</div>
-        <ul class="vlist">${s.value.map(v=>`<li><i class="ti ti-check"></i>${v}</li>`).join('')}</ul>
+        <div class="sl" style="margin-top:1rem"><i class="ti ti-chart-bar"></i>Business value</div>
+        <table class="vtable">
+          <tr class="vtable-head"><td>Metric</td><td>Why it matters</td></tr>
+          ${s.value.map(v=>{
+            const dash = v.indexOf(' — ');
+            const metric = dash > -1 ? v.slice(0, dash) : v;
+            const impact = dash > -1 ? v.slice(dash + 3) : '';
+            const metricCited = metric.replace(/\(([^)]+,\s*\d{4}[^)]*)\)/g,'<cite>$1</cite>');
+            const impactCited = impact.replace(/\(([^)]+,\s*\d{4}[^)]*)\)/g,'<cite>$1</cite>');
+            return `<tr><td>${metricCited}</td><td>${impactCited}</td></tr>`;
+          }).join('')}
+        </table>
       </div>
       <div>
         <div class="sl"><i class="ti ti-git-fork"></i>Journey flow</div>
